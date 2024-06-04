@@ -5,10 +5,11 @@ from typing import Dict, List
 @dataclass
 class ProjectStat:
     name: str
-    score: float
     metrics: Dict[str, float]
+    score: float = None
 
 @dataclass
 class CalculationResults:
     ranking: List[ProjectStat]
+    build_time: int
 

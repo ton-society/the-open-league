@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import List, Dict
 
 from models.project_base import Project
+from models.scores import ScoreModel
 
 
 @dataclass
@@ -16,3 +17,9 @@ class SeasonConfig:
 
     projects: List[Project]
     # backend_config: Dict[str, Dict[str, str]] # backend specific configs
+
+    score_model: ScoreModel # score model
+
+    # for SQL usage
+    def safe_season_name(self):
+        return self.name.replace(".", '_')
