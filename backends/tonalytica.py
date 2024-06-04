@@ -82,14 +82,17 @@ class TonalyticaAppBackend(CalculationBackend):
           join wallets using(user_address)
         )
         , good_users as (
-        select project, sum(weight) as total_users from users_stats
-        where tx_count > 1
+        select
+          project,
+          sum(weight) filter (where tx_count > 1) as total_users, -- users with 2+ tx, custodial wallets have lower weight
+          percentile_disc(0.5) within group (order by tx_count) as median_tx  -- median tx per user 
+        from users_stats
         group by 1
         ), tx_stat as (
         select project, sum(weight * tx_count) as tx_count from users_stats
         group by 1
         )
-        select project, tx_count,  coalesce(total_users,0 )as total_users
+        select project, tx_count,  coalesce(total_users,0 )as total_users, median_tx
         from tx_stat
                  left join good_users using(project)
         """
@@ -112,8 +115,9 @@ class TonalyticaAppBackend(CalculationBackend):
                             name=row['project'],
                             metrics={}
                         )
-                        results[row['project']].metrics['tx_count'] = int(row['tx_count'])
-                        results[row['project']].metrics['total_users'] = int(row['total_users'])
+                        results[row['project']].metrics[ProjectStat.APP_ONCHAIN_TOTAL_TX] = int(row['tx_count'])
+                        results[row['project']].metrics[ProjectStat.APP_ONCHAIN_UAW] = int(row['total_users'])
+                        results[row['project']].metrics[ProjectStat.APP_ONCHAIN_MEDIAN_TX] = int(row['median_tx'])
                 logger.info("Main query finished")
             if not dry_run:
                 logger.info("Requesting off-chain tganalytics.xyz metrics")
@@ -130,8 +134,12 @@ class TonalyticaAppBackend(CalculationBackend):
                             if project.name not in results:
                                 logger.error(f"Project {project.name} has no on-chain data, ignoring")
                             else:
-                                results[project.name].metrics['non_premium_users'] = int(res['non_premium_users'])
-                                results[project.name].metrics['premium_users'] = int(res['premium_users'])
+                                results[project.name].metrics[ProjectStat.APP_OFFCHAIN_NON_PREMIUM_USERS] = int(res['non_premium_users'])
+                                results[project.name].metrics[ProjectStat.APP_OFFCHAIN_PREMIUM_USERS] = int(res['premium_users'])
+                                results[project.name].metrics[ProjectStat.APP_OFFCHAIN_AVG_DAU] = int(res['avg_dau'])
+                                results[project.name].metrics[ProjectStat.APP_OFFCHAIN_TOTAL_USERS] = int(res['total_unique_users'])
+                                results[project.name].metrics[ProjectStat.APP_STICKINESS] = 1.0 * int(res['avg_dau']) / int(res['total_unique_users'])
+
 
                 logger.info("Off-chain processing is finished")
 
