@@ -17,6 +17,7 @@ class ProjectStat:
     TOKEN_TVL_CHANGE = 'token_tvl_change'
     TOKEN_PRICE_CHANGE_NORMED = 'price_change_normed'
     TOKEN_NEW_USERS_WITH_MIN_AMOUNT = 'new_users_min_amount'
+    TOKEN_ADDRESS = 'token_address'
 
 
     name: str

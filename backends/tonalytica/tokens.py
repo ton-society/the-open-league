@@ -166,14 +166,15 @@ class TonalyticaTokensBackend(CalculationBackend):
                     cursor.execute(SQL)
                     for row in cursor.fetchall():
                         logger.info(row)
-                        assert row['project'] not in results
+                        assert row['symbol'] not in results
                         results[row['project']] = ProjectStat(
-                            name=row['project'],
+                            name=row['symbol'],
                             metrics={}
                         )
-                        results[row['project']].metrics[ProjectStat.TOKEN_TVL_CHANGE] = int(row['tx_count'])
-                        results[row['project']].metrics[ProjectStat.TOKEN_PRICE_CHANGE_NORMED] = int(row['total_users'])
-                        results[row['project']].metrics[ProjectStat.TOKEN_NEW_USERS_WITH_MIN_AMOUNT] = int(row['median_tx'])
+                        results[row['symbol']].metrics[ProjectStat.TOKEN_ADDRESS] = row['address']
+                        results[row['symbol']].metrics[ProjectStat.TOKEN_TVL_CHANGE] = int(row['tx_count'])
+                        results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_CHANGE_NORMED] = int(row['total_users'])
+                        results[row['symbol']].metrics[ProjectStat.TOKEN_NEW_USERS_WITH_MIN_AMOUNT] = int(row['median_tx'])
                 logger.info("Tokens query finished")
 
         return CalculationResults(ranking=results.values(), build_time=1)  # TODO build time
