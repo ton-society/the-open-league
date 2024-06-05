@@ -8,7 +8,8 @@ class TokenTransferTonalyticaImpl(TonalyticaMetricImpl):
         jetton_masters = "\nor\n".join(map(lambda addr: f"jt.destination_owner  = '{addr}'", metric.jetton_masters))
 
         return f"""
-        select jt.msg_id as id, '{context.project.name}' as project, jt.source_owner as user_address
+        select jt.msg_id as id, '{context.project.name}' as project, {0.5 if metric.is_custodial else 1} as weight,
+        jt.source_owner as user_address
         from jetton_transfers_local jt
         WHERE (
             {destinations}

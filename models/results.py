@@ -14,6 +14,10 @@ class ProjectStat:
     APP_ONCHAIN_UAW = 'onchain_uaw'
     APP_ONCHAIN_MEDIAN_TX = 'onchain_median_tx'
 
+    TOKEN_TVL_CHANGE = 'token_tvl_change'
+    TOKEN_PRICE_CHANGE_NORMED = 'price_change_normed'
+    TOKEN_NEW_USERS_WITH_MIN_AMOUNT = 'new_users_min_amount'
+
 
     name: str
     metrics: Dict[str, float]

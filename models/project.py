@@ -7,6 +7,7 @@ from models.project_base import Project
 @dataclass
 class Token(Project):
     address: str # token address
+    decimals: int # token decimals
 
 @dataclass
 class App(Project):
