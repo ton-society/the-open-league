@@ -41,6 +41,22 @@ class TonalyticaAppBackend(CalculationBackend):
             -- we will use subset of messages table for better performance
             -- also this table contains only messages with successful destination tx
             select * from tol.messages_{config.safe_season_name()}
+        ), jetton_transfers_local as (
+            select jt.*, jw.jetton_master from jetton_transfers jt
+            JOIN jetton_wallets jw ON jw.address = jt.source_wallet and not jw.is_scam
+            where
+                jt.successful and
+                jt.utime >= {config.start_time} and
+                jt.utime <  {config.end_time}
+        ), nft_activity_local as (
+          select msg_id as id, nt.current_owner as user_address, ni.collection  from nft_transfers nt
+                                                                               join nft_item ni on nt.nft_item = ni.address
+            where nt.utime >= {config.start_time}  and nt.utime <  {config.end_time}
+              and collection is not null
+            union
+            select msg_id as id, new_owner as user_address, collection_address as collection
+            from nft_history nh where event_type ='sale'
+                                  and utime >= {config.start_time}  and utime <  {config.end_time}
         ),
         {PROJECTS},
         all_projects_raw as (

@@ -28,4 +28,4 @@ class AppLeaderboardModelV2(ScoreModel):
                     5 * normalized_max(project, ProjectStat.APP_OFFCHAIN_NON_PREMIUM_USERS) + \
                     15 * normalized_max(project, ProjectStat.APP_OFFCHAIN_PREMIUM_USERS) + \
                     20 * normalized_max(project, ProjectStat.APP_STICKINESS)
-        return project
+        return metrics

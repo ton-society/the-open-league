@@ -3,6 +3,7 @@ S3.5 - test season between S3 and S4
 """
 from models.season_config import SeasonConfig
 from projects.apps.Arbuz import Arbuz
+from projects.apps.Fanzee import Fanzee
 from projects.apps.QuackQuack import QuackQuack
 from seasons.app_models import AppLeaderboardModelV2
 
@@ -13,7 +14,8 @@ S3_5_apps = SeasonConfig(
     end_time=1718190000, # Wed Jun 12 2024 11:00:00 GMT+0000
     projects=[
         QuackQuack,
-        Arbuz
+        Arbuz,
+        Fanzee
     ],
     score_model=AppLeaderboardModelV2()
 )
