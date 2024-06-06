@@ -7,6 +7,7 @@ from projects.apps.Catizen import Catizen
 from projects.apps.Fanzee import Fanzee
 from projects.apps.GM import GM
 from projects.apps.JetTon import JetTon
+from projects.apps.PlayWallet import PlayWallet
 from projects.apps.QuackQuack import QuackQuack
 from projects.apps.SquidTG import SquidTG
 from projects.apps.XPLUS import XPLUS
@@ -91,7 +92,8 @@ S3_5_apps = SeasonConfig(
         JetTon,
         SquidTG,
         XPLUS,
-        xRare
+        xRare,
+        PlayWallet
     ],
     score_model=AppLeaderboardModelV2()
 )
