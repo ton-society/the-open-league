@@ -4,6 +4,7 @@ S3.5 - test season between S3 and S4
 from models.season_config import SeasonConfig
 from projects.apps.Arbuz import Arbuz
 from projects.apps.Catizen import Catizen
+from projects.apps.Fanton import Fanton
 from projects.apps.Fanzee import Fanzee
 from projects.apps.GM import GM
 from projects.apps.GetGems import GetGems
@@ -97,7 +98,8 @@ S3_5_apps = SeasonConfig(
         xRare,
         PlayWallet,
         YesCoin,
-        GetGems
+        GetGems,
+        Fanton
     ],
     score_model=AppLeaderboardModelV2()
 )
