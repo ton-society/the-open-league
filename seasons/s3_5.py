@@ -11,6 +11,7 @@ from projects.apps.PlayWallet import PlayWallet
 from projects.apps.QuackQuack import QuackQuack
 from projects.apps.SquidTG import SquidTG
 from projects.apps.XPLUS import XPLUS
+from projects.apps.YesCoin import YesCoin
 from projects.apps.xRare import xRare
 from projects.tokens.ARBUZ import ARBUZ
 from projects.tokens.KINGY import KINGY
@@ -93,7 +94,8 @@ S3_5_apps = SeasonConfig(
         SquidTG,
         XPLUS,
         xRare,
-        PlayWallet
+        PlayWallet,
+        YesCoin
     ],
     score_model=AppLeaderboardModelV2()
 )
