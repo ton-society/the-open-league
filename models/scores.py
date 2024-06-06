@@ -27,7 +27,7 @@ class ScoreModel:
         return max(map(lambda x: x.metrics[field], metrics))
 
     def get_min(self, field: str, metrics):
-        return max(map(lambda x: x.metrics[field], metrics))
+        return min(map(lambda x: x.metrics[field], metrics))
 
     """
     Normalize value on the max value in the data set

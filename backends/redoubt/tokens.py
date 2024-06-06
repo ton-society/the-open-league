@@ -1,3 +1,4 @@
+import time
 from typing import Dict
 
 from models.backend import CalculationBackend
@@ -25,6 +26,9 @@ class RedoubtTokensBackend(CalculationBackend):
             """)
         PROJECTS = "\nunion all\n".join(PROJECTS)
 
+        balances_table = "mview_jetton_balances"
+        if (time.time()) > config.end_time:
+            balances_table = f"tol.token_balances_snapshot_{config.safe_season_name()}"
         SQL = f"""
             with tol_tokens as (
                 {PROJECTS}                
@@ -45,7 +49,7 @@ class RedoubtTokensBackend(CalculationBackend):
                 select 'EQDPdq8xjAhytYqfGSX8KcFWIReCufsB9Wdg0pLlYSO_h76w' as address 
             ),
             latest_balances as (
-                select * from tol.tol_s3_final_jetton_balances -- TODO use latest mview or snapshot version
+                select * from {balances_table}
             ), pools as (
               -- all DEX pools for our tokens
               select distinct tol_tokens.symbol, tol_tokens.address, thd.address as pool
