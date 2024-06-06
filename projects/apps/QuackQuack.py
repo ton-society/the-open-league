@@ -10,6 +10,9 @@ QuackQuack = App(
     analytics_key="QuackQuack_TON",
     metrics=[
         SmartContractInteraction(
+            "Deposits", "EQDDo8EnHzcMf_c-WKBEuoJjYqK__APFlq8fe53BoI4cpPJF"
+        ),
+        SmartContractInteraction(
             "Contract calls", "EQBDnRbwoxKsjrenrNQxHtMRnwu7mu7cNxtJN2-VDD16FoDW"
         ),
         SmartContractInteraction(

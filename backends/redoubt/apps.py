@@ -26,7 +26,7 @@ class RedoubtAppBackend(CalculationBackend):
                 from tol.messages_{config.safe_season_name()} m
                 order by msg_id desc limit 1
                 """)
-                return cursor.fetchone()['gen_utime']
+                return cursor.fetchone()['last_time']
 
     def _do_calculate(self, config: SeasonConfig, dry_run: bool = False):
         logger.info("Running re:doubt backend for App leaderboard SQL generation")
@@ -153,6 +153,15 @@ class RedoubtAppBackend(CalculationBackend):
                 logger.info("Requesting off-chain tganalytics.xyz metrics")
                 with pg.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
                     for project in config.projects:
+                        if project.analytics_key is None:
+                            logger.info(f"Project {project.name} has no off-chain tracking activity")
+                            results[project.name].metrics[ProjectStat.APP_OFFCHAIN_NON_PREMIUM_USERS] = 0
+                            results[project.name].metrics[ProjectStat.APP_OFFCHAIN_PREMIUM_USERS] = 0
+                            results[project.name].metrics[ProjectStat.APP_OFFCHAIN_AVG_DAU] = 0
+                            results[project.name].metrics[ProjectStat.APP_OFFCHAIN_TOTAL_USERS] = 0
+                            results[project.name].metrics[ProjectStat.APP_STICKINESS] = 0
+                            continue
+
                         logger.info(f"Requesting data for {project.name} ({project.analytics_key}) ({config.name})")
                         cursor.execute("""
                         select * from tol.tganalytics_latest where app_name = %s and season = %s
@@ -163,6 +172,11 @@ class RedoubtAppBackend(CalculationBackend):
                         else:
                             if project.name not in results:
                                 logger.error(f"Project {project.name} has no on-chain data, ignoring")
+                                results[project.name].metrics[ProjectStat.APP_OFFCHAIN_NON_PREMIUM_USERS] = 0
+                                results[project.name].metrics[ProjectStat.APP_OFFCHAIN_PREMIUM_USERS] = 0
+                                results[project.name].metrics[ProjectStat.APP_OFFCHAIN_AVG_DAU] = 0
+                                results[project.name].metrics[ProjectStat.APP_OFFCHAIN_TOTAL_USERS] = 0
+                                results[project.name].metrics[ProjectStat.APP_STICKINESS] = 0
                             else:
                                 results[project.name].metrics[ProjectStat.APP_OFFCHAIN_NON_PREMIUM_USERS] = int(res['non_premium_users'])
                                 results[project.name].metrics[ProjectStat.APP_OFFCHAIN_PREMIUM_USERS] = int(res['premium_users'])

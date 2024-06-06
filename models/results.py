@@ -8,7 +8,7 @@ class ProjectStat:
     APP_OFFCHAIN_PREMIUM_USERS = 'offchain_premium_users'
     APP_OFFCHAIN_AVG_DAU = 'offchain_avg_dau'
     APP_OFFCHAIN_TOTAL_USERS = 'offchain_total_unique_users'
-    APP_STICKINESS = 'offchain_total_unique_users'
+    APP_STICKINESS = 'offchain_stickiness'
 
     APP_ONCHAIN_TOTAL_TX = 'onchain_total_tx'
     APP_ONCHAIN_UAW = 'onchain_uaw'

@@ -3,7 +3,9 @@ S3.5 - test season between S3 and S4
 """
 from models.season_config import SeasonConfig
 from projects.apps.Arbuz import Arbuz
+from projects.apps.Catizen import Catizen
 from projects.apps.Fanzee import Fanzee
+from projects.apps.GM import GM
 from projects.apps.QuackQuack import QuackQuack
 from projects.tokens.ARBUZ import ARBUZ
 from projects.tokens.KINGY import KINGY
@@ -79,7 +81,9 @@ S3_5_apps = SeasonConfig(
     projects=[
         QuackQuack,
         Arbuz,
-        Fanzee
+        Fanzee,
+        Catizen,
+        GM
     ],
     score_model=AppLeaderboardModelV2()
 )

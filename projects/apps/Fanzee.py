@@ -1,5 +1,5 @@
 from models.metrics.smc_interaction import SmartContractInteraction
-from models.metrics.token_transfer import TokenTransfer
+from models.metrics.token_transfer_from_user import TokenTransferFromUser
 from models.project import App
 
 """
@@ -13,7 +13,7 @@ Fanzee = App(
         SmartContractInteraction(
             "Deposits in TON", "EQDMN701aHQG9TvbnIqI5oEmvPN6HaTk_DBqkwTGQJWSXC_x", comment_required=True
         ),
-        TokenTransfer(
+        TokenTransferFromUser(
             "on-chain battles (FNZ or !NOT transfers), deposits in FNZ",
             jetton_masters=[
                 "EQDCJL0iQHofcBBvFBHdVG233Ri2V4kCNFgfRT-gqAd3Oc86", # FNZ
