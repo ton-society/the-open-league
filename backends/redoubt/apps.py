@@ -77,7 +77,21 @@ class RedoubtAppBackend(CalculationBackend):
         ), nft_transfers_local as (
             select  * from nft_transfers
             where utime  >= {config.start_time} and utime  < {config.end_time}
-        ),  
+        ), ton20_sale_local as (
+            select * from ton20_sale ts
+            where utime >= {config.start_time}  and utime <  {config.end_time}
+        ), jetton_burn_local as (
+            select jb.*, jw."owner" as user_address, jw.jetton_master from jetton_burn jb
+            join jetton_wallets jw on jw.address  = jb.wallet and jb.successful and not jw.is_scam
+            where utime >= {config.start_time}  and utime <  {config.end_time}
+        ), jetton_mint_local as (
+            select jm.*, jw."owner" as user_address, jw.jetton_master from jetton_mint jm
+            join jetton_wallets jw on jw.address  = jm.wallet and jm.successful and not jw.is_scam
+            where utime >= {config.start_time}  and utime <  {config.end_time}
+        ), dex_swaps_local as (
+            select * from dex_swap_parsed
+            where swap_utime >= {config.start_time}  and swap_utime <  {config.end_time}
+        ),      
         nft_sales as (
             select msg_id as id, nh.current_owner  as user_address, marketplace from nft_history_local nh where
             (event_type = 'init_sale' or event_type = 'cancel_sale')

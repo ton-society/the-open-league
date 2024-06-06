@@ -15,7 +15,8 @@ class SmartContractInteractionRedoubtImpl(RedoubtMetricImpl):
         if metric.address:
             address_filter = f"destination ='{metric.address}'"
         else:
-            assert len(metric.addresses) > 0, "You should provide either address or addresses non empty list"
+            assert len(metric.addresses) > 0, f"You should provide either address or addresses non empty list " \
+                                              f"({context.project.name}: {metric.description})"
             address_filter = " OR ".join(map(lambda a: f"destination ='{a}'", metric.addresses))
         if len(metric.comment_not_equals) > 0:
             comment_not_equals_filter = "and " + " and ".join(map(lambda v: f"comment != '{v}'", metric.comment_not_equals))
