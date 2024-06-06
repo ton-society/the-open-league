@@ -8,10 +8,13 @@ from projects.apps.Fanton import Fanton
 from projects.apps.Fanzee import Fanzee
 from projects.apps.GM import GM
 from projects.apps.GetGems import GetGems
+from projects.apps.Gram import Gram
 from projects.apps.JetTon import JetTon
 from projects.apps.PlayWallet import PlayWallet
 from projects.apps.QuackQuack import QuackQuack
 from projects.apps.SquidTG import SquidTG
+from projects.apps.SwapCoffee import SwapCoffee
+from projects.apps.TonPunks import TopPunks
 from projects.apps.Tonano import Tonano
 from projects.apps.XPLUS import XPLUS
 from projects.apps.YesCoin import YesCoin
@@ -101,7 +104,10 @@ S3_5_apps = SeasonConfig(
         YesCoin,
         GetGems,
         Fanton,
-        Tonano
+        Tonano,
+        TopPunks,
+        SwapCoffee,
+        Gram
     ],
     score_model=AppLeaderboardModelV2()
 )
