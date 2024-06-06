@@ -20,6 +20,7 @@ class ProjectStat:
     TOKEN_PRICE_BEFORE = 'token_price_before'
     TOKEN_PRICE_AFTER = 'token_price_after'
     TOKEN_PRICE_CHANGE_NORMED = 'price_change_normed'
+    TOKEN_PRICE_CHANGE_SIMPLE = 'price_change_simple'
     TOKEN_NEW_USERS_WITH_MIN_AMOUNT = 'new_users_min_amount'
     TOKEN_ADDRESS = 'token_address'
     TOKEN_IS_MEME = 'is_meme'

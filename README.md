@@ -4,15 +4,15 @@ This repository contains code for The Open League metrics calculation.
 
 ## Architecture
 
-The Open League contains multiple leaderboard with the project ranking.
-Ranking is based on metrics and computed for a particular Season - period of
-time with a fixed project's list and rules.
+The Open League consists of multiple leaderboards showcasing project rankings. 
+These rankings are based on specific metrics and are calculated for a particular season, 
+a set period of time with a defined list of projects and rules.
 
-The main goal of this repo is to create DSL for leaderboards, projects 
-and seasons. Based on this DSL all ranks could be calculated
-using backends. Backend is an implementation of metrics calculation
-based on specific data source. For now the only supported backend
-is re:doubt DB based on [ton-indexer](https://github.com/re-doubt/ton-indexer) and 
+The primary objective of this repository is to establish a Domain Specific Language (DSL) 
+for leaderboards, projects, and seasons. Using this DSL, all ranks can be calculated 
+through backends. A backend is an implementation of metrics calculation based on a 
+specific data source. Currently, the only supported backend is re:doubt DB, 
+which is based on [ton-indexer](https://github.com/re-doubt/ton-indexer) and 
 [Tonalytica](https://tonalytica.redoubt.online/).
 
 Main entities:
@@ -29,14 +29,14 @@ scoring formula, etc..
 
 ## Season
 
-List of the seasons supported:
-* [S3.5](./seasons/s3_5.py) - test season (no actual competition), between S3 and S4.
+List of the seasons supported with the leaderboard links
 
-## Documentation
-
-Auto-generated documentation for the app leaderboard will be added soon
+| Season | Results                                                                                                                                                                                                                                                                                                                                                                            | Runner                                 |
+|--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+|  [S3.5](./seasons/s3_5.py) - test season (no actual competition), between S3 and S4.      | <ul><li>Tokens: [HTML](https://the-open-league-static-data.s3.amazonaws.com/season/s3_5/token.html), [JSON](https://the-open-league-static-data.s3.amazonaws.com/season/s3_5/token.json)</li><li>Tokens: [HTML](https://the-open-league-static-data.s3.amazonaws.com/season/s3_5/app.html), [JSON](https://the-open-league-static-data.s3.amazonaws.com/season/s3_5/app.json)</ul> | [season3_5.py](./runners/season3_5.py) |
 
 ## Adding metrics for your project
 
 To add new project one need to create a file in [projects/{type}/{slug.py}](./projects) folder,
 where type is __apps__ or __token__ and __slug__ is project name.
+ 
