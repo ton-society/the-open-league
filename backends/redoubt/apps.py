@@ -71,6 +71,18 @@ class RedoubtAppBackend(CalculationBackend):
             select msg_id as id, new_owner as user_address, collection_address as collection
             from nft_history nh where event_type ='sale'
                                   and utime >= {config.start_time}  and utime <  {config.end_time}
+        ), nft_history_local as (
+            select  * from nft_history
+            where utime  >= {config.start_time} and utime  < {config.end_time}
+        ), 
+        nft_sales as (
+            select msg_id as id, nh.current_owner  as user_address, marketplace from nft_history_local nh where
+            (event_type = 'init_sale' or event_type = 'cancel_sale')
+            
+            union all
+            
+            select msg_id as id, nh.new_owner as user_address, marketplace from nft_history_local nh where
+            event_type = 'sale'
         ),
         {PROJECTS},
         all_projects_raw as (

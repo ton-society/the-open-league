@@ -10,6 +10,7 @@ from projects.apps.JetTon import JetTon
 from projects.apps.QuackQuack import QuackQuack
 from projects.apps.SquidTG import SquidTG
 from projects.apps.XPLUS import XPLUS
+from projects.apps.xRare import xRare
 from projects.tokens.ARBUZ import ARBUZ
 from projects.tokens.KINGY import KINGY
 from projects.tokens.TINU import TINU
@@ -89,7 +90,8 @@ S3_5_apps = SeasonConfig(
         GM,
         JetTon,
         SquidTG,
-        XPLUS
+        XPLUS,
+        xRare
     ],
     score_model=AppLeaderboardModelV2()
 )
