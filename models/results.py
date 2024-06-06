@@ -15,6 +15,10 @@ class ProjectStat:
     APP_ONCHAIN_MEDIAN_TX = 'onchain_median_tx'
 
     TOKEN_TVL_CHANGE = 'token_tvl_change'
+    TOKEN_START_TVL = 'token_start_tvl'
+    TOKEN_LAST_TVL = 'token_last_tvl'
+    TOKEN_PRICE_BEFORE = 'token_price_before'
+    TOKEN_PRICE_AFTER = 'token_price_after'
     TOKEN_PRICE_CHANGE_NORMED = 'price_change_normed'
     TOKEN_NEW_USERS_WITH_MIN_AMOUNT = 'new_users_min_amount'
     TOKEN_ADDRESS = 'token_address'

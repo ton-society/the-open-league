@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from models.results import CalculationResults
 import json
 
@@ -22,7 +24,7 @@ class JsonRenderMethod(RenderMethod):
                 'score': item.score
             }
             for k, v in item.metrics.items():
-                obj[k] = v
+                obj[k] = float(v) if type(v) == Decimal else v
             items.append(obj)
         res = {
             'build_time': res.build_time,

@@ -14,6 +14,20 @@ class RedoubtAppBackend(CalculationBackend):
         CalculationBackend.__init__(self, "re:doubt backend for App leaderboard",
                                     leaderboards=[SeasonConfig.APPS])
 
+    """
+    Update time for auxiliary table with messages
+    """
+    def get_update_time(self, config: SeasonConfig):
+        with psycopg2.connect() as pg:
+            with pg.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+                cursor.execute(f"""
+                select coalesce( (select utime from transactions t where t.tx_id = m.in_tx_id),
+                (select utime from transactions t where t.tx_id = m.out_tx_id)) as last_time
+                from tol.messages_{config.safe_season_name()} m
+                order by msg_id desc limit 1
+                """)
+                return cursor.fetchone()['gen_utime']
+
     def _do_calculate(self, config: SeasonConfig, dry_run: bool = False):
         logger.info("Running re:doubt backend for App leaderboard SQL generation")
         PROJECTS = []

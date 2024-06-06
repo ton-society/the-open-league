@@ -25,4 +25,4 @@ class TokenLeaderboardModelV4(ScoreModel):
                             30 * self.normalized_min_max(project, ProjectStat.TOKEN_TVL_CHANGE, metrics) + \
                             30 * self.normalized_min_max(project, ProjectStat.TOKEN_PRICE_CHANGE_NORMED, metrics)
 
-        return metrics
+        return sorted(metrics, key=lambda m: m.score, reverse=True)

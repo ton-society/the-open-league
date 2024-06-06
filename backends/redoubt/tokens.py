@@ -16,6 +16,14 @@ class RedoubtTokensBackend(CalculationBackend):
         CalculationBackend.__init__(self, "re:doubt backend for Tokens leaderboard",
                                     leaderboards=[SeasonConfig.TOKENS])
 
+    def get_update_time(self, config: SeasonConfig):
+        with psycopg2.connect() as pg:
+            with pg.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+                cursor.execute("""
+                select extract('epoch' from update_time) as update_time  from chartingview.token_agg_price tap order by update_time desc limit 1
+                """)
+                return cursor.fetchone()['update_time']
+
     def _do_calculate(self, config: SeasonConfig, dry_run: bool = False):
         logger.info("Running re:doubt backend for Token leaderboard SQL generation")
         PROJECTS = []
@@ -177,6 +185,10 @@ class RedoubtTokensBackend(CalculationBackend):
                         )
                         results[row['symbol']].metrics[ProjectStat.TOKEN_ADDRESS] = row['address']
                         results[row['symbol']].metrics[ProjectStat.TOKEN_TVL_CHANGE] = int(row['tvl_change'])
+                        results[row['symbol']].metrics[ProjectStat.TOKEN_START_TVL] = int(row['start_tvl'])
+                        results[row['symbol']].metrics[ProjectStat.TOKEN_LAST_TVL] = int(row['last_tvl'])
+                        results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_BEFORE] = int(row['price_before'])
+                        results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_AFTER] = int(row['price_after'])
                         results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_CHANGE_NORMED] = int(row['price_delta_normed'])
                         results[row['symbol']].metrics[ProjectStat.TOKEN_NEW_USERS_WITH_MIN_AMOUNT] = int(row['new_holders'])
                 logger.info("Tokens query finished")

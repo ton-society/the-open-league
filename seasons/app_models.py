@@ -22,4 +22,5 @@ class AppLeaderboardModelV2(ScoreModel):
                     5 * self.normalized_max(project, ProjectStat.APP_OFFCHAIN_NON_PREMIUM_USERS, metrics) + \
                     15 * self.normalized_max(project, ProjectStat.APP_OFFCHAIN_PREMIUM_USERS, metrics) + \
                     20 * self.normalized_max(project, ProjectStat.APP_STICKINESS, metrics)
-        return metrics
+
+        return sorted(metrics, key=lambda m: m.score, reverse=True)
