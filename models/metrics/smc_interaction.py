@@ -1,7 +1,7 @@
-from models.metric import Metric, CalculationContext, TonalyticaMetricImpl
+from models.metric import Metric, CalculationContext, RedoubtMetricImpl
 
 
-class SmartContractInteractionTonalyticaImpl(TonalyticaMetricImpl):
+class SmartContractInteractionRedoubtImpl(RedoubtMetricImpl):
 
     def calculate(self, context: CalculationContext, metric):
         return f"""
@@ -17,7 +17,7 @@ Simple smart contract interaction - any message (but resulted in successful tran
 """
 class SmartContractInteraction(Metric):
     def __init__(self, description, address, is_custodial=False, comment_required=False):
-        Metric.__init__(self, description, [SmartContractInteractionTonalyticaImpl()])
+        Metric.__init__(self, description, [SmartContractInteractionRedoubtImpl()])
         self.address = address
         self.is_custodial = is_custodial
         self.comment_required = comment_required

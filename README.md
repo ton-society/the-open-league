@@ -12,7 +12,8 @@ The main goal of this repo is to create DSL for leaderboards, projects
 and seasons. Based on this DSL all ranks could be calculated
 using backends. Backend is an implementation of metrics calculation
 based on specific data source. For now the only supported backend
-is [Tonalytica](https://tonalytica.redoubt.online/).
+is re:doubt DB based on [ton-indexer](https://github.com/re-doubt/ton-indexer) and 
+[Tonalytica](https://tonalytica.redoubt.online/).
 
 Main entities:
 * [Metric](./models/metrics/) - used for the App Leaderboard, a simple way to describe

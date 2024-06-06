@@ -21,7 +21,7 @@ class TokenLeaderboardModelV4(ScoreModel):
     def calculate(self, metrics: List[ProjectStat]):
         for project in metrics:
             logger.info(f"Calculating score for {project}")
-            project.score = 40 * self.normalized_max(project, ProjectStat.TOKEN_NEW_USERS_MIN_AMOUNT, metrics) + \
+            project.score = 40 * self.normalized_max(project, ProjectStat.TOKEN_NEW_USERS_WITH_MIN_AMOUNT, metrics) + \
                             30 * self.normalized_min_max(project, ProjectStat.TOKEN_TVL_CHANGE, metrics) + \
                             30 * self.normalized_min_max(project, ProjectStat.TOKEN_PRICE_CHANGE_NORMED, metrics)
 

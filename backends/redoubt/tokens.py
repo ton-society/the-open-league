@@ -1,7 +1,7 @@
 from typing import Dict
 
 from models.backend import CalculationBackend
-from models.backends import BACKEND_TONALYTICA
+from models.backends import BACKEND_REDOUBT
 from models.metric import MetricImpl, CalculationContext
 from models.results import ProjectStat, CalculationResults
 from models.scores import ScoreModel
@@ -10,15 +10,15 @@ import psycopg2
 import psycopg2.extras
 from loguru import logger
 
-class TonalyticaTokensBackend(CalculationBackend):
+class RedoubtTokensBackend(CalculationBackend):
     def __init__(self):
-        CalculationBackend.__init__(self, "Tonalytica Tokens leaderboard",
+        CalculationBackend.__init__(self, "re:doubt backend for Tokens leaderboard",
                                     leaderboards=[SeasonConfig.TOKENS])
 
     def _do_calculate(self, config: SeasonConfig, dry_run: bool = False):
-        logger.info("Running tonalytica Token leaderboard SQL generation")
+        logger.info("Running re:doubt backend for Token leaderboard SQL generation")
         PROJECTS = []
-        context = CalculationContext(season=config, impl=BACKEND_TONALYTICA)
+        context = CalculationContext(season=config, impl=BACKEND_REDOUBT)
         for project in config.projects:
             PROJECTS.append(f"""
             select '{project.name}' as symbol, '{project.address}' as address, {project.decimals} as decimals

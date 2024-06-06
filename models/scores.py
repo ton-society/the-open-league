@@ -4,6 +4,7 @@ Scores models
 from typing import List
 
 from models.results import ProjectStat
+from loguru import logger
 
 
 """
@@ -39,7 +40,12 @@ class ScoreModel:
     max value will be 1
     """
     def normalized_min_max(self, p: ProjectStat, field: str, metrics):
-        return (p.metrics[field] - self.get_min(field, metrics)) / (self.get_max(field, metrics) - self.get_min(field, metrics))
+        max_ = self.get_max(field, metrics)
+        min_ = self.get_min(field, metrics)
+        if max_ == min_:
+            logger.error(f"Max = min for {field}")
+            return 0
+        return (p.metrics[field] - min_) / (max_ - min_)
 
     def calculate(self, metrics: List[ProjectStat]):
         raise NotImplemented()

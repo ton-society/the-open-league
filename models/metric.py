@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import List
 from loguru import logger
 
-from models.backends import BACKEND_TONALYTICA
+from models.backends import BACKEND_REDOUBT
 from models.project_base import Project
 from models.season_config import SeasonConfig
 
@@ -24,11 +24,11 @@ class MetricImpl:
         raise NotImplemented()
 
 """
-Tonalytica implementation
+implementation based on re:doubt backend (https://github.com/re-doubt/ton-indexer)
 """
-class TonalyticaMetricImpl(MetricImpl):
+class RedoubtMetricImpl(MetricImpl):
     def name(self):
-        return BACKEND_TONALYTICA
+        return BACKEND_REDOUBT
 
 
 """

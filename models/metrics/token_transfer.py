@@ -1,7 +1,7 @@
-from models.metric import Metric, CalculationContext, TonalyticaMetricImpl
+from models.metric import Metric, CalculationContext, RedoubtMetricImpl
 
 
-class TokenTransferTonalyticaImpl(TonalyticaMetricImpl):
+class TokenTransferRedoubtImpl(RedoubtMetricImpl):
 
     def calculate(self, context: CalculationContext, metric):
         destinations = "\nor\n".join(map(lambda addr: f"jt.destination_owner  = '{addr}'", metric.destinations))
@@ -25,7 +25,7 @@ TEP-74 token (jetton) transfer, allows to specify the list of destinations and t
 """
 class TokenTransfer(Metric):
     def __init__(self, description, jetton_masters=[], destinations=[], is_custodial=False):
-        Metric.__init__(self, description, [TokenTransferTonalyticaImpl()])
+        Metric.__init__(self, description, [TokenTransferRedoubtImpl()])
         self.jetton_masters = jetton_masters
         self.is_custodial = is_custodial
         self.destinations = destinations
