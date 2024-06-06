@@ -6,6 +6,7 @@ from projects.apps.Arbuz import Arbuz
 from projects.apps.Catizen import Catizen
 from projects.apps.Fanzee import Fanzee
 from projects.apps.GM import GM
+from projects.apps.JetTon import JetTon
 from projects.apps.QuackQuack import QuackQuack
 from projects.tokens.ARBUZ import ARBUZ
 from projects.tokens.KINGY import KINGY
@@ -83,7 +84,8 @@ S3_5_apps = SeasonConfig(
         Arbuz,
         Fanzee,
         Catizen,
-        GM
+        GM,
+        JetTon
     ],
     score_model=AppLeaderboardModelV2()
 )
