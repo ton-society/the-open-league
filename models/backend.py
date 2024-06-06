@@ -14,7 +14,7 @@ class CalculationBackend:
 
     def calculate(self, config: SeasonConfig, dry_run: bool = False):
         if not dry_run:
-            update_time = self.get_update_time(config)
+            update_time = int(self.get_update_time(config))
         if config.leaderboard not in self.leaderboards:
             raise Exception(f"Leaderboard {config.leaderboard} is not supported")
         res = self._do_calculate(config, dry_run)

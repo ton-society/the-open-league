@@ -187,9 +187,9 @@ class RedoubtTokensBackend(CalculationBackend):
                         results[row['symbol']].metrics[ProjectStat.TOKEN_TVL_CHANGE] = int(row['tvl_change'])
                         results[row['symbol']].metrics[ProjectStat.TOKEN_START_TVL] = int(row['start_tvl'])
                         results[row['symbol']].metrics[ProjectStat.TOKEN_LAST_TVL] = int(row['last_tvl'])
-                        results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_BEFORE] = int(row['price_before'])
-                        results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_AFTER] = int(row['price_after'])
-                        results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_CHANGE_NORMED] = int(row['price_delta_normed'])
+                        results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_BEFORE] = float(row['price_before'])
+                        results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_AFTER] = float(row['price_after'])
+                        results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_CHANGE_NORMED] = float(row['price_delta_normed'])
                         results[row['symbol']].metrics[ProjectStat.TOKEN_NEW_USERS_WITH_MIN_AMOUNT] = int(row['new_holders'])
                 logger.info("Tokens query finished")
 
