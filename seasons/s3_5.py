@@ -6,6 +6,7 @@ from projects.apps.Arbuz import Arbuz
 from projects.apps.Catizen import Catizen
 from projects.apps.Fanzee import Fanzee
 from projects.apps.GM import GM
+from projects.apps.GetGems import GetGems
 from projects.apps.JetTon import JetTon
 from projects.apps.PlayWallet import PlayWallet
 from projects.apps.QuackQuack import QuackQuack
@@ -95,7 +96,8 @@ S3_5_apps = SeasonConfig(
         XPLUS,
         xRare,
         PlayWallet,
-        YesCoin
+        YesCoin,
+        GetGems
     ],
     score_model=AppLeaderboardModelV2()
 )
