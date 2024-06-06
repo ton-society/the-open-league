@@ -8,6 +8,7 @@ from models.project_base import Project
 class Token(Project):
     address: str # token address
     decimals: int # token decimals
+    is_meme: bool = False # meme flag
 
 @dataclass
 class App(Project):

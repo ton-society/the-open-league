@@ -7,7 +7,7 @@ from loguru import logger
 
 from backends.redoubt.apps import RedoubtAppBackend
 from backends.redoubt.tokens import RedoubtTokensBackend
-from models.render_method import JsonRenderMethod
+from models.render_method import JsonRenderMethod, HTMLRenderMethod
 from seasons.s3_5 import S3_5_apps, S3_5_tokens
 
 if __name__ == "__main__":
@@ -16,4 +16,6 @@ if __name__ == "__main__":
     res = backend.calculate(season, dry_run=len(sys.argv) > 1 and sys.argv[1] == '--dryrun')
     logger.info(res)
     render = JsonRenderMethod("output.json")
+    render.render(res)
+    render = HTMLRenderMethod("output.html")
     render.render(res)

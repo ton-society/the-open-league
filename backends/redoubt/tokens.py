@@ -27,10 +27,11 @@ class RedoubtTokensBackend(CalculationBackend):
     def _do_calculate(self, config: SeasonConfig, dry_run: bool = False):
         logger.info("Running re:doubt backend for Token leaderboard SQL generation")
         PROJECTS = []
-        context = CalculationContext(season=config, impl=BACKEND_REDOUBT)
+        # context = CalculationContext(season=config, impl=BACKEND_REDOUBT)
         for project in config.projects:
             PROJECTS.append(f"""
-            select '{project.name}' as symbol, '{project.address}' as address, {project.decimals} as decimals
+            select '{project.name}' as symbol, '{project.address}' as address, {project.decimals} as decimals,
+            {project.is_meme} as is_meme
             """)
         PROJECTS = "\nunion all\n".join(PROJECTS)
 
@@ -152,6 +153,7 @@ class RedoubtTokensBackend(CalculationBackend):
             )
             select tvl_weighted.symbol,
             (select address from tol_tokens where tol_tokens.symbol = tvl_weighted.symbol limit 1) as address,
+            (select is_meme from tol_tokens where tol_tokens.symbol = tvl_weighted.symbol limit 1) as is_meme,
             tvl_change, start_tvl,
             coalesce(new_holders, 0) as new_holders,
             last_tvl.tvl as last_tvl,
@@ -184,6 +186,7 @@ class RedoubtTokensBackend(CalculationBackend):
                             metrics={}
                         )
                         results[row['symbol']].metrics[ProjectStat.TOKEN_ADDRESS] = row['address']
+                        results[row['symbol']].metrics[ProjectStat.TOKEN_IS_MEME] = row['is_meme']
                         results[row['symbol']].metrics[ProjectStat.TOKEN_TVL_CHANGE] = int(row['tvl_change'])
                         results[row['symbol']].metrics[ProjectStat.TOKEN_START_TVL] = int(row['start_tvl'])
                         results[row['symbol']].metrics[ProjectStat.TOKEN_LAST_TVL] = int(row['last_tvl'])
