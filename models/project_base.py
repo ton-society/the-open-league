@@ -6,4 +6,4 @@ class Project:
     name: str # project name
 
     def name_safe(self):
-        return self.name.replace(".", "_")
+        return self.name.replace(".", "_").replace(" ", "_")

@@ -13,6 +13,7 @@ from projects.apps.Gram import Gram
 from projects.apps.JetTon import JetTon
 from projects.apps.PlayWallet import PlayWallet
 from projects.apps.QuackQuack import QuackQuack
+from projects.apps.RoyalFortess import RoyalFortess
 from projects.apps.SquidTG import SquidTG
 from projects.apps.SwapCoffee import SwapCoffee
 from projects.apps.TonPunks import TopPunks
@@ -109,7 +110,8 @@ S3_5_apps = SeasonConfig(
         TopPunks,
         SwapCoffee,
         Gram,
-        Gatto
+        Gatto,
+        RoyalFortess
     ],
     score_model=AppLeaderboardModelV2()
 )
