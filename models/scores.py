@@ -36,6 +36,31 @@ class ScoreModel:
         return p.metrics[field] / self.get_max(field, metrics)
 
     """
+    The largest value gets max (100%) and the lowest gets min (0%),
+    all other values have result according to their rank in the set of values.
+    Simple example: given values 1, 12, 2, 3, 4, 2, 3.
+    Building ranks from it:
+    #1: 12
+    #2: 4
+    #3: 3, 3
+    #4: 2, 2
+    #5: 1
+    
+    So #1 12 will get 100% (i.e 1, float value), #5 1 will get 0%,
+    #2 4 - 75%, #3: 3, 3 - %50, #4: 2, 2 - %25        
+    """
+    def rank_index(self, p: ProjectStat, field: str, metrics):
+        current = p.metrics[field]
+        values = sorted(set(map(lambda x: x.metrics[field], metrics)), reverse=True)
+        rank = len(values)
+        for value in values:
+            if value == current:
+                break
+            rank -= 1
+        logger.info(f"Value : {current}, values: {values}, rank: {rank}, rank value: {1.0 * rank / len(values)}")
+        return 1.0 * rank / len(values)
+
+    """
     Normalize value based on the min and max values. So min value will be 0 and
     max value will be 1
     """

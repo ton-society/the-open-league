@@ -18,7 +18,7 @@ class AppLeaderboardModelV2(ScoreModel):
         for project in metrics:
             logger.info(f"Calculating score for {project}")
             project.score = 40 * self.normalized_max(project, ProjectStat.APP_ONCHAIN_UAW, metrics) + \
-                    20 * self.normalized_max(project, ProjectStat.APP_ONCHAIN_MEDIAN_TX, metrics) + \
+                    20 * self.rank_index(project, ProjectStat.APP_ONCHAIN_MEDIAN_TX, metrics) + \
                     5 * self.normalized_max(project, ProjectStat.APP_OFFCHAIN_NON_PREMIUM_USERS, metrics) + \
                     15 * self.normalized_max(project, ProjectStat.APP_OFFCHAIN_PREMIUM_USERS, metrics) + \
                     20 * self.normalized_max(project, ProjectStat.APP_STICKINESS, metrics)
