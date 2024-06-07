@@ -18,6 +18,7 @@ from projects.apps.SquidTG import SquidTG
 from projects.apps.SwapCoffee import SwapCoffee
 from projects.apps.TonPunks import TopPunks
 from projects.apps.Tonano import Tonano
+from projects.apps.TonsOfFriends import TonsOfFriends
 from projects.apps.XPLUS import XPLUS
 from projects.apps.YesCoin import YesCoin
 from projects.apps.xRare import xRare
@@ -111,7 +112,8 @@ S3_5_apps = SeasonConfig(
         SwapCoffee,
         Gram,
         Gatto,
-        RoyalFortess
+        RoyalFortess,
+        TonsOfFriends
     ],
     score_model=AppLeaderboardModelV2()
 )
