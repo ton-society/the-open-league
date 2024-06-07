@@ -27,7 +27,7 @@ Gram = App(
             ]
         ),
         NFTActivity(
-            "Gram DNS", "EQAic3zPce496ukFDhbco28FVsKKl2WUX_iJwaL87CBxSiLQ"
+            "Gram DNS", collections=["EQAic3zPce496ukFDhbco28FVsKKl2WUX_iJwaL87CBxSiLQ"]
         ),
         TokenTransferFromUser(
             "GRAM domains mints",

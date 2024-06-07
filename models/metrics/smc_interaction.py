@@ -41,6 +41,8 @@ class SmartContractInteraction(Metric):
     def __init__(self, description, address=None, addresses=[], is_custodial=False,
                  comment_required=False, op_codes=[], comment_regexp=None, comment_not_equals=[]):
         Metric.__init__(self, description, [SmartContractInteractionRedoubtImpl()])
+        assert type(addresses) == list
+        assert type(op_codes) == list
         self.address = address
         self.addresses = addresses
         self.is_custodial = is_custodial

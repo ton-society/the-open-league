@@ -18,6 +18,7 @@ TEP-74 token (jetton) mint
 """
 class JettonMint(Metric):
     def __init__(self, description, jetton_masters=[]):
+        assert type(jetton_masters) == list
         Metric.__init__(self, description, [JettonMintRedoubtImpl()])
         self.jetton_masters = jetton_masters
 

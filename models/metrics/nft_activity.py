@@ -22,6 +22,7 @@ All actions with NFTs for specified collections. Includes transfers and sales (a
 """
 class NFTActivity(Metric):
     def __init__(self, description, collections=[], is_custodial=False):
+        assert type(collections) == list
         Metric.__init__(self, description, [NFTActivityRedoubtImpl()])
         self.collections = collections
         self.is_custodial = is_custodial

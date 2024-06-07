@@ -43,6 +43,8 @@ This metric covers jetton transfer to user from smart contract.
 class TokenTransferToUser(Metric):
     def __init__(self, description, jetton_masters=[], sources=[], initiated_by_user=False, is_custodial=False):
         Metric.__init__(self, description, [TokenTransferToUserRedoubtImpl()])
+        assert type(jetton_masters) == list
+        assert type(sources) == list
         self.jetton_masters = jetton_masters
         self.is_custodial = is_custodial
         self.sources = sources

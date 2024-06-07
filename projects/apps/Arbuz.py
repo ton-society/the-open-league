@@ -10,7 +10,7 @@ Arbuz = App(
     analytics_key="ClickARBUZ",
     metrics=[
         SmartContractInteraction(
-            "Clicker actions", "EQCaFoHe_hgwwtj3n5gjUsmGcxHA0X_-q2mZTxyzmvbWnEtC"
+            "Clicker actions", address="EQCaFoHe_hgwwtj3n5gjUsmGcxHA0X_-q2mZTxyzmvbWnEtC"
         ),
         SmartContractInteraction(
             "Arbuz claim", "EQAnhNV-BnPRwfbJUOrNqnYs8YZ31sk1YAvhYSGLqfvIPEYE"
