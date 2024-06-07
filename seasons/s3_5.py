@@ -7,6 +7,7 @@ from projects.apps.Catizen import Catizen
 from projects.apps.Fanton import Fanton
 from projects.apps.Fanzee import Fanzee
 from projects.apps.GM import GM
+from projects.apps.Gatto import Gatto
 from projects.apps.GetGems import GetGems
 from projects.apps.Gram import Gram
 from projects.apps.JetTon import JetTon
@@ -107,7 +108,8 @@ S3_5_apps = SeasonConfig(
         Tonano,
         TopPunks,
         SwapCoffee,
-        Gram
+        Gram,
+        Gatto
     ],
     score_model=AppLeaderboardModelV2()
 )
