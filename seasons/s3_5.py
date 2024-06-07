@@ -18,6 +18,7 @@ from projects.apps.RoyalFortess import RoyalFortess
 from projects.apps.SquidTG import SquidTG
 from projects.apps.SwapCoffee import SwapCoffee
 from projects.apps.TapFantasy import TapFantasy
+from projects.apps.ThePixels import ThePixels
 from projects.apps.TonPunks import TopPunks
 from projects.apps.Tonano import Tonano
 from projects.apps.TonsOfFriends import TonsOfFriends
@@ -117,7 +118,8 @@ S3_5_apps = SeasonConfig(
         RoyalFortess,
         TonsOfFriends,
         ChickCoop,
-        TapFantasy
+        TapFantasy,
+        ThePixels
     ],
     score_model=AppLeaderboardModelV2()
 )
