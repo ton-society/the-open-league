@@ -14,7 +14,7 @@ class InscriptionsRedoubtImpl(RedoubtMetricImpl):
 
 
 """
-Special filter for all messages using subscting in comment
+Special filter for all messages using specific pattern in comment
 """
 class Inscriptions(Metric):
     def __init__(self, description, project_market):

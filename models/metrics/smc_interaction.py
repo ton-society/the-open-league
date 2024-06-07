@@ -36,6 +36,14 @@ class SmartContractInteractionRedoubtImpl(RedoubtMetricImpl):
 
 """
 Simple smart contract interaction - any message (but resulted in successful transaction) to the address provided
+Options:
+* address - single address
+* addresses - list of addresses
+* is_custodial - custodial flag
+* comment_required - comment required flag
+* op_codes - list of op codes (please use signed decimal notation, not hex!)
+* comment_regexp - comment regexp to filter with
+* comment_not_equals - list of strings from comment to exclude  
 """
 class SmartContractInteraction(Metric):
     def __init__(self, description, address=None, addresses=[], is_custodial=False,

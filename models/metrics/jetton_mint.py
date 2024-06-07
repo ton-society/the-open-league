@@ -14,7 +14,7 @@ class JettonMintRedoubtImpl(RedoubtMetricImpl):
 
 
 """
-TEP-74 token (jetton) mint
+TEP-74 token (jetton) mint, i.e. transfer initiated by jetton master 
 """
 class JettonMint(Metric):
     def __init__(self, description, jetton_masters=[]):

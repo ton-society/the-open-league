@@ -14,7 +14,7 @@ class JettonBurnRedoubtImpl(RedoubtMetricImpl):
 
 
 """
-TEP-74 token (jetton) mint
+TEP-74 token (jetton) burn
 """
 class JettonBurn(Metric):
     def __init__(self, description, jetton_masters=[]):

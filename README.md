@@ -39,4 +39,7 @@ List of the seasons supported with the leaderboard links
 
 To add new project one need to create a file in [projects/{type}/{slug.py}](./projects) folder,
 where type is __apps__ or __token__ and __slug__ is project name.
+
+To add more contracts please find your project file in [projects](./projects) folder
+and add metrics you need. The full list of supported metrics is [here](./models/metrics).
  
