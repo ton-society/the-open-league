@@ -10,9 +10,10 @@ import psycopg2.extras
 from loguru import logger
 
 class RedoubtAppBackend(CalculationBackend):
-    def __init__(self):
+    def __init__(self, mau_stats=False):
         CalculationBackend.__init__(self, "re:doubt backend for App leaderboard",
                                     leaderboards=[SeasonConfig.APPS])
+        self.mau_stats = mau_stats
 
     """
     Update time for auxiliary table with messages
@@ -50,11 +51,49 @@ class RedoubtAppBackend(CalculationBackend):
             """)
         PROJECTS = ",\n".join(PROJECTS)
         PROJECTS_ALIASES = "\nUNION ALL\n".join(PROJECTS_ALIASES)
-        SQL = f"""
-        with messages_local as (
+        if self.mau_stats:
+            messages = f"""
+            -- full messages table, filter by last 30 days
+            select m.*
+            from  messages m
+            where
+            (
+            select
+                        (t.action_result_code  = 0 and t.compute_exit_code  = 0)
+                        or
+                        (t.action_result_code is null and t.compute_exit_code  is null and t.compute_skip_reason = 'cskip_no_gas')
+            from transactions t where t.tx_id = in_tx_id and t.utime > {config.start_time} and 
+            t.utime < {config.end_time} 
+            )
+            """
+            final_part = """
+            select count(1) as mau from users_stats where tx_count > 1
+            """
+        else:
+            messages = """
             -- we will use subset of messages table for better performance
             -- also this table contains only messages with successful destination tx
             select * from tol.messages_{config.safe_season_name()}
+            """
+            final_part = """
+            , good_users as (
+            select
+              project,
+              sum(weight) filter (where tx_count > 1) as total_users, -- users with 2+ tx, custodial wallets have lower weight
+              percentile_disc(0.5) within group (order by tx_count) as median_tx  -- median tx per user 
+            from users_stats
+            group by 1
+            ), tx_stat as (
+            select project, sum(weight * tx_count) as tx_count from users_stats
+            group by 1
+            )
+            select project, tx_count,  coalesce(total_users,0 )as total_users, median_tx
+            from tx_stat
+                     left join good_users using(project)
+            """
+        SQL = f"""
+        with messages_local as (
+            {messages}            
         ), jetton_transfers_local as (
             select jt.*, jw.jetton_master from jetton_transfers jt
             JOIN jetton_wallets jw ON jw.address = jt.source_wallet and not jw.is_scam
@@ -140,25 +179,18 @@ class RedoubtAppBackend(CalculationBackend):
           select * from users_stats_raw
           join wallets using(user_address)
         )
-        , good_users as (
-        select
-          project,
-          sum(weight) filter (where tx_count > 1) as total_users, -- users with 2+ tx, custodial wallets have lower weight
-          percentile_disc(0.5) within group (order by tx_count) as median_tx  -- median tx per user 
-        from users_stats
-        group by 1
-        ), tx_stat as (
-        select project, sum(weight * tx_count) as tx_count from users_stats
-        group by 1
-        )
-        select project, tx_count,  coalesce(total_users,0 )as total_users, median_tx
-        from tx_stat
-                 left join good_users using(project)
+        {final_part}
         """
         logger.info(f"Generated SQL: {SQL}")
 
         results: Dict[str, ProjectStat] = {}
         with psycopg2.connect() as pg:
+            if self.mau_stats:
+                with pg.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+                    cursor.execute(SQL)
+                    mau = cursor.fetchone()['mau']
+                    logger.info(f"Mau calculated: {mau}")
+                    return mau
             if dry_run:
                 logger.info("Running SQL query in dry_run mode")
                 with pg.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:

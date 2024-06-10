@@ -7,7 +7,7 @@ TonPunks app
 """
 
 TonPunks = App(
-    name="TonPunks",
+    name="TON Punks",
     analytics_key=None,
     metrics=[
         SmartContractInteraction(
