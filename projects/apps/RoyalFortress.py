@@ -5,8 +5,8 @@ from models.project import App
 TheRoyalFortess app
 """
 
-RoyalFortess = App(
-    name="The Royal Fortess",
+RoyalFortress = App(
+    name="The Royal Fortress",
     analytics_key=None,
     metrics=[
         SmartContractInteraction(

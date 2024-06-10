@@ -14,12 +14,12 @@ from projects.apps.Gram import Gram
 from projects.apps.JetTon import JetTon
 from projects.apps.PlayWallet import PlayWallet
 from projects.apps.QuackQuack import QuackQuack
-from projects.apps.RoyalFortess import RoyalFortess
+from projects.apps.RoyalFortress import RoyalFortress
 from projects.apps.SquidTG import SquidTG
 from projects.apps.SwapCoffee import SwapCoffee
 from projects.apps.TapFantasy import TapFantasy
 from projects.apps.ThePixels import ThePixels
-from projects.apps.TonPunks import TopPunks
+from projects.apps.TonPunks import TonPunks
 from projects.apps.Tonano import Tonano
 from projects.apps.TonsOfFriends import TonsOfFriends
 from projects.apps.XPLUS import XPLUS
@@ -111,11 +111,11 @@ S3_5_apps = SeasonConfig(
         GetGems,
         Fanton,
         Tonano,
-        TopPunks,
+        TonPunks,
         SwapCoffee,
         Gram,
         Gatto,
-        RoyalFortess,
+        RoyalFortress,
         TonsOfFriends,
         ChickCoop,
         TapFantasy,
