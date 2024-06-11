@@ -12,17 +12,17 @@ import psycopg2.extras
 from loguru import logger
 
 class RedoubtTokensBackend(CalculationBackend):
-    def __init__(self):
+    def __init__(self, connection):
         CalculationBackend.__init__(self, "re:doubt backend for Tokens leaderboard",
                                     leaderboards=[SeasonConfig.TOKENS])
+        self.connection = connection
 
     def get_update_time(self, config: SeasonConfig):
-        with psycopg2.connect() as pg:
-            with pg.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
-                cursor.execute("""
-                select extract('epoch' from update_time) as update_time  from chartingview.token_agg_price tap order by update_time desc limit 1
-                """)
-                return cursor.fetchone()['update_time']
+        with self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+            cursor.execute("""
+            select extract('epoch' from update_time) as update_time  from chartingview.token_agg_price tap order by update_time desc limit 1
+            """)
+            return cursor.fetchone()['update_time']
 
     def _do_calculate(self, config: SeasonConfig, dry_run: bool = False):
         logger.info("Running re:doubt backend for Token leaderboard SQL generation")
@@ -170,33 +170,32 @@ class RedoubtTokensBackend(CalculationBackend):
         logger.info(f"Generated SQL: {SQL}")
 
         results: Dict[str, ProjectStat] = {}
-        with psycopg2.connect() as pg:
-            if dry_run:
-                logger.info("Running SQL query in dry_run mode")
-                with pg.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
-                    cursor.execute(f"explain {SQL}")
-            else:
-                logger.info("Running SQL query in production mode")
-                with pg.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
-                    cursor.execute(SQL)
-                    for row in cursor.fetchall():
-                        logger.info(row)
-                        assert row['symbol'] not in results
-                        results[row['symbol']] = ProjectStat(
-                            name=row['symbol'],
-                            metrics={}
-                        )
-                        results[row['symbol']].metrics[ProjectStat.TOKEN_ADDRESS] = row['address']
-                        results[row['symbol']].metrics[ProjectStat.TOKEN_IS_MEME] = row['is_meme']
-                        results[row['symbol']].metrics[ProjectStat.TOKEN_HAS_BOOST] = row['has_boost']
-                        results[row['symbol']].metrics[ProjectStat.TOKEN_TVL_CHANGE] = int(row['tvl_change'])
-                        results[row['symbol']].metrics[ProjectStat.TOKEN_START_TVL] = int(row['start_tvl'])
-                        results[row['symbol']].metrics[ProjectStat.TOKEN_LAST_TVL] = int(row['last_tvl'])
-                        results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_BEFORE] = float(row['price_before'])
-                        results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_AFTER] = float(row['price_after'])
-                        results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_CHANGE_NORMED] = float(row['price_delta_normed'])
-                        results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_CHANGE_SIMPLE] = float(row['price_delta'])
-                        results[row['symbol']].metrics[ProjectStat.TOKEN_NEW_USERS_WITH_MIN_AMOUNT] = int(row['new_holders'])
-                logger.info("Tokens query finished")
+        if dry_run:
+            logger.info("Running SQL query in dry_run mode")
+            with self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+                cursor.execute(f"explain {SQL}")
+        else:
+            logger.info("Running SQL query in production mode")
+            with self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+                cursor.execute(SQL)
+                for row in cursor.fetchall():
+                    logger.info(row)
+                    assert row['symbol'] not in results
+                    results[row['symbol']] = ProjectStat(
+                        name=row['symbol'],
+                        metrics={}
+                    )
+                    results[row['symbol']].metrics[ProjectStat.TOKEN_ADDRESS] = row['address']
+                    results[row['symbol']].metrics[ProjectStat.TOKEN_IS_MEME] = row['is_meme']
+                    results[row['symbol']].metrics[ProjectStat.TOKEN_HAS_BOOST] = row['has_boost']
+                    results[row['symbol']].metrics[ProjectStat.TOKEN_TVL_CHANGE] = int(row['tvl_change'])
+                    results[row['symbol']].metrics[ProjectStat.TOKEN_START_TVL] = int(row['start_tvl'])
+                    results[row['symbol']].metrics[ProjectStat.TOKEN_LAST_TVL] = int(row['last_tvl'])
+                    results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_BEFORE] = float(row['price_before'])
+                    results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_AFTER] = float(row['price_after'])
+                    results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_CHANGE_NORMED] = float(row['price_delta_normed'])
+                    results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_CHANGE_SIMPLE] = float(row['price_delta'])
+                    results[row['symbol']].metrics[ProjectStat.TOKEN_NEW_USERS_WITH_MIN_AMOUNT] = int(row['new_holders'])
+            logger.info("Tokens query finished")
 
         return CalculationResults(ranking=results.values(), build_time=1)  # TODO build time

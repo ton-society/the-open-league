@@ -10,24 +10,24 @@ import psycopg2.extras
 from loguru import logger
 
 class RedoubtAppBackend(CalculationBackend):
-    def __init__(self, mau_stats=False):
+    def __init__(self, connection, mau_stats=False):
         CalculationBackend.__init__(self, "re:doubt backend for App leaderboard",
                                     leaderboards=[SeasonConfig.APPS])
         self.mau_stats = mau_stats
+        self.connection = connection
 
     """
     Update time for auxiliary table with messages
     """
     def get_update_time(self, config: SeasonConfig):
-        with psycopg2.connect() as pg:
-            with pg.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
-                cursor.execute(f"""
-                select coalesce( (select utime from transactions t where t.tx_id = m.in_tx_id),
-                (select utime from transactions t where t.tx_id = m.out_tx_id)) as last_time
-                from tol.messages_{config.safe_season_name()} m
-                order by msg_id desc limit 1
-                """)
-                return cursor.fetchone()['last_time']
+        with self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+            cursor.execute(f"""
+            select coalesce( (select utime from transactions t where t.tx_id = m.in_tx_id),
+            (select utime from transactions t where t.tx_id = m.out_tx_id)) as last_time
+            from tol.messages_{config.safe_season_name()} m
+            order by msg_id desc limit 1
+            """)
+            return cursor.fetchone()['last_time']
 
     def _do_calculate(self, config: SeasonConfig, dry_run: bool = False):
         logger.info("Running re:doubt backend for App leaderboard SQL generation")
@@ -184,69 +184,69 @@ class RedoubtAppBackend(CalculationBackend):
         logger.info(f"Generated SQL: {SQL}")
 
         results: Dict[str, ProjectStat] = {}
-        with psycopg2.connect() as pg:
-            if self.mau_stats:
-                with pg.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
-                    cursor.execute(SQL)
-                    mau = cursor.fetchone()['mau']
-                    logger.info(f"Mau calculated: {mau}")
-                    return mau
-            if dry_run:
-                logger.info("Running SQL query in dry_run mode")
-                with pg.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
-                    cursor.execute(f"explain {SQL}")
-            else:
-                logger.info("Running SQL query in production mode")
-                with pg.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
-                    cursor.execute(SQL)
-                    for row in cursor.fetchall():
-                        logger.info(row)
-                        assert row['project'] not in results
-                        results[row['project']] = ProjectStat(
-                            name=row['project'],
-                            metrics={}
-                        )
-                        results[row['project']].metrics[ProjectStat.APP_ONCHAIN_TOTAL_TX] = int(row['tx_count'])
-                        results[row['project']].metrics[ProjectStat.APP_ONCHAIN_UAW] = int(row['total_users'])
-                        results[row['project']].metrics[ProjectStat.APP_ONCHAIN_MEDIAN_TX] = int(row['median_tx'])
-                logger.info("Main query finished")
-            if not dry_run:
-                logger.info("Requesting off-chain tganalytics.xyz metrics")
-                with pg.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
-                    for project in config.projects:
-                        if project.analytics_key is None:
-                            logger.info(f"Project {project.name} has no off-chain tracking activity")
+
+        if self.mau_stats:
+            with self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+                cursor.execute(SQL)
+                mau = cursor.fetchone()['mau']
+                logger.info(f"Mau calculated: {mau}")
+                return mau
+        if dry_run:
+            logger.info("Running SQL query in dry_run mode")
+            with self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+                cursor.execute(f"explain {SQL}")
+        else:
+            logger.info("Running SQL query in production mode")
+            with self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+                cursor.execute(SQL)
+                for row in cursor.fetchall():
+                    logger.info(row)
+                    assert row['project'] not in results
+                    results[row['project']] = ProjectStat(
+                        name=row['project'],
+                        metrics={}
+                    )
+                    results[row['project']].metrics[ProjectStat.APP_ONCHAIN_TOTAL_TX] = int(row['tx_count'])
+                    results[row['project']].metrics[ProjectStat.APP_ONCHAIN_UAW] = int(row['total_users'])
+                    results[row['project']].metrics[ProjectStat.APP_ONCHAIN_MEDIAN_TX] = int(row['median_tx'])
+            logger.info("Main query finished")
+        if not dry_run:
+            logger.info("Requesting off-chain tganalytics.xyz metrics")
+            with self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+                for project in config.projects:
+                    if project.analytics_key is None:
+                        logger.info(f"Project {project.name} has no off-chain tracking activity")
+                        results[project.name].metrics[ProjectStat.APP_OFFCHAIN_NON_PREMIUM_USERS] = 0
+                        results[project.name].metrics[ProjectStat.APP_OFFCHAIN_PREMIUM_USERS] = 0
+                        results[project.name].metrics[ProjectStat.APP_OFFCHAIN_AVG_DAU] = 0
+                        results[project.name].metrics[ProjectStat.APP_OFFCHAIN_TOTAL_USERS] = 0
+                        results[project.name].metrics[ProjectStat.APP_STICKINESS] = 0
+                        continue
+
+                    logger.info(f"Requesting data for {project.name} ({project.analytics_key}) ({config.name})")
+                    cursor.execute("""
+                    select * from tol.tganalytics_latest where app_name = %s and season = %s
+                    """, (project.analytics_key, config.name))
+                    res = cursor.fetchone()
+                    if not res:
+                        logger.error(f"No off-chain data for {project.name}")
+                    else:
+                        if project.name not in results:
+                            logger.error(f"Project {project.name} has no on-chain data, ignoring")
                             results[project.name].metrics[ProjectStat.APP_OFFCHAIN_NON_PREMIUM_USERS] = 0
                             results[project.name].metrics[ProjectStat.APP_OFFCHAIN_PREMIUM_USERS] = 0
                             results[project.name].metrics[ProjectStat.APP_OFFCHAIN_AVG_DAU] = 0
                             results[project.name].metrics[ProjectStat.APP_OFFCHAIN_TOTAL_USERS] = 0
                             results[project.name].metrics[ProjectStat.APP_STICKINESS] = 0
-                            continue
-
-                        logger.info(f"Requesting data for {project.name} ({project.analytics_key}) ({config.name})")
-                        cursor.execute("""
-                        select * from tol.tganalytics_latest where app_name = %s and season = %s
-                        """, (project.analytics_key, config.name))
-                        res = cursor.fetchone()
-                        if not res:
-                            logger.error(f"No off-chain data for {project.name}")
                         else:
-                            if project.name not in results:
-                                logger.error(f"Project {project.name} has no on-chain data, ignoring")
-                                results[project.name].metrics[ProjectStat.APP_OFFCHAIN_NON_PREMIUM_USERS] = 0
-                                results[project.name].metrics[ProjectStat.APP_OFFCHAIN_PREMIUM_USERS] = 0
-                                results[project.name].metrics[ProjectStat.APP_OFFCHAIN_AVG_DAU] = 0
-                                results[project.name].metrics[ProjectStat.APP_OFFCHAIN_TOTAL_USERS] = 0
-                                results[project.name].metrics[ProjectStat.APP_STICKINESS] = 0
-                            else:
-                                results[project.name].metrics[ProjectStat.APP_OFFCHAIN_NON_PREMIUM_USERS] = int(res['non_premium_users'])
-                                results[project.name].metrics[ProjectStat.APP_OFFCHAIN_PREMIUM_USERS] = int(res['premium_users'])
-                                results[project.name].metrics[ProjectStat.APP_OFFCHAIN_AVG_DAU] = int(res['avg_dau'])
-                                results[project.name].metrics[ProjectStat.APP_OFFCHAIN_TOTAL_USERS] = int(res['total_unique_users'])
-                                results[project.name].metrics[ProjectStat.APP_STICKINESS] = 1.0 * int(res['avg_dau']) / int(res['total_unique_users'])
+                            results[project.name].metrics[ProjectStat.APP_OFFCHAIN_NON_PREMIUM_USERS] = int(res['non_premium_users'])
+                            results[project.name].metrics[ProjectStat.APP_OFFCHAIN_PREMIUM_USERS] = int(res['premium_users'])
+                            results[project.name].metrics[ProjectStat.APP_OFFCHAIN_AVG_DAU] = int(res['avg_dau'])
+                            results[project.name].metrics[ProjectStat.APP_OFFCHAIN_TOTAL_USERS] = int(res['total_unique_users'])
+                            results[project.name].metrics[ProjectStat.APP_STICKINESS] = 1.0 * int(res['avg_dau']) / int(res['total_unique_users'])
 
 
-                logger.info("Off-chain processing is finished")
+            logger.info("Off-chain processing is finished")
 
         return CalculationResults(ranking=results.values(), build_time=1)  # TODO build time
 
