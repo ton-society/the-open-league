@@ -6,14 +6,25 @@ import sys
 from loguru import logger
 
 from backends.redoubt.apps import RedoubtAppBackend
+from backends.redoubt.nfts import RedoubtNFTsBackend
 from backends.redoubt.tokens import RedoubtTokensBackend
 from models.render_method import JsonRenderMethod, HTMLRenderMethod
-from seasons.s3_5 import S3_5_apps, S3_5_tokens
+from seasons.s3_5 import S3_5_apps, S3_5_tokens, S3_5_nfts
 
 if __name__ == "__main__":
-    backend = RedoubtAppBackend()
-    season = S3_5_apps
-    res = backend.calculate(season, dry_run=len(sys.argv) > 1 and sys.argv[1] == '--dryrun')
+    if sys.argv[1] == 'tokens':
+        backend = RedoubtTokensBackend()
+        season = S3_5_tokens
+    elif sys.argv[1] == 'apps':
+        backend = RedoubtAppBackend()
+        season = S3_5_apps
+    elif sys.argv[1] == 'nfts':
+        backend = RedoubtNFTsBackend()
+        season = S3_5_nfts
+    else:
+        raise Exception(f"leadeboard not supported: {sys.argv[1]}")
+    
+    res = backend.calculate(season, dry_run=len(sys.argv) > 2 and sys.argv[2] == '--dryrun')
     logger.info(res)
     render = JsonRenderMethod("output_s3_5.json")
     render.render(res, season)

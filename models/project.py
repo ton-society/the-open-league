@@ -16,3 +16,7 @@ class Token(Project):
 class App(Project):
     analytics_key: str # project name in tganalytics.xy
     metrics: List[Metric]
+
+@dataclass
+class NFT(Project):
+    address: str # token address

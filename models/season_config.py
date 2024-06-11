@@ -9,6 +9,7 @@ from models.scores import ScoreModel
 class SeasonConfig:
     APPS = "apps" # applications leaderboard
     TOKENS = "tokens" # tokens leaderboard
+    NFTS = "nfts" # NFTs leaderboard
 
     leaderboard: str # leaderboard name
     name: str # season name

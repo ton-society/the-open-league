@@ -91,7 +91,23 @@ from projects.tokens.JETTON import JETTON
 from projects.tokens.FISH import FISH
 from projects.tokens.DICK import DICK
 from projects.tokens.LLAMA import LLAMA
+from projects.nfts.TheMinersClubNFTs import TheMinersClubNFTsNFT
+from projects.nfts.YNGEXPLRZ import YNGEXPLRZNFT
+from projects.nfts.Gatto import GattoNFT
+from projects.nfts.AnimalsRedList import AnimalsRedListNFT
+from projects.nfts.Smeshariki import SmesharikiNFT
+from projects.nfts.TONDiamonds import TONDiamondsNFT
+from projects.nfts.NOTPunks import NOTPunksNFT
+from projects.nfts.TONFISHBOX import TONFISHBOXNFT
+from projects.nfts.PovelDurevNFT import PovelDurevNFTNFT
+from projects.nfts.TONPunks import TONPunksNFT
+from projects.nfts.TonedApeClub import TonedApeClubNFT
+from projects.nfts.Runeston import RunestonNFT
+from projects.nfts.FantonFantasyFootball import FantonFantasyFootballNFT
+from projects.nfts.RoOLZ import RoOLZNFT
+from projects.nfts.Glitches import GlitchesNFT
 from seasons.app_models import AppLeaderboardModelV2
+from seasons.nfts_models import NFTLeaderboardModelV1
 from seasons.tokens_models import TokenLeaderboardModelV4
 
 S3_5_apps = SeasonConfig(
@@ -143,4 +159,18 @@ S3_5_tokens = SeasonConfig(
         DUCK, KAKAXA, PET, JETTON, FISH, DICK, LLAMA
     ],
     score_model=TokenLeaderboardModelV4()
+)
+
+S3_5_nfts = SeasonConfig(
+    leaderboard=SeasonConfig.NFTS,
+    name="S3.5",
+    start_time=1716980400, # 2024-05-29 11:00:00 +0000
+    end_time=1718190000, # Wed Jun 12 2024 11:00:00 GMT+0000
+    projects=[
+        TheMinersClubNFTsNFT, YNGEXPLRZNFT, GattoNFT, AnimalsRedListNFT, SmesharikiNFT,
+        TONDiamondsNFT, NOTPunksNFT, TONFISHBOXNFT, PovelDurevNFTNFT, TONPunksNFT,
+        TonedApeClubNFT, RunestonNFT, FantonFantasyFootballNFT, RoOLZNFT, GlitchesNFT
+
+    ],
+    score_model=NFTLeaderboardModelV1()
 )
