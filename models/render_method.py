@@ -44,7 +44,7 @@ class JsonRenderMethod(RenderMethod):
             'update_time': res.build_time,
             'build_time': int(time.time()),
             'github_hash': self.get_commit_hash(),
-            'github_link': f"https://github.com/ton-society/the-open-league/tree/{self.get_commit_hash()}",
+            'source_link': f"https://github.com/ton-society/the-open-league/tree/{self.get_commit_hash()}",
             'items': items
         }
         with open(self.output_name, "wt") as out:
