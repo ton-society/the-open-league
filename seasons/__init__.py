@@ -1,7 +1,7 @@
 import time
 
 from models.season_config import SeasonConfig
-from s3_5 import S3_5_apps
+from seasons.s3_5 import S3_5_apps
 import time
 
 from seasons.app_models import AppLeaderboardModelV2

@@ -24,6 +24,7 @@ class ProjectStat:
     TOKEN_NEW_USERS_WITH_MIN_AMOUNT = 'new_users_min_amount'
     TOKEN_ADDRESS = 'token_address'
     TOKEN_IS_MEME = 'is_meme'
+    TOKEN_HAS_BOOST = 'has_boost'
 
 
     name: str

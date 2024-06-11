@@ -9,6 +9,8 @@ class Token(Project):
     address: str # token address
     decimals: int # token decimals
     is_meme: bool = False # meme flag
+    has_boost: bool = False
+
 
 @dataclass
 class App(Project):
