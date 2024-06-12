@@ -55,7 +55,6 @@ from projects.tokens.UP import UP
 from projects.tokens.GEMSTON import GEMSTON
 from projects.tokens.SQD import SQD
 from projects.tokens.CATS import CATS
-from projects.tokens.RAFF import RAFF
 from projects.tokens.RUSD import RUSD
 from projects.tokens.REDO import REDO
 from projects.tokens.Bear import Bear
@@ -143,7 +142,7 @@ S4_tokens = SeasonConfig(
     projects=[
         ARBUZ, KINGY, PUNK, GLINT, RECA, TIGER, WALL, DFC, MEH, HYDRA, WEB3, STON, BOLT,
         durev, OPEN, TGRAM, MagicCrystal, TONG, SCALE, GRAM, VIRUS, JVT, BURN, UP,
-        GEMSTON, SQD, CATS, RAFF, RUSD, REDO, Bear, MEM,
+        GEMSTON, SQD, CATS, RUSD, REDO, Bear, MEM,
         FNZ, SHIP, LAVE, TONK, CES, TON_STARS, SOX, COFE, PEPE, REGI, WIF, ANON,
         KAKAXA, JETTON, FISH, DICK, LLAMA
     ],
