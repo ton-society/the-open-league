@@ -33,6 +33,7 @@ class RedoubtAppBackend(CalculationBackend):
         logger.info("Running re:doubt backend for App leaderboard SQL generation")
         PROJECTS = []
         PROJECTS_ALIASES = []
+        PROJECTS_NAMES = []
         context = CalculationContext(season=config, impl=BACKEND_REDOUBT)
         
         for project in config.projects:
@@ -49,8 +50,12 @@ class RedoubtAppBackend(CalculationBackend):
             PROJECTS_ALIASES.append(f"""
             select * from project_{project.name_safe()}
             """)
+            PROJECTS_NAMES.append(f"""
+            select '{project.name}' as project
+            """)
         PROJECTS = ",\n".join(PROJECTS)
         PROJECTS_ALIASES = "\nUNION ALL\n".join(PROJECTS_ALIASES)
+        PROJECTS_NAMES = "\nUNION ALL\n".join(PROJECTS_NAMES)
         if self.mau_stats:
             messages = f"""
             -- full messages table, filter by last 30 days
@@ -87,8 +92,10 @@ class RedoubtAppBackend(CalculationBackend):
             select project, sum(weight * tx_count) as tx_count from users_stats
             group by 1
             )
-            select project, tx_count,  coalesce(total_users,0 )as total_users, median_tx
-            from tx_stat
+            select project, coalesce(tx_count, 0) as tx_count,  coalesce(total_users,0 )as total_users, 
+            coalesce(median_tx, 0) as median_tx 
+            from project_names
+            left join tx_stat using(project)
                      left join good_users using(project)
             """
         SQL = f"""
@@ -143,6 +150,8 @@ class RedoubtAppBackend(CalculationBackend):
         {PROJECTS},
         all_projects_raw as (
         {PROJECTS_ALIASES}        
+        ), project_names as (
+        {PROJECTS_NAMES}
         ),
         all_projects as (
           -- exclude banned users
@@ -231,6 +240,11 @@ class RedoubtAppBackend(CalculationBackend):
                     res = cursor.fetchone()
                     if not res:
                         logger.error(f"No off-chain data for {project.name}")
+                        results[project.name].metrics[ProjectStat.APP_OFFCHAIN_NON_PREMIUM_USERS] = 0
+                        results[project.name].metrics[ProjectStat.APP_OFFCHAIN_PREMIUM_USERS] = 0
+                        results[project.name].metrics[ProjectStat.APP_OFFCHAIN_AVG_DAU] = 0
+                        results[project.name].metrics[ProjectStat.APP_OFFCHAIN_TOTAL_USERS] = 0
+                        results[project.name].metrics[ProjectStat.APP_STICKINESS] = 0
                     else:
                         if project.name not in results:
                             logger.error(f"Project {project.name} has no on-chain data, ignoring")

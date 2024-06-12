@@ -33,7 +33,10 @@ class ScoreModel:
     Normalize value on the max value in the data set
     """
     def normalized_max(self, p: ProjectStat, field: str, metrics):
-        return p.metrics[field] / self.get_max(field, metrics)
+        m = self.get_max(field, metrics)
+        if m == 0:
+            return 0
+        return p.metrics[field] / m
 
     """
     The largest value gets max (100%) and the lowest gets min (0%),
