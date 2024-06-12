@@ -51,7 +51,7 @@ class RedoubtAppBackend(CalculationBackend):
             select * from project_{project.name_safe()}
             """)
             PROJECTS_NAMES.append(f"""
-            select {project.name} as 'project'
+            select '{project.name}' as project
             """)
         PROJECTS = ",\n".join(PROJECTS)
         PROJECTS_ALIASES = "\nUNION ALL\n".join(PROJECTS_ALIASES)
