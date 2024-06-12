@@ -151,21 +151,21 @@ class RedoubtTokensBackend(CalculationBackend):
               end as price_change
               from price_snapshots
             )
-            select tvl_weighted.symbol,
-            (select address from tol_tokens where tol_tokens.symbol = tvl_weighted.symbol limit 1) as address,
-            (select is_meme from tol_tokens where tol_tokens.symbol = tvl_weighted.symbol limit 1) as is_meme,
-            (select has_boost from tol_tokens where tol_tokens.symbol = tvl_weighted.symbol limit 1) as has_boost,
-            tvl_change, start_tvl,
+            select tol_tokens.symbol,
+            tol_tokens.address,
+            is_meme,
+            has_boost,
+            coalesce(tvl_change, 0) as tvl_change, coalesce(start_tvl, 0) as start_tvl,
             coalesce(new_holders, 0) as new_holders,
-            last_tvl.tvl as last_tvl,
+            coalesce(last_tvl.tvl, 0) as last_tvl,
             100 * coalesce(price_change, 0) as price_delta,
             100 * coalesce(price_change, 0) * ( sqrt(last_tvl.tvl) / 1000) as price_delta_normed,
             coalesce(price_before, 0) as price_before,
             coalesce(price_after, 0) as price_after
-            from tvl_weighted
-            join last_tvl on last_tvl.symbol = tvl_weighted.symbol
-            left join new_holders on new_holders.symbol = tvl_weighted.symbol
-            left join price_delta on price_delta.symbol = tvl_weighted.symbol
+            from tol_tokens left join tvl_weighted on tvl_weighted.symbol = tol_tokens.symbol 
+            left join last_tvl on last_tvl.symbol = tol_tokens.symbol
+            left join new_holders on new_holders.symbol = tol_tokens.symbol
+            left join price_delta on price_delta.symbol = tol_tokens.symbol
         """
         logger.info(f"Generated SQL: {SQL}")
 
