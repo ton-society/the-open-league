@@ -3,5 +3,6 @@ from models.project import Token
 JETTON = Token(
     name='JETTON',
     address='EQAQXlWJvGbbFfE8F3oS8s87lIgdovS455IsWFaRdmJetTon',
-    decimals=9
+    decimals=9,
+    has_boost=True
 )
