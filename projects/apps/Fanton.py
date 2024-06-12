@@ -9,7 +9,7 @@ Fanton app
 
 Fanton = App(
     name="Fanton",
-    analytics_key=None,
+    analytics_key="Fanton",
     metrics=[
         NFTActivity(
             "Project NFTs", collections=[
