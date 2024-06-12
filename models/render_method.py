@@ -6,6 +6,7 @@ from datetime import datetime
 
 from models.results import CalculationResults
 import json
+import pathlib
 import git
 
 from models.season_config import SeasonConfig
@@ -18,7 +19,7 @@ class RenderMethod:
         raise NotImplemented()
 
     def get_commit_hash(self):
-        repo = git.Repo(search_parent_directories=True)
+        repo = git.Repo(search_parent_directories=True, path=pathlib.Path(__file__).parent.resolve())
         return  repo.head.object.hexsha
 
     def get_items(self, res: CalculationResults):
