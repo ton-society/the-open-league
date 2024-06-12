@@ -240,6 +240,11 @@ class RedoubtAppBackend(CalculationBackend):
                     res = cursor.fetchone()
                     if not res:
                         logger.error(f"No off-chain data for {project.name}")
+                        results[project.name].metrics[ProjectStat.APP_OFFCHAIN_NON_PREMIUM_USERS] = 0
+                        results[project.name].metrics[ProjectStat.APP_OFFCHAIN_PREMIUM_USERS] = 0
+                        results[project.name].metrics[ProjectStat.APP_OFFCHAIN_AVG_DAU] = 0
+                        results[project.name].metrics[ProjectStat.APP_OFFCHAIN_TOTAL_USERS] = 0
+                        results[project.name].metrics[ProjectStat.APP_STICKINESS] = 0
                     else:
                         if project.name not in results:
                             logger.error(f"Project {project.name} has no on-chain data, ignoring")
