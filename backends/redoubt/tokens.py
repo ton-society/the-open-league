@@ -158,8 +158,8 @@ class RedoubtTokensBackend(CalculationBackend):
             coalesce(tvl_change, 0) as tvl_change, coalesce(start_tvl, 0) as start_tvl,
             coalesce(new_holders, 0) as new_holders,
             coalesce(last_tvl.tvl, 0) as last_tvl,
-            100 * coalesce(price_change, 0) as price_delta,
-            100 * coalesce(price_change, 0) * ( sqrt(last_tvl.tvl) / 1000) as price_delta_normed,
+            coalesce(100 * coalesce(price_change, 0), 0) as price_delta,
+            coalesce(100 * coalesce(price_change, 0) * ( sqrt(last_tvl.tvl) / 1000), 0) as price_delta_normed,
             coalesce(price_before, 0) as price_before,
             coalesce(price_after, 0) as price_after
             from tol_tokens left join tvl_weighted on tvl_weighted.symbol = tol_tokens.symbol 
