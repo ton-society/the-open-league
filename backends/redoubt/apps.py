@@ -70,7 +70,7 @@ class RedoubtAppBackend(CalculationBackend):
             select count(1) as mau from users_stats where tx_count > 1
             """
         else:
-            messages = """
+            messages = f"""
             -- we will use subset of messages table for better performance
             -- also this table contains only messages with successful destination tx
             select * from tol.messages_{config.safe_season_name()}
