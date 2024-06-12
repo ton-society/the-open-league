@@ -216,11 +216,12 @@ class RedoubtAppBackend(CalculationBackend):
                 for project in config.projects:
                     if project.analytics_key is None:
                         logger.info(f"Project {project.name} has no off-chain tracking activity")
-                        results[project.name].metrics[ProjectStat.APP_OFFCHAIN_NON_PREMIUM_USERS] = 0
-                        results[project.name].metrics[ProjectStat.APP_OFFCHAIN_PREMIUM_USERS] = 0
-                        results[project.name].metrics[ProjectStat.APP_OFFCHAIN_AVG_DAU] = 0
-                        results[project.name].metrics[ProjectStat.APP_OFFCHAIN_TOTAL_USERS] = 0
-                        results[project.name].metrics[ProjectStat.APP_STICKINESS] = 0
+                        if project.name in results:
+                            results[project.name].metrics[ProjectStat.APP_OFFCHAIN_NON_PREMIUM_USERS] = 0
+                            results[project.name].metrics[ProjectStat.APP_OFFCHAIN_PREMIUM_USERS] = 0
+                            results[project.name].metrics[ProjectStat.APP_OFFCHAIN_AVG_DAU] = 0
+                            results[project.name].metrics[ProjectStat.APP_OFFCHAIN_TOTAL_USERS] = 0
+                            results[project.name].metrics[ProjectStat.APP_STICKINESS] = 0
                         continue
 
                     logger.info(f"Requesting data for {project.name} ({project.analytics_key}) ({config.name})")
