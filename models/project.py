@@ -24,6 +24,5 @@ class NFT(Project):
 
 @dataclass
 class DeFi(Project):
-    title: str # project title
     url: str # project url
     defillama_slug: str # Defillama slug
