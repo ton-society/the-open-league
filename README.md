@@ -11,9 +11,10 @@ a set period of time with a defined list of projects and rules.
 The primary objective of this repository is to establish a Domain Specific Language (DSL) 
 for leaderboards, projects, and seasons. Using this DSL, all ranks can be calculated 
 through backends. A backend is an implementation of metrics calculation based on a 
-specific data source. Currently, the only supported backend is re:doubt DB, 
-which is based on [ton-indexer](https://github.com/re-doubt/ton-indexer) and 
-[Tonalytica](https://tonalytica.redoubt.online/).
+specific data source. Currently, there are two backends:
+* re:doubt DB, which is based on [ton-indexer](https://github.com/re-doubt/ton-indexer) and 
+[Tonalytica](https://tonalytica.redoubt.online/). It is used for all leaderboards except of DeFi.
+* [DefiLlama](./backends/defi.py) with on-chain data from [Tonapi](https://tonapi.io/) - used for the DeFi Leaderboard.
 
 Main entities:
 * [Metric](./models/metrics/) - used for the App Leaderboard, a simple way to describe
@@ -43,3 +44,37 @@ where type is __apps__ or __token__ and __slug__ is project name.
 To add more contracts please find your project file in [projects](./projects) folder
 and add metrics you need. The full list of supported metrics is [here](./models/metrics).
  
+## Running configuration
+
+To run metrics calculation one needs to use existing [SeasonConfig](./seasons) and configured backend.
+In general backends require some params and resources preconfigured (like DB connection).
+Simple example of running different backends is provided in [test_runnger.py](./test_runner.py).
+
+### Re:doubt backend
+
+One need to pass postgres db connection. Below is an example for running via Apache Airflow:
+```python
+postgres_hook = PostgresHook(postgres_conn_id="db")
+backend = RedoubtAppBackend(postgres_hook.get_conn())
+results = backend.calculate(S4_app)
+OUTPUT_JSON = "output.json"
+OUTPUT_HTML = "output.html"
+render = JsonRenderMethod(OUTPUT_JSON)
+render.render(results, season_config)
+render = HTMLRenderMethod(OUTPUT_HTML)
+render.render(results, season_config)
+```
+
+### DeFiLlama backend
+
+It requires data from DeFiLlama (public, doesn't require auth) and 
+tonapi (API key is recommended). Also, [contract-executor](https://github.com/shuva10v/contracts-executor) tool
+is required. Example of running config:
+```python
+backend  = DefillamaDeFiBackend(
+                tonapi=TonapiAdapter("ABCD...."),
+                executor=ContractsExecutor("http://localhost:9090/execute")
+            )
+results = backend.calculate(S4_defi)
+...
+```
