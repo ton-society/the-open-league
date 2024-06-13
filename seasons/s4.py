@@ -1,7 +1,7 @@
 """
 S4 season config
 """
-from models.season_config import SeasonConfig
+from models.season_config import SeasonConfig, DexPool
 from projects.apps.Arbuz import Arbuz
 from projects.apps.Catizen import Catizen
 from projects.apps.ChickCoop import ChickCoop
@@ -28,6 +28,12 @@ from projects.apps.TonsOfFriends import TonsOfFriends
 from projects.apps.XPLUS import XPLUS
 from projects.apps.YesCoin import YesCoin
 from projects.apps.xRare import xRare
+from projects.defi.DAOLama import DAOLama
+from projects.defi.DeDust import DeDust
+from projects.defi.EVAA import EVAA
+from projects.defi.StonFi import StonFi
+from projects.defi.StormTrade import StormTrade
+from projects.defi.Tradoor import Tradoor
 from projects.tokens.ARBUZ import ARBUZ
 from projects.tokens.KINGY import KINGY
 from projects.tokens.PUNK import PUNK
@@ -162,4 +168,40 @@ S4_nfts = SeasonConfig(
 
     ],
     score_model=NFTLeaderboardModelV1()
+)
+
+S4_defi = SeasonConfig(
+    leaderboard=SeasonConfig.DEFI,
+    name="S4",
+    start_time=S4_START,
+    end_time=S4_END,
+    projects=[
+        DeDust, StonFi, DAOLama, StormTrade, EVAA, Tradoor
+    ],
+    score_model=NFTLeaderboardModelV1(),
+    options={
+        SeasonConfig.OPTION_DEFI_EXCLUDED_POOLS: [
+            DexPool(  # USDT/TON
+                address='EQA-X_yo3fzzbDbJ_0bzFWKqtRuZFIRa1sJsveZJ1YpViO3r',
+                dex=DexPool.DEX_DEDUST,
+                asset_position=DexPool.POSITION_RIGHT,
+                asset_currency=DexPool.ASSET_USDT
+            ),
+            DexPool(  # USDT/TON
+                address='EQD8TJ8xEWB1SpnRE4d89YO3jl0W0EiBnNS4IBaHaUmdfizE',
+                dex=DexPool.DEX_STON,
+                asset_position=DexPool.POSITION_LEFT,
+                asset_currency=DexPool.ASSET_USDT
+            ),
+            ### TOL Projects boosts
+            DexPool(  # BOLT/TON
+                address='EQABHkxndSnqrBgMIDR73LB0FBDDM0C_Up39EL1Rn3ao_54-',
+                dex=DexPool.DEX_DEDUST,
+                asset_position=DexPool.POSITION_LEFT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+        ]
+    },
+    # 2024-06-12 14:59:57.000 +0400
+    block_before_start_ref='-1,8000000000000000,38319277,6D29F1A684BDA0C354E309C6BD47DD64FF5A9406D714BEBD4F7C4684D77CF339,5AB65BBD48348225CC03725564DB27EEF0C6E4FA0B275DB21B80323BBE0940E1'
 )
