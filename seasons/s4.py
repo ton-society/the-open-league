@@ -83,6 +83,13 @@ from projects.tokens.FISH import FISH
 from projects.tokens.DICK import DICK
 from projects.tokens.LLAMA import LLAMA
 from projects.tokens.TONALD import TONALD
+from projects.tokens.ALENKA import ALENKA
+from projects.tokens.WON import WON
+from projects.tokens.HIF import HIF
+from projects.tokens.RANDOM import RANDOM
+from projects.tokens.INS import INS
+from projects.tokens.SHIT import SHIT
+from projects.tokens.POE import POE
 from projects.nfts.TheMinersClubNFTs import TheMinersClubNFTsNFT
 from projects.nfts.YNGEXPLRZ import YNGEXPLRZNFT
 from projects.nfts.Gatto import GattoNFT
@@ -152,7 +159,7 @@ S4_tokens = SeasonConfig(
         durev, OPEN, TGRAM, MagicCrystal, TONG, SCALE, GRAM, VIRUS, JVT, BURN, UP,
         GEMSTON, SQD, CATS, RUSD, REDO, Bear, MEM,
         FNZ, SHIP, LAVE, TONK, CES, TON_STARS, SOX, COFE, PEPE, REGI, WIF, ANON,
-        KAKAXA, JETTON, FISH, DICK, LLAMA, TONALD
+        KAKAXA, JETTON, FISH, DICK, LLAMA, TONALD, ALENKA, WON, HIF, RANDOM, INS, SHIT, POE
     ],
     score_model=TokenLeaderboardModelV4()
 )
