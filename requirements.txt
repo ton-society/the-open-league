@@ -2,4 +2,4 @@ loguru==0.7.2
 psycopg2==2.9.5
 gitpython
 requests
-pytoniq-core
+tonsdk

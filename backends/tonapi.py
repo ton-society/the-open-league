@@ -2,8 +2,7 @@ import base64
 import os
 import requests
 from urllib.parse import quote_plus
-from pytoniq_core import Cell
-from pytoniq_core.tlb import Account
+from tonsdk.boc import Cell
 
 
 """
@@ -26,9 +25,9 @@ class TonapiAdapter:
                            (f'?target_block={quote_plus("(" + target_block + ")")}' if target_block else ''),
                            headers=self.auth_header).json()
         state = Cell.one_from_boc(res['state']).begin_parse()
-        acc = Account.deserialize(state)
+    
         def to_b64(cell):
             return base64.b64encode(cell.to_boc()).decode('utf-8')
-        code = to_b64(acc.storage.state.state_init.code)
-        data = to_b64(acc.storage.state.state_init.data)
+        code = to_b64(state.refs[0])
+        data = to_b64(state.refs[1])
         return code, data

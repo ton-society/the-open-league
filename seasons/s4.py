@@ -218,7 +218,7 @@ S4_defi = SeasonConfig(
                 asset_currency=DexPool.ASSET_TON
             ),
             DexPool(  # KINGY/TON
-                address='EQB7zhVOQKkfoMtnGU4f_uf0f6HmgcHJj6vZ-NTyHhsaPHCo',
+                address='EQDsIxN6kTHNTzkW-KDAFoOd7uK8IV_qhw8wR5NkYH1Gh_SQ',
                 dex=DexPool.DEX_DEDUST,
                 asset_position=DexPool.POSITION_LEFT,
                 asset_currency=DexPool.ASSET_TON
