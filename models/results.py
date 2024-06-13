@@ -26,6 +26,13 @@ class ProjectStat:
     TOKEN_IS_MEME = 'is_meme'
     TOKEN_HAS_BOOST = 'has_boost'
 
+    DEFI_TVL_BEFORE = 'defi_tvl_before'
+    DEFI_TVL_AFTER = 'defi_tvl_after'
+    DEFI_TVL_DELTA = 'defi_tvl_delta'
+
+    TITLE = 'title'
+    URL = 'url'
+
 
     name: str
     metrics: Dict[str, float]
