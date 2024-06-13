@@ -138,11 +138,8 @@ S4_apps = SeasonConfig(
         SwapCoffee,
         Gram,
         Gatto,
-        RoyalFortress,
         TonsOfFriends,
         ChickCoop,
-        TapFantasy,
-        ThePixels,
         TonUP,
         Tongochi,
         Shardify
