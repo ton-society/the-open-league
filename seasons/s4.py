@@ -105,6 +105,13 @@ from projects.nfts.Runeston import RunestonNFT
 from projects.nfts.FantonFantasyFootball import FantonFantasyFootballNFT
 from projects.nfts.RoOLZ import RoOLZNFT
 from projects.nfts.Glitches import GlitchesNFT
+from projects.nfts.MarketMakers import MarketMakers
+from projects.nfts.Parachute import Parachute
+from projects.nfts.NFTWeb3TON import NFTWeb3TON
+from projects.nfts.TONFrogs import TONFrogs
+from projects.nfts.GBOTSSD import GBOTSSD
+from projects.nfts.TonAlchemists import TonAlchemists
+from projects.nfts.TONSharks import TONSharks
 from seasons.app_models import AppLeaderboardModelV2
 from seasons.defi_models import DeFiWeightedRewards
 from seasons.nfts_models import NFTLeaderboardModelV1
@@ -169,7 +176,8 @@ S4_nfts = SeasonConfig(
     projects=[
         TheMinersClubNFTsNFT, YNGEXPLRZNFT, GattoNFT, AnimalsRedListNFT, SmesharikiNFT,
         TONDiamondsNFT, NOTPunksNFT, TONFISHBOXNFT, PovelDurevNFTNFT, TONPunksNFT,
-        TonedApeClubNFT, RunestonNFT, FantonFantasyFootballNFT, RoOLZNFT, GlitchesNFT
+        TonedApeClubNFT, RunestonNFT, FantonFantasyFootballNFT, RoOLZNFT, GlitchesNFT,
+        MarketMakers, Parachute, NFTWeb3TON, TONFrogs, GBOTSSD, TonAlchemists, TONSharks
 
     ],
     score_model=NFTLeaderboardModelV1()
