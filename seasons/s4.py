@@ -99,6 +99,7 @@ from projects.nfts.FantonFantasyFootball import FantonFantasyFootballNFT
 from projects.nfts.RoOLZ import RoOLZNFT
 from projects.nfts.Glitches import GlitchesNFT
 from seasons.app_models import AppLeaderboardModelV2
+from seasons.defi_models import DeFiWeightedRewards
 from seasons.nfts_models import NFTLeaderboardModelV1
 from seasons.tokens_models import TokenLeaderboardModelV4
 
@@ -178,7 +179,10 @@ S4_defi = SeasonConfig(
     projects=[
         DeDust, StonFi, DAOLama, StormTrade, EVAA, Tradoor
     ],
-    score_model=NFTLeaderboardModelV1(),
+    score_model=DeFiWeightedRewards(
+        total_prize_pool=150000,
+        max_prize=75000
+    ),
     options={
         SeasonConfig.OPTION_DEFI_EXCLUDED_POOLS: [
             DexPool(  # USDT/TON

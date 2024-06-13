@@ -124,5 +124,4 @@ class DefillamaDeFiBackend(CalculationBackend):
             ))
 
 
-
-        return CalculationResults(ranking=None, build_time=1)  # TODO build time
+        return CalculationResults(ranking=results, build_time=1)
