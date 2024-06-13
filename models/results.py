@@ -30,7 +30,10 @@ class ProjectStat:
 
     DEFI_TVL_BEFORE = 'defi_tvl_before'
     DEFI_TVL_AFTER = 'defi_tvl_after'
-    DEFI_TVL_DELTA = 'defi_tvl_delta'
+    DEFI_TVL_BEFORE_COUNTED = 'defi_tvl_before_counted'
+    DEFI_TVL_AFTER_COUNTED = 'defi_tvl_after_counted'
+    DEFI_TVL_DELTA = 'defi_tvl_delta_full'
+    DEFI_TVL_DELTA_COUNTED = 'defi_tvl_delta'
 
     TITLE = 'title'
     URL = 'url'
