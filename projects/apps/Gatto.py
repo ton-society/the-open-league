@@ -9,7 +9,7 @@ Gatto app
 
 Gatto = App(
     name="Gatto",
-    analytics_key=None,
+    analytics_key="Gatto",
     metrics=[
         SmartContractInteraction(
             "User actions", "EQBi01YXMYnPnv_rddXJeU4CD47lHyzlZ45JmKObIPL5V9rV", comment_required=True

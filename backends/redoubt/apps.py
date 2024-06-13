@@ -258,7 +258,7 @@ class RedoubtAppBackend(CalculationBackend):
                             results[project.name].metrics[ProjectStat.APP_OFFCHAIN_PREMIUM_USERS] = int(res['premium_users'])
                             results[project.name].metrics[ProjectStat.APP_OFFCHAIN_AVG_DAU] = int(res['avg_dau'])
                             results[project.name].metrics[ProjectStat.APP_OFFCHAIN_TOTAL_USERS] = int(res['total_unique_users'])
-                            results[project.name].metrics[ProjectStat.APP_STICKINESS] = 1.0 * int(res['avg_dau']) / int(res['total_unique_users'])
+                            results[project.name].metrics[ProjectStat.APP_STICKINESS] = 100.0 * int(res['avg_dau']) / int(res['total_unique_users'])
 
 
             logger.info("Off-chain processing is finished")

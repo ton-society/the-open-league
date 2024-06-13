@@ -1,7 +1,7 @@
 """
 S4 season config
 """
-from models.season_config import SeasonConfig
+from models.season_config import SeasonConfig, DexPool
 from projects.apps.Arbuz import Arbuz
 from projects.apps.Catizen import Catizen
 from projects.apps.ChickCoop import ChickCoop
@@ -28,6 +28,12 @@ from projects.apps.TonsOfFriends import TonsOfFriends
 from projects.apps.XPLUS import XPLUS
 from projects.apps.YesCoin import YesCoin
 from projects.apps.xRare import xRare
+from projects.defi.DAOLama import DAOLama
+from projects.defi.DeDust import DeDust
+from projects.defi.EVAA import EVAA
+from projects.defi.StonFi import StonFi
+from projects.defi.StormTrade import StormTrade
+from projects.defi.Tradoor import Tradoor
 from projects.tokens.ARBUZ import ARBUZ
 from projects.tokens.KINGY import KINGY
 from projects.tokens.PUNK import PUNK
@@ -78,6 +84,13 @@ from projects.tokens.DICK import DICK
 from projects.tokens.LLAMA import LLAMA
 from projects.tokens.TONALD import TONALD
 from projects.tokens.MITTENS import MITTENS
+from projects.tokens.ALENKA import ALENKA
+from projects.tokens.WON import WON
+from projects.tokens.HIF import HIF
+from projects.tokens.RANDOM import RANDOM
+from projects.tokens.INS import INS
+from projects.tokens.SHIT import SHIT
+from projects.tokens.POE import POE
 from projects.nfts.TheMinersClubNFTs import TheMinersClubNFTsNFT
 from projects.nfts.YNGEXPLRZ import YNGEXPLRZNFT
 from projects.nfts.Gatto import GattoNFT
@@ -94,6 +107,7 @@ from projects.nfts.FantonFantasyFootball import FantonFantasyFootballNFT
 from projects.nfts.RoOLZ import RoOLZNFT
 from projects.nfts.Glitches import GlitchesNFT
 from seasons.app_models import AppLeaderboardModelV2
+from seasons.defi_models import DeFiWeightedRewards
 from seasons.nfts_models import NFTLeaderboardModelV1
 from seasons.tokens_models import TokenLeaderboardModelV4
 
@@ -146,7 +160,7 @@ S4_tokens = SeasonConfig(
         durev, OPEN, TGRAM, MagicCrystal, TONG, SCALE, GRAM, VIRUS, JVT, BURN, UP,
         GEMSTON, SQD, CATS, RUSD, REDO, Bear, MEM,
         FNZ, SHIP, LAVE, TONK, CES, TON_STARS, SOX, COFE, PEPE, REGI, WIF, ANON,
-        KAKAXA, JETTON, FISH, DICK, LLAMA, TONALD, MITTENS
+        KAKAXA, JETTON, FISH, DICK, LLAMA, TONALD, ALENKA, WON, HIF, RANDOM, INS, SHIT, POE, MITTENS
     ],
     score_model=TokenLeaderboardModelV4()
 )
@@ -163,4 +177,117 @@ S4_nfts = SeasonConfig(
 
     ],
     score_model=NFTLeaderboardModelV1()
+)
+
+S4_defi = SeasonConfig(
+    leaderboard=SeasonConfig.DEFI,
+    name="S4",
+    start_time=S4_START,
+    end_time=S4_END,
+    projects=[
+        DeDust, StonFi, DAOLama, StormTrade, EVAA, Tradoor
+    ],
+    score_model=DeFiWeightedRewards(
+        total_prize_pool=150000,
+        max_prize=75000
+    ),
+    options={
+        SeasonConfig.OPTION_DEFI_EXCLUDED_POOLS: [
+            DexPool(  # USDT/TON
+                address='EQA-X_yo3fzzbDbJ_0bzFWKqtRuZFIRa1sJsveZJ1YpViO3r',
+                dex=DexPool.DEX_DEDUST,
+                asset_position=DexPool.POSITION_RIGHT,
+                asset_currency=DexPool.ASSET_USDT
+            ),
+            DexPool(  # USDT/TON
+                address='EQD8TJ8xEWB1SpnRE4d89YO3jl0W0EiBnNS4IBaHaUmdfizE',
+                dex=DexPool.DEX_STON,
+                asset_position=DexPool.POSITION_LEFT,
+                asset_currency=DexPool.ASSET_USDT
+            ),
+            ### TOL Projects boosts
+            ### DeDust
+            DexPool(  # BOLT/TON
+                address='EQABHkxndSnqrBgMIDR73LB0FBDDM0C_Up39EL1Rn3ao_54-',
+                dex=DexPool.DEX_DEDUST,
+                asset_position=DexPool.POSITION_LEFT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            DexPool(  # HYDRA/TON
+                address='EQBF-YYoDy6ue0J4K-v5L_HYzwWCLpwXSLsTFmT7hr2uqHf5',
+                dex=DexPool.DEX_DEDUST,
+                asset_position=DexPool.POSITION_LEFT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            DexPool(  # JVT/TON
+                address='EQB7zhVOQKkfoMtnGU4f_uf0f6HmgcHJj6vZ-NTyHhsaPHCo',
+                dex=DexPool.DEX_DEDUST,
+                asset_position=DexPool.POSITION_LEFT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            DexPool(  # KINGY/TON
+                address='EQDsIxN6kTHNTzkW-KDAFoOd7uK8IV_qhw8wR5NkYH1Gh_SQ',
+                dex=DexPool.DEX_DEDUST,
+                asset_position=DexPool.POSITION_LEFT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            ## Ston.fi
+            DexPool(  # WEB3/TON
+                address='EQBeplxseh8R1QHlFwuCHiUnm7Mhp5aAQ7_n7-n5iXlhCThc',
+                dex=DexPool.DEX_STON,
+                asset_position=DexPool.POSITION_LEFT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            DexPool(  # FNZ/TON
+                address='EQAZFS5dJ8STrKcn5VnptYsoKILXbAYaDhdJJjbzUrNkDdH_',
+                dex=DexPool.DEX_STON,
+                asset_position=DexPool.POSITION_RIGHT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            DexPool(  # STON/TON
+                address='EQDtZHOtVWaf9UIU6rmjLPNLTGxNLNogvK5xUZlMRgZwQ4Gt',
+                dex=DexPool.DEX_STON,
+                asset_position=DexPool.POSITION_RIGHT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            DexPool(  # WALL/TON
+                address='EQAI2oFhkFupg6tHRpKwxbVNQbHwuD7HlSCkHD6vi2V--8_0',
+                dex=DexPool.DEX_STON,
+                asset_position=DexPool.POSITION_RIGHT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            DexPool(  # COFE/TON
+                address='EQDsMul-_xm99ien8PGbIg5BDBNhwI_RJAfzx8yxjZDiNgCA',
+                dex=DexPool.DEX_STON,
+                asset_position=DexPool.POSITION_RIGHT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            DexPool(  # JETTON/TON
+                address='EQATnq6W2xv10C19LNlC26xFtTV1fbzMkXmXQCWHqtv6Okf7',
+                dex=DexPool.DEX_STON,
+                asset_position=DexPool.POSITION_LEFT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            DexPool(  # DFC/TON
+                address='EQCmapEiLQO0uYEOmvDeXNR9i5R4kYVPEmyNJEcwSCTSUTTa',
+                dex=DexPool.DEX_STON,
+                asset_position=DexPool.POSITION_RIGHT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            DexPool(  # durev/TON
+                address='EQAIp9JcWs87eXXuaTaDXxzQSoN6yt4pffqxy1hXWBBmguqq',
+                dex=DexPool.DEX_STON,
+                asset_position=DexPool.POSITION_LEFT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            DexPool(  # LLAMA/TON
+                address='EQC6Tw4JSRKlqVx5Qn_-wgKXCn0E_ikza9MdtqSwzl-W65TR',
+                dex=DexPool.DEX_STON,
+                asset_position=DexPool.POSITION_RIGHT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+        ]
+    },
+    # 2024-06-12 14:59:57.000 +0400
+    block_before_start_ref='-1,8000000000000000,38319277,6D29F1A684BDA0C354E309C6BD47DD64FF5A9406D714BEBD4F7C4684D77CF339,5AB65BBD48348225CC03725564DB27EEF0C6E4FA0B275DB21B80323BBE0940E1'
 )

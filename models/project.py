@@ -20,3 +20,10 @@ class App(Project):
 @dataclass
 class NFT(Project):
     address: str # token address
+
+
+@dataclass
+class DeFi(Project):
+    title: str # project title
+    url: str # project url
+    defillama_slug: str # Defillama slug

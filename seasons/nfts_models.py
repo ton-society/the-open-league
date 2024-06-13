@@ -14,6 +14,6 @@ class NFTLeaderboardModelV1(ScoreModel):
     def calculate(self, metrics: List[ProjectStat]):
         for project in metrics:
             logger.info(f"Calculating score for {project}")
-            project.score = 0
+            project.score = self.normalized_max(project, ProjectStat.NFT_VOLUME, metrics)
 
         return sorted(metrics, key=lambda m: m.score, reverse=True)
