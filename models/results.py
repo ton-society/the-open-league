@@ -30,6 +30,9 @@ class ProjectStat:
     DEFI_TVL_AFTER = 'defi_tvl_after'
     DEFI_TVL_DELTA = 'defi_tvl_delta'
 
+    TITLE = 'title'
+    URL = 'url'
+
 
     name: str
     metrics: Dict[str, float]

@@ -120,6 +120,8 @@ class DefillamaDeFiBackend(CalculationBackend):
                     ProjectStat.DEFI_TVL_BEFORE: float(snapshot_tvl),
                     ProjectStat.DEFI_TVL_AFTER: float(latest_tvl),
                     ProjectStat.DEFI_TVL_DELTA: float(latest_tvl) - float(snapshot_tvl),
+                    ProjectStat.TITLE: project.title,
+                    ProjectStat.URL: project.url,
                 }
             ))
 
