@@ -194,10 +194,84 @@ S4_defi = SeasonConfig(
                 asset_currency=DexPool.ASSET_USDT
             ),
             ### TOL Projects boosts
+            ### DeDust
             DexPool(  # BOLT/TON
                 address='EQABHkxndSnqrBgMIDR73LB0FBDDM0C_Up39EL1Rn3ao_54-',
                 dex=DexPool.DEX_DEDUST,
                 asset_position=DexPool.POSITION_LEFT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            DexPool(  # HYDRA/TON
+                address='EQBF-YYoDy6ue0J4K-v5L_HYzwWCLpwXSLsTFmT7hr2uqHf5',
+                dex=DexPool.DEX_DEDUST,
+                asset_position=DexPool.POSITION_LEFT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            DexPool(  # JVT/TON
+                address='EQB7zhVOQKkfoMtnGU4f_uf0f6HmgcHJj6vZ-NTyHhsaPHCo',
+                dex=DexPool.DEX_DEDUST,
+                asset_position=DexPool.POSITION_LEFT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            DexPool(  # KINGY/TON
+                address='EQB7zhVOQKkfoMtnGU4f_uf0f6HmgcHJj6vZ-NTyHhsaPHCo',
+                dex=DexPool.DEX_DEDUST,
+                asset_position=DexPool.POSITION_LEFT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            ## Ston.fi
+            DexPool(  # WEB3/TON
+                address='EQBeplxseh8R1QHlFwuCHiUnm7Mhp5aAQ7_n7-n5iXlhCThc',
+                dex=DexPool.DEX_STON,
+                asset_position=DexPool.POSITION_LEFT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            DexPool(  # FNZ/TON
+                address='EQAZFS5dJ8STrKcn5VnptYsoKILXbAYaDhdJJjbzUrNkDdH_',
+                dex=DexPool.DEX_STON,
+                asset_position=DexPool.POSITION_RIGHT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            DexPool(  # STON/TON
+                address='EQDtZHOtVWaf9UIU6rmjLPNLTGxNLNogvK5xUZlMRgZwQ4Gt',
+                dex=DexPool.DEX_STON,
+                asset_position=DexPool.POSITION_RIGHT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            DexPool(  # WALL/TON
+                address='EQAI2oFhkFupg6tHRpKwxbVNQbHwuD7HlSCkHD6vi2V--8_0',
+                dex=DexPool.DEX_STON,
+                asset_position=DexPool.POSITION_RIGHT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            DexPool(  # COFE/TON
+                address='EQDsMul-_xm99ien8PGbIg5BDBNhwI_RJAfzx8yxjZDiNgCA',
+                dex=DexPool.DEX_STON,
+                asset_position=DexPool.POSITION_RIGHT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            DexPool(  # JETTON/TON
+                address='EQATnq6W2xv10C19LNlC26xFtTV1fbzMkXmXQCWHqtv6Okf7',
+                dex=DexPool.DEX_STON,
+                asset_position=DexPool.POSITION_LEFT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            DexPool(  # DFC/TON
+                address='EQCmapEiLQO0uYEOmvDeXNR9i5R4kYVPEmyNJEcwSCTSUTTa',
+                dex=DexPool.DEX_STON,
+                asset_position=DexPool.POSITION_RIGHT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            DexPool(  # durev/TON
+                address='EQAIp9JcWs87eXXuaTaDXxzQSoN6yt4pffqxy1hXWBBmguqq',
+                dex=DexPool.DEX_STON,
+                asset_position=DexPool.POSITION_LEFT,
+                asset_currency=DexPool.ASSET_TON
+            ),
+            DexPool(  # LLAMA/TON
+                address='EQC6Tw4JSRKlqVx5Qn_-wgKXCn0E_ikza9MdtqSwzl-W65TR',
+                dex=DexPool.DEX_STON,
+                asset_position=DexPool.POSITION_RIGHT,
                 asset_currency=DexPool.ASSET_TON
             ),
         ]
