@@ -5,7 +5,7 @@ from models.project import App
 Arbuz app
 """
 
-Arbuz = App(
+TestArbuz = App(
     name="Arbuz",
     analytics_key="ClickARBUZ",
     metrics=[
