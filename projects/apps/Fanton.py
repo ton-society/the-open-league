@@ -8,7 +8,7 @@ Fanton app
 """
 
 Fanton = App(
-    name="Fanton",
+    name="FantonTESTICONS",
     analytics_key="Fanton",
     metrics=[
         NFTActivity(
