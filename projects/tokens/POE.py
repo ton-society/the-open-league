@@ -4,5 +4,5 @@ POE = Token(
     name='POE',
     address='EQBB7RWO0qzo6JhikXLjmKJc81IS4JR0cyc5bPAL_h0GGmxW',
     decimals=9,
-    is_meme=True
+    is_meme=False
 )
