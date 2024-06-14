@@ -15,7 +15,8 @@ if __name__ == '__main__':
         season_name = file.split("/")[1].split(".")[0]
         import_stmt = f"seasons.{season_name}"
         print(f"Importing {import_stmt}")
-        m = __import__(import_stmt)
+        m = __import__(import_stmt, globals(), locals(), ['SeasonConfig'])
+        # print(m.__dict__)
         for name, season_config in dict([(name, cls) for name, cls in m.__dict__.items() if isinstance(cls, SeasonConfig)]).items():
             print(f"Checking {name} from {season_name}")
             for project in season_config.projects:
