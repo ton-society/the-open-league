@@ -19,7 +19,10 @@ if __name__ == '__main__':
         # print(m.__dict__)
         for name, season_config in dict([(name, cls) for name, cls in m.__dict__.items() if isinstance(cls, SeasonConfig)]).items():
             print(f"Checking {name} from {season_name}")
+            names = set()
             for project in season_config.projects:
+                assert project.name not in names, f"Duplicate found: {project.name}"
+                names.add(project.name)
                 image = get_icon_name(season_config, project)
                 if image.endswith(".svg"):
                     continue
