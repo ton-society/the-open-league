@@ -1,10 +1,12 @@
+import glob
+import os
 from decimal import Decimal
 
 import pandas as pd
 import time
 from datetime import datetime
 
-from models.results import CalculationResults
+from models.results import CalculationResults, ProjectStat
 import json
 import pathlib
 import git
@@ -15,6 +17,9 @@ from models.season_config import SeasonConfig
 Method to render results
 """
 class RenderMethod:
+    def __init__(self, icons_base_path):
+        self.icons_base_path = icons_base_path
+
     def render(self, res: CalculationResults, config: SeasonConfig):
         raise NotImplemented()
 
@@ -22,12 +27,30 @@ class RenderMethod:
         repo = git.Repo(search_parent_directories=True, path=pathlib.Path(__file__).parent.resolve())
         return  repo.head.object.hexsha
 
-    def get_items(self, res: CalculationResults):
+    def get_icon(self, project: ProjectStat, config: SeasonConfig):
+        # start with detecing icon extension
+        prefix = config.leaderboard + "_" + project.name.lower()
+        icons = glob.glob(f"{os.path.dirname(os.path.realpath(__file__))}/../projects/icons/{prefix}.*")
+        if len(icons) == 0:
+            raise Exception(f"No icon found for {project.name}")
+        if len(icons) > 1:
+            raise Exception(f"Multiple icon formats found for {project.name}")
+        format = icons[0].split(".")[-1]
+        icon_name = prefix + '.' + format
+        if self.icons_base_path:
+            return self.icons_base_path + icon_name
+        else:
+            return icon_name
+
+
+
+    def get_items(self, res: CalculationResults, config: SeasonConfig):
         items = []
         for item in res.ranking:
             obj = {
                 'name': item.name,
-                'score': item.score
+                'score': item.score,
+                'icon': self.get_icon(item, config)
             }
             for k, v in item.metrics.items():
                 obj[k] = float(v) if type(v) == Decimal else v
@@ -36,11 +59,13 @@ class RenderMethod:
 
 
 class JsonRenderMethod(RenderMethod):
-    def __init__(self, output_name):
+
+    def __init__(self, output_name, icons_base_path=None):
+        RenderMethod.__init__(self, icons_base_path)
         self.output_name = output_name
 
     def render(self, res: CalculationResults, config: SeasonConfig):
-        items = self.get_items(res)
+        items = self.get_items(res, config)
         res = {
             'update_time': res.build_time,
             'build_time': int(time.time()),
@@ -52,11 +77,12 @@ class JsonRenderMethod(RenderMethod):
             json.dump(res, out, indent=True)
 
 class HTMLRenderMethod(RenderMethod):
-    def __init__(self, output_name):
+    def __init__(self, output_name, icons_base_path=None):
+        RenderMethod.__init__(self, icons_base_path)
         self.output_name = output_name
 
     def render(self, res: CalculationResults, config: SeasonConfig):
-        items = self.get_items(res)
+        items = self.get_items(res, config)
         table = pd.DataFrame(items).to_html()
         with open(self.output_name, "wt") as out:
             out.write(f"<html><head>Results for {config.name}</head><body>")
