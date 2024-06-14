@@ -6,6 +6,7 @@ import pandas as pd
 import time
 from datetime import datetime
 
+from models.icons import get_icon_name
 from models.results import CalculationResults, ProjectStat
 import json
 import pathlib
@@ -28,15 +29,7 @@ class RenderMethod:
         return  repo.head.object.hexsha
 
     def get_icon(self, project: ProjectStat, config: SeasonConfig):
-        # start with detecing icon extension
-        prefix = config.leaderboard + "_" + project.name.lower()
-        icons = glob.glob(f"{os.path.dirname(os.path.realpath(__file__))}/../projects/icons/{prefix}.*")
-        if len(icons) == 0:
-            raise Exception(f"No icon found for {project.name}")
-        if len(icons) > 1:
-            raise Exception(f"Multiple icon formats found for {project.name}")
-        format = icons[0].split(".")[-1]
-        icon_name = prefix + '.' + format
+        icon_name = get_icon_name(config, project)
         if self.icons_base_path:
             return self.icons_base_path + icon_name
         else:
