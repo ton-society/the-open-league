@@ -36,6 +36,7 @@ from projects.defi.StormTrade import StormTrade
 from projects.defi.Tradoor import Tradoor
 from projects.tokens.ARBUZ import ARBUZ
 from projects.tokens.KINGY import KINGY
+from projects.tokens.NOT import NOT
 from projects.tokens.PUNK import PUNK
 from projects.tokens.GLINT import GLINT
 from projects.tokens.RECA import RECA
@@ -163,7 +164,8 @@ S4_tokens = SeasonConfig(
         durev, OPEN, TGRAM, MagicCrystal, TONG, SCALE, GRAM, VIRUS, JVT, BURN, UP,
         GEMSTON, SQD, CATS, RUSD, REDO, Bear, MEM,
         FNZ, SHIP, LAVE, TONK, CES, TON_STARS, SOX, COFE, PEPE, REGI, WIF, ANON,
-        KAKAXA, JETTON, FISH, DICK, LLAMA, TONALD, WON, HIF, RANDOM, INS, SHIT, POE, MITTENS
+        KAKAXA, JETTON, FISH, DICK, LLAMA, TONALD, WON, HIF, RANDOM, INS, SHIT, POE, MITTENS,
+        NOT
     ],
     score_model=TokenLeaderboardModelV4()
 )
