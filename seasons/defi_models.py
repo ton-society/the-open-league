@@ -21,7 +21,7 @@ class DeFiWeightedRewards(ScoreModel):
     def calculate(self, metrics: List[ProjectStat]):
         total_tvl_delta = 0
         for project in metrics:
-            delta = project.metrics[ProjectStat.DEFI_TVL_DELTA]
+            delta = project.metrics[ProjectStat.DEFI_TVL_DELTA_COUNTED]
             if delta > 0:
                 total_tvl_delta += delta
         logger.info(f"Total positive TVL delta is {total_tvl_delta:0.2f}$")
