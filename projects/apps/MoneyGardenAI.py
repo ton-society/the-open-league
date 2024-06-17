@@ -12,7 +12,7 @@ MoneyGardenAI = App(
     metrics=[
         SmartContractInteraction(
             "Daily Check-in", 
-            address="EQCjSrNwSn6lTluhWSOTmnA6O1mvz89LIt7e1rynFwZwYhUv",
+            address="EQCiY6qFHFtYtUt4pmggppA2V7OzZPmM2M7yKhD269txqcX-",
         )
     ]
 )
