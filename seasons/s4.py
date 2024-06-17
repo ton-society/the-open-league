@@ -4,6 +4,7 @@ S4 season config
 from models.season_config import SeasonConfig, DexPool
 from projects.apps.Arbuz import Arbuz
 from projects.apps.BountyBay import BountyBay
+from projects.apps.CatGoldMiner import CatGoldMiner
 from projects.apps.Catizen import Catizen
 from projects.apps.ChickCoop import ChickCoop
 from projects.apps.Fanton import Fanton
@@ -157,7 +158,8 @@ S4_apps = SeasonConfig(
         TonMap,
         Gamee,
         MoneyGardenAI,
-        BountyBay
+        BountyBay,
+        CatGoldMiner,
     ],
     score_model=AppLeaderboardModelV2()
 )
