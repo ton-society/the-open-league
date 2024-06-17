@@ -7,6 +7,7 @@ from projects.apps.BountyBay import BountyBay
 from projects.apps.CatGoldMiner import CatGoldMiner
 from projects.apps.Catizen import Catizen
 from projects.apps.ChickCoop import ChickCoop
+from projects.apps.EdChess import EdChess
 from projects.apps.Fanton import Fanton
 from projects.apps.Fanzee import Fanzee
 from projects.apps.GM import GM
@@ -164,6 +165,7 @@ S4_apps = SeasonConfig(
         CatGoldMiner,
         Vertus,
         Uniton,
+        EdChess,
     ],
     score_model=AppLeaderboardModelV2()
 )
