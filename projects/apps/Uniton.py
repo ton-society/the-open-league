@@ -8,7 +8,7 @@ Uniton app
 Uniton = App(
     name="Uniton",
     analytics_key="Uniton",
-    url="",
+    url="https://t.me/UnitonAIBot",
     metrics=[
         SmartContractInteraction(
             "Daily Check-in", 
