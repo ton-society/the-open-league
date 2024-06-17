@@ -47,10 +47,10 @@ class RedoubtAppBackend(CalculationBackend):
                 project_{project.name_safe()} as (
                 {metrics}
                 )
-            """)
-            PROJECTS_ALIASES.append(f"""
-            select * from project_{project.name_safe()}
-            """)
+                """)
+                PROJECTS_ALIASES.append(f"""
+                select * from project_{project.name_safe()}
+                """)
             PROJECTS_NAMES.append(f"""
             select '{project.name}' as project, '{project.url if project.url else ""}' as url
             """)
