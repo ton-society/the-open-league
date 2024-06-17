@@ -20,6 +20,7 @@ from projects.apps.SquidTG import SquidTG
 from projects.apps.SwapCoffee import SwapCoffee
 from projects.apps.TapFantasy import TapFantasy
 from projects.apps.ThePixels import ThePixels
+from projects.apps.TonMap import TonMap
 from projects.apps.TonPunks import TonPunks
 from projects.apps.TonUp import TonUP
 from projects.apps.Tonano import Tonano
@@ -149,7 +150,8 @@ S4_apps = SeasonConfig(
         ChickCoop,
         TonUP,
         Tongochi,
-        Shardify
+        Shardify,
+        TonMap
     ],
     score_model=AppLeaderboardModelV2()
 )
