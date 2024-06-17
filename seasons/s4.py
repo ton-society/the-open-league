@@ -8,6 +8,7 @@ from projects.apps.ChickCoop import ChickCoop
 from projects.apps.Fanton import Fanton
 from projects.apps.Fanzee import Fanzee
 from projects.apps.GM import GM
+from projects.apps.Gamee import Gamee
 from projects.apps.Gatto import Gatto
 from projects.apps.GetGems import GetGems
 from projects.apps.Gram import Gram
@@ -151,7 +152,8 @@ S4_apps = SeasonConfig(
         TonUP,
         Tongochi,
         Shardify,
-        TonMap
+        TonMap,
+        Gamee
     ],
     score_model=AppLeaderboardModelV2()
 )
