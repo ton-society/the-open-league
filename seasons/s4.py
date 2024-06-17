@@ -30,6 +30,7 @@ from projects.apps.TonUp import TonUP
 from projects.apps.Tonano import Tonano
 from projects.apps.Tongochi import Tongochi
 from projects.apps.TonsOfFriends import TonsOfFriends
+from projects.apps.Uniton import Uniton
 from projects.apps.Vertus import Vertus
 from projects.apps.XPLUS import XPLUS
 from projects.apps.YesCoin import YesCoin
@@ -162,6 +163,7 @@ S4_apps = SeasonConfig(
         BountyBay,
         CatGoldMiner,
         Vertus,
+        Uniton,
     ],
     score_model=AppLeaderboardModelV2()
 )
