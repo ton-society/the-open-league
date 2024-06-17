@@ -5,5 +5,6 @@ durev = Token(
     address='EQB02DJ0cdUD4iQDRbBv4aYG3htePHBRK1tGeRtCnatescK0',
     decimals=9,
     is_meme=True,
-    has_boost=True
+    has_boost=True,
+    boost_link='https://app.ston.fi/pools/EQAIp9JcWs87eXXuaTaDXxzQSoN6yt4pffqxy1hXWBBmguqq'
 )

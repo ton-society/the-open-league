@@ -10,16 +10,20 @@ class Token(Project):
     decimals: int # token decimals
     is_meme: bool = False # meme flag
     has_boost: bool = False
+    url: str = None # project url
+    boost_link: str = None
 
 
 @dataclass
 class App(Project):
     analytics_key: str # project name in tganalytics.xy
     metrics: List[Metric]
+    url: str = None # project url
 
 @dataclass
 class NFT(Project):
     address: str # token address
+    url: str = None # project url
 
 
 @dataclass

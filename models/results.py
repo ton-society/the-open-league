@@ -25,6 +25,7 @@ class ProjectStat:
     TOKEN_ADDRESS = 'token_address'
     TOKEN_IS_MEME = 'is_meme'
     TOKEN_HAS_BOOST = 'has_boost'
+    TOKEN_BOOST_LINK = 'boost_link'
 
     NFT_VOLUME = 'volume'
 
