@@ -30,6 +30,7 @@ from projects.apps.TonUp import TonUP
 from projects.apps.Tonano import Tonano
 from projects.apps.Tongochi import Tongochi
 from projects.apps.TonsOfFriends import TonsOfFriends
+from projects.apps.Vertus import Vertus
 from projects.apps.XPLUS import XPLUS
 from projects.apps.YesCoin import YesCoin
 from projects.apps.xRare import xRare
@@ -160,6 +161,7 @@ S4_apps = SeasonConfig(
         MoneyGardenAI,
         BountyBay,
         CatGoldMiner,
+        Vertus,
     ],
     score_model=AppLeaderboardModelV2()
 )
