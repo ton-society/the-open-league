@@ -13,6 +13,7 @@ from projects.apps.Gatto import Gatto
 from projects.apps.GetGems import GetGems
 from projects.apps.Gram import Gram
 from projects.apps.JetTon import JetTon
+from projects.apps.MoneyGardenAI import MoneyGardenAI
 from projects.apps.PlayWallet import PlayWallet
 from projects.apps.QuackQuack import QuackQuack
 from projects.apps.RoyalFortress import RoyalFortress
@@ -153,7 +154,8 @@ S4_apps = SeasonConfig(
         Tongochi,
         Shardify,
         TonMap,
-        Gamee
+        Gamee,
+        MoneyGardenAI
     ],
     score_model=AppLeaderboardModelV2()
 )
