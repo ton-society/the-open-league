@@ -41,11 +41,12 @@ class RedoubtAppBackend(CalculationBackend):
             metrics = []
             for metric in project.metrics:
                 metrics.append(metric.calculate(context))
-            metrics = "\nUNION ALL\n".join(metrics)
-            PROJECTS.append(f"""
-            project_{project.name_safe()} as (
-            {metrics}
-            )
+            if len(metrics) > 0:
+                metrics = "\nUNION ALL\n".join(metrics)
+                PROJECTS.append(f"""
+                project_{project.name_safe()} as (
+                {metrics}
+                )
             """)
             PROJECTS_ALIASES.append(f"""
             select * from project_{project.name_safe()}
