@@ -35,7 +35,7 @@ class RedoubtNFTsBackend(CalculationBackend):
         
         projects = []
         for project in config.projects:
-            projects.append(f"select '{project.name}' as name, '{project.address}' as address")
+            projects.append(f"select '{project.name}' as name, '{project.address}' as address, '{project.url}' as url")
         PROJECTS = "\nunion all\n".join(projects)
 
         SQL = f"""
@@ -57,7 +57,7 @@ class RedoubtNFTsBackend(CalculationBackend):
             group by d.collection_address
             order by volume desc
         )
-        select address, name, coalesce(volume, 0) as volume from collections
+        select address, name, url, coalesce(volume, 0) as volume from collections
         left join top using(address)
         """
         logger.info(f"Generated SQL: {SQL}")
@@ -77,7 +77,8 @@ class RedoubtNFTsBackend(CalculationBackend):
                     results[row['name']] = ProjectStat(
                         name=row['name'],
                         metrics={
-                            ProjectStat.NFT_VOLUME: int(row['volume'])
+                            ProjectStat.NFT_VOLUME: int(row['volume']),
+                            ProjectStat.URL:  row['url'] if len(row['url']) > 0 else ("https://getgems.io/collection/" + row['address'])
                         }
                     )
 
