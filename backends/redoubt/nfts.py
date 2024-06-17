@@ -35,7 +35,7 @@ class RedoubtNFTsBackend(CalculationBackend):
         
         projects = []
         for project in config.projects:
-            projects.append(f"select '{project.name}' as name, '{project.address}' as address, '{project.url}' as url")
+            projects.append(f"select '{project.name}' as name, '{project.address}' as address, '{project.url if project.url else ''}' as url")
         PROJECTS = "\nunion all\n".join(projects)
 
         SQL = f"""
