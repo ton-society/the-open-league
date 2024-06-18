@@ -61,15 +61,15 @@ class RedoubtAppBackend(CalculationBackend):
             messages = f"""
             -- full messages table, filter by last 30 days
             select m.*
-            from  messages m
+            from  transactions t
+            join messages m on m.in_tx_id  = t.tx_id
+    
             where
-            (
-            select
+            t.utime > {config.start_time} and t.utime < {config.end_time}
+            and (
                         (t.action_result_code  = 0 and t.compute_exit_code  = 0)
                         or
                         (t.action_result_code is null and t.compute_exit_code  is null and t.compute_skip_reason = 'cskip_no_gas')
-            from transactions t where t.tx_id = in_tx_id and t.utime > {config.start_time} and 
-            t.utime < {config.end_time} 
             )
             """
             final_part = """
