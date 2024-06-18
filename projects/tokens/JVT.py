@@ -5,5 +5,5 @@ JVT = Token(
     address='EQC8FoZMlBcZhZ6Pr9sHGyHzkFv9y2B5X9tN61RvucLRzFZz',
     decimals=9,
     has_boost=True,
-    url='https://dyor.io/ru/token/EQC8FoZMlBcZhZ6Pr9sHGyHzkFv9y2B5X9tN61RvucLRzFZz'
+    url='https://dyor.io/token/EQC8FoZMlBcZhZ6Pr9sHGyHzkFv9y2B5X9tN61RvucLRzFZz'
 )
