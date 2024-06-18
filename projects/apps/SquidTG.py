@@ -10,6 +10,7 @@ SquidTG app
 SquidTG = App(
     name="SquidTG",
     analytics_key="SquidTG",
+    url='https://t.me/squidtg_bot',
     metrics=[
         SmartContractInteraction(
             "Contract call",

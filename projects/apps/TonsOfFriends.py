@@ -8,6 +8,7 @@ TonsOfFriends app
 TonsOfFriends = App(
     name="TonsOfFriends",
     analytics_key=None,
+    url='https://t.me/toftechbot',
     metrics=[
         SmartContractInteraction(
             "Contract calls", "EQBUXXx7QXeogpRqlCEqvJrhLKLmLrJKqnB35V931v2gYdW-",

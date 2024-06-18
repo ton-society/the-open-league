@@ -8,6 +8,7 @@ Chick Coop app
 ChickCoop = App(
     name="Chick Coop",
     analytics_key="Chickcoop",
+    url='https://t.me/chickcoopofficial_bot',
     metrics=[
         SmartContractInteraction(
             "Shop/Buying Gem and Lucky Wheel",

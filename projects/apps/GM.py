@@ -10,6 +10,7 @@ GM app
 GM = App(
     name="GM",
     analytics_key="KINGY",
+    url='https://t.me/kingyGMbot',
     metrics=[
         TokenTransferToUser(
             "Claims", sources=["EQAfzTHykeqA3uN_w8Naoluqx2CHOU5NllD8oK5S5ZYiqNR3"]

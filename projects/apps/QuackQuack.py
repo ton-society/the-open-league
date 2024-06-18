@@ -8,6 +8,7 @@ QuackQuack app
 QuackQuack = App(
     name="QuackQuack",
     analytics_key="QuackQuack_TON",
+    url='https://t.me/quackquack_game_bot',
     metrics=[
         SmartContractInteraction(
             "Deposits", "EQDDo8EnHzcMf_c-WKBEuoJjYqK__APFlq8fe53BoI4cpPJF"

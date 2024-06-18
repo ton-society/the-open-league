@@ -10,6 +10,7 @@ Fanton app
 Fanton = App(
     name="Fanton",
     analytics_key="Fanton",
+    url='https://t.me/FanTonGameBot',
     metrics=[
         NFTActivity(
             "Project NFTs", collections=[

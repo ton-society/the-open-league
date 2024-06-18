@@ -11,6 +11,7 @@ Gram app
 Gram = App(
     name="Gram",
     analytics_key=None,
+    url='https://gramcoin.org',
     metrics=[
         SmartContractInteraction(
             "GRAM mining", addresses=[

@@ -11,6 +11,7 @@ xRare app
 xRare = App(
     name="xRare",
     analytics_key="xrare",
+    url='https://t.me/xrare',
     metrics=[
         NFTMarketplace("Marketplace sales", "EQD_e1RdLx-t4-D0OCpxzsNFTDRBBpMkMi4TBQEz48awW_qW")
     ]

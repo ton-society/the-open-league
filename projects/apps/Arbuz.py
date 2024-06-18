@@ -8,6 +8,7 @@ Arbuz app
 Arbuz = App(
     name="Arbuz",
     analytics_key="ClickARBUZ",
+    url='https://tonarbuz.fun',
     metrics=[
         SmartContractInteraction(
             "Clicker actions", address="EQCaFoHe_hgwwtj3n5gjUsmGcxHA0X_-q2mZTxyzmvbWnEtC"

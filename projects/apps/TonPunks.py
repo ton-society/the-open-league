@@ -9,6 +9,7 @@ TonPunks app
 TonPunks = App(
     name="TON Punks",
     analytics_key=None,
+    url='https://t.me/TonPunksBot',
     metrics=[
         SmartContractInteraction(
             "@cubesonthewater_bot", "EQCtEy4bAxYrDZLetcP9wyAKL3MkgMxDoe_1BxLeo-1B9F2A", comment_required=True
