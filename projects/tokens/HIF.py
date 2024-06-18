@@ -4,5 +4,6 @@ HIF = Token(
     name='HIF',
     address='EQCLWvCj44QYTeLujnCYKH7DoAuk_O7QI-LnAt3X5bOfNFMy',
     decimals=9,
-    is_meme=True
+    is_meme=True,
+    url='https://coinmarketcap.com/currencies/hedgehog-in-the-fog/'
 )
