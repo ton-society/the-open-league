@@ -8,7 +8,7 @@ The Pixels app
 
 ThePixels = App(
     name="The Pixels",
-    analytics_key=None,
+    analytics_key="the_pixels",
     metrics=[
         SmartContractInteraction(
             "Deposits", "EQAbRnBFsHIJmk2HmY8PD91YRHCNXNuL8N8z2KmWDVZYfFLK",

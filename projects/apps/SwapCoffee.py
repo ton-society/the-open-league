@@ -14,7 +14,7 @@ Swap.Coffee app
 
 SwapCoffee = App(
     name="swap.coffee",
-    analytics_key=None,
+    analytics_key="swapcoffee",
     metrics=[
         DexSwaps(
             "Referral swaps", "EQCNTO0Nh0Z7QNyRW1BLWfk08f2dAOw4izrx9sO6OUPg4GfQ"
