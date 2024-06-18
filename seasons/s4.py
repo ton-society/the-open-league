@@ -3,15 +3,20 @@ S4 season config
 """
 from models.season_config import SeasonConfig, DexPool
 from projects.apps.Arbuz import Arbuz
+from projects.apps.BountyBay import BountyBay
+from projects.apps.CatGoldMiner import CatGoldMiner
 from projects.apps.Catizen import Catizen
 from projects.apps.ChickCoop import ChickCoop
+from projects.apps.EdChess import EdChess
 from projects.apps.Fanton import Fanton
 from projects.apps.Fanzee import Fanzee
 from projects.apps.GM import GM
+from projects.apps.Gamee import Gamee
 from projects.apps.Gatto import Gatto
 from projects.apps.GetGems import GetGems
 from projects.apps.Gram import Gram
 from projects.apps.JetTon import JetTon
+from projects.apps.MoneyGardenAI import MoneyGardenAI
 from projects.apps.PlayWallet import PlayWallet
 from projects.apps.QuackQuack import QuackQuack
 from projects.apps.RoyalFortress import RoyalFortress
@@ -20,11 +25,14 @@ from projects.apps.SquidTG import SquidTG
 from projects.apps.SwapCoffee import SwapCoffee
 from projects.apps.TapFantasy import TapFantasy
 from projects.apps.ThePixels import ThePixels
+from projects.apps.TonMap import TonMap
 from projects.apps.TonPunks import TonPunks
 from projects.apps.TonUp import TonUP
 from projects.apps.Tonano import Tonano
 from projects.apps.Tongochi import Tongochi
 from projects.apps.TonsOfFriends import TonsOfFriends
+from projects.apps.Uniton import Uniton
+from projects.apps.Vertus import Vertus
 from projects.apps.XPLUS import XPLUS
 from projects.apps.YesCoin import YesCoin
 from projects.apps.xRare import xRare
@@ -36,6 +44,7 @@ from projects.defi.StormTrade import StormTrade
 from projects.defi.Tradoor import Tradoor
 from projects.tokens.ARBUZ import ARBUZ
 from projects.tokens.KINGY import KINGY
+from projects.tokens.NOT import NOT
 from projects.tokens.PUNK import PUNK
 from projects.tokens.GLINT import GLINT
 from projects.tokens.RECA import RECA
@@ -148,7 +157,15 @@ S4_apps = SeasonConfig(
         ChickCoop,
         TonUP,
         Tongochi,
-        Shardify
+        Shardify,
+        TonMap,
+        Gamee,
+        MoneyGardenAI,
+        BountyBay,
+        CatGoldMiner,
+        Vertus,
+        Uniton,
+        EdChess,
     ],
     score_model=AppLeaderboardModelV2()
 )
@@ -163,7 +180,8 @@ S4_tokens = SeasonConfig(
         durev, OPEN, TGRAM, MagicCrystal, TONG, SCALE, GRAM, VIRUS, JVT, BURN, UP,
         GEMSTON, SQD, CATS, RUSD, REDO, Bear, MEM,
         FNZ, SHIP, LAVE, TONK, CES, TON_STARS, SOX, COFE, PEPE, REGI, WIF, ANON,
-        KAKAXA, JETTON, FISH, DICK, LLAMA, TONALD, WON, HIF, RANDOM, INS, SHIT, POE, MITTENS
+        KAKAXA, JETTON, FISH, DICK, LLAMA, TONALD, WON, HIF, RANDOM, INS, SHIT, POE, MITTENS,
+        NOT
     ],
     score_model=TokenLeaderboardModelV4()
 )

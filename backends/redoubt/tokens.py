@@ -31,7 +31,8 @@ class RedoubtTokensBackend(CalculationBackend):
         for project in config.projects:
             PROJECTS.append(f"""
             select '{project.name}' as symbol, '{project.address}' as address, {project.decimals} as decimals,
-            {project.is_meme} as is_meme, {project.has_boost} as has_boost
+            {project.is_meme} as is_meme, {project.has_boost} as has_boost, '{project.url if project.url else ""}' as url,
+            '{project.boost_link if project.boost_link else ""}' as boost_link
             """)
         PROJECTS = "\nunion all\n".join(PROJECTS)
 
@@ -155,6 +156,7 @@ class RedoubtTokensBackend(CalculationBackend):
             tol_tokens.address,
             is_meme,
             has_boost,
+            url, boost_link,
             coalesce(tvl_change, 0) as tvl_change, coalesce(start_tvl, 0) as start_tvl,
             coalesce(new_holders, 0) as new_holders,
             coalesce(last_tvl.tvl, 0) as last_tvl,
@@ -196,6 +198,8 @@ class RedoubtTokensBackend(CalculationBackend):
                     results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_CHANGE_NORMED] = float(row['price_delta_normed'])
                     results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_CHANGE_SIMPLE] = float(row['price_delta'])
                     results[row['symbol']].metrics[ProjectStat.TOKEN_NEW_USERS_WITH_MIN_AMOUNT] = int(row['new_holders'])
+                    results[row['symbol']].metrics[ProjectStat.URL] = row['url']
+                    results[row['symbol']].metrics[ProjectStat.TOKEN_BOOST_LINK] = row['boost_link']
             logger.info("Tokens query finished")
 
         return CalculationResults(ranking=results.values(), build_time=1)  # TODO build time

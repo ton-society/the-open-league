@@ -41,17 +41,18 @@ class RedoubtAppBackend(CalculationBackend):
             metrics = []
             for metric in project.metrics:
                 metrics.append(metric.calculate(context))
-            metrics = "\nUNION ALL\n".join(metrics)
-            PROJECTS.append(f"""
-            project_{project.name_safe()} as (
-            {metrics}
-            )
-            """)
-            PROJECTS_ALIASES.append(f"""
-            select * from project_{project.name_safe()}
-            """)
+            if len(metrics) > 0:
+                metrics = "\nUNION ALL\n".join(metrics)
+                PROJECTS.append(f"""
+                project_{project.name_safe()} as (
+                {metrics}
+                )
+                """)
+                PROJECTS_ALIASES.append(f"""
+                select * from project_{project.name_safe()}
+                """)
             PROJECTS_NAMES.append(f"""
-            select '{project.name}' as project
+            select '{project.name}' as project, '{project.url if project.url else ""}' as url
             """)
         PROJECTS = ",\n".join(PROJECTS)
         PROJECTS_ALIASES = "\nUNION ALL\n".join(PROJECTS_ALIASES)
@@ -93,7 +94,7 @@ class RedoubtAppBackend(CalculationBackend):
             group by 1
             )
             select project, coalesce(tx_count, 0) as tx_count,  coalesce(total_users,0 )as total_users, 
-            coalesce(median_tx, 0) as median_tx 
+            coalesce(median_tx, 0) as median_tx, url 
             from project_names
             left join tx_stat using(project)
                      left join good_users using(project)
@@ -215,6 +216,7 @@ class RedoubtAppBackend(CalculationBackend):
                         name=row['project'],
                         metrics={}
                     )
+                    results[row['project']].metrics[ProjectStat.URL] = row['url']
                     results[row['project']].metrics[ProjectStat.APP_ONCHAIN_TOTAL_TX] = int(row['tx_count'])
                     results[row['project']].metrics[ProjectStat.APP_ONCHAIN_UAW] = int(row['total_users'])
                     results[row['project']].metrics[ProjectStat.APP_ONCHAIN_MEDIAN_TX] = int(row['median_tx'])

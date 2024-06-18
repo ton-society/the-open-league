@@ -4,5 +4,6 @@ REDO = Token(
     name='REDO',
     address='EQBZ_cafPyDr5KUTs0aNxh0ZTDhkpEZONmLJA2SNGlLm4Cko',
     decimals=9,
-    is_meme=True
+    is_meme=True,
+    url='https://coinmarketcap.com/currencies/resistance-dog/'
 )

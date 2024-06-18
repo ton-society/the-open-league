@@ -28,6 +28,12 @@ must contain all possible interactions and unique off-chain analytics tag.
 scoring formula, etc..
 * [ScoreModel](./models/scores.py) - final formula to get scores for each project based on metrics
 
+Every project must have an icon, icon must be present in the [projects/icons](projects/icons) folder.
+Icon name template is ``{leaderboard}_{project_name}.{extension}``, where:
+* __leaderboard__ - value from ``SeasonConfig.leaderboard``
+* __project_name__ - project name (``Project.name``), in lower-case
+* __extension__ - svg or png. In case of png size must be 100x100 px.
+
 ## Season
 
 List of the seasons supported with the leaderboard links

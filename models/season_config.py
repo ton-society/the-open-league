@@ -6,8 +6,8 @@ from models.scores import ScoreModel
 
 @dataclass
 class DexPool:
-    DEX_STON = 'ston.fi'
-    DEX_DEDUST = 'dedust'
+    DEX_STON = 'Ston.fi'
+    DEX_DEDUST = 'DeDust'
     ASSET_USDT = 'usdt'
     ASSET_TON = 'ton'
     POSITION_LEFT = 0

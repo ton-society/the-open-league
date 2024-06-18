@@ -25,12 +25,16 @@ class ProjectStat:
     TOKEN_ADDRESS = 'token_address'
     TOKEN_IS_MEME = 'is_meme'
     TOKEN_HAS_BOOST = 'has_boost'
+    TOKEN_BOOST_LINK = 'boost_link'
 
     NFT_VOLUME = 'volume'
 
     DEFI_TVL_BEFORE = 'defi_tvl_before'
     DEFI_TVL_AFTER = 'defi_tvl_after'
-    DEFI_TVL_DELTA = 'defi_tvl_delta'
+    DEFI_TVL_BEFORE_COUNTED = 'defi_tvl_before_counted'
+    DEFI_TVL_AFTER_COUNTED = 'defi_tvl_after_counted'
+    DEFI_TVL_DELTA = 'defi_tvl_delta_full'
+    DEFI_TVL_DELTA_COUNTED = 'defi_tvl_delta'
 
     TITLE = 'title'
     URL = 'url'

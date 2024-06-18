@@ -6,5 +6,6 @@ durev = Token(
     decimals=9,
     is_meme=True,
     has_boost=True,
+    boost_link='https://app.ston.fi/pools/EQAIp9JcWs87eXXuaTaDXxzQSoN6yt4pffqxy1hXWBBmguqq',
     url='https://coinmarketcap.com/currencies/povel-durev/'
 )

@@ -111,16 +111,16 @@ class DefillamaDeFiBackend(CalculationBackend):
             correction_snapshot = -1 * excluded_snapshot.get(project.name, 0)
             logger.info(f"{project.name}: {snapshot_tvl}({correction_snapshot}) => {latest_tvl}({correction_latest})")
             
-            snapshot_tvl += correction_snapshot
-            latest_tvl += correction_latest
 
             results.append(ProjectStat(
                 name=project.name,
                 metrics={
-                    ProjectStat.DEFI_TVL_BEFORE: float(snapshot_tvl),
-                    ProjectStat.DEFI_TVL_AFTER: float(latest_tvl),
-                    ProjectStat.DEFI_TVL_DELTA: float(latest_tvl) - float(snapshot_tvl),
-                    ProjectStat.TITLE: project.title,
+                    ProjectStat.DEFI_TVL_BEFORE: snapshot_tvl,
+                    ProjectStat.DEFI_TVL_AFTER: latest_tvl,
+                    ProjectStat.DEFI_TVL_BEFORE_COUNTED: snapshot_tvl + correction_snapshot,
+                    ProjectStat.DEFI_TVL_AFTER_COUNTED: latest_tvl + correction_latest,
+                    ProjectStat.DEFI_TVL_DELTA: latest_tvl - snapshot_tvl,
+                    ProjectStat.DEFI_TVL_DELTA_COUNTED: latest_tvl + correction_latest - snapshot_tvl - correction_snapshot,
                     ProjectStat.URL: project.url,
                 }
             ))

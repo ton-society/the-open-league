@@ -14,7 +14,7 @@ Tonano app
 
 Tonano = App(
     name="Tonano",
-    analytics_key=None,
+    analytics_key="tonano",
     metrics=[
         Ton20Sales(
             "ton-20 marketplace sales", marketplace='EQBhwZHdjuchMZvuVtIXWJe6hgZVFIwEYlsyVA2h7SI5p5LT'

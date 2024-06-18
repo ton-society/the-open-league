@@ -7,7 +7,7 @@ Chick Coop app
 
 ChickCoop = App(
     name="Chick Coop",
-    analytics_key=None,
+    analytics_key="Chickcoop",
     metrics=[
         SmartContractInteraction(
             "Shop/Buying Gem and Lucky Wheel",
