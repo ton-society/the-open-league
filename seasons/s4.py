@@ -15,6 +15,7 @@ from projects.apps.Gamee import Gamee
 from projects.apps.Gatto import Gatto
 from projects.apps.GetGems import GetGems
 from projects.apps.Gram import Gram
+from projects.apps.GramillaWorld import GramillaWorld
 from projects.apps.JetTon import JetTon
 from projects.apps.MoneyGardenAI import MoneyGardenAI
 from projects.apps.PlayWallet import PlayWallet
@@ -166,6 +167,7 @@ S4_apps = SeasonConfig(
         Vertus,
         Uniton,
         EdChess,
+        GramillaWorld,
     ],
     score_model=AppLeaderboardModelV2()
 )
