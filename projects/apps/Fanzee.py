@@ -9,6 +9,7 @@ Fanzee app
 Fanzee = App(
     name="Fanzee",
     analytics_key="Fanzee",
+    url='https://t.me/fanzeebattlesbot',
     metrics=[
         SmartContractInteraction(
             "Deposits in TON", "EQDMN701aHQG9TvbnIqI5oEmvPN6HaTk_DBqkwTGQJWSXC_x", comment_required=True

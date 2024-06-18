@@ -10,6 +10,7 @@ Tongochi app
 Tongochi = App(
     name="Tongochi",
     analytics_key=None,
+    url='https://t.me/TonGochi_bot',
     metrics=[
         NFTActivity(
             "Project's NFTs", collections=[

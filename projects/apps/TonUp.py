@@ -10,6 +10,7 @@ TonUp app
 TonUP = App(
     name="TonUP",
     analytics_key=None,
+    url='https://tonup.io/',
     metrics=[
         SmartContractInteraction(
             "Accept of ToS", "EQCvp_7oqAiq12G8Q5PtE0B3OV_yGk1MuTlqurKxFDGxfZ3r", comment_required=True

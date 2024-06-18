@@ -10,6 +10,7 @@ XPLUS app
 XPLUS = App(
     name="XPLUS",
     analytics_key="XPLUS",
+    url='https://t.me/xplusio_bot',
     metrics=[
         SmartContractInteraction(
             "Check-in", "EQCU80ddWxsL0JFiRh3pYxDqwPG777t4qDBv6wde7MpsyJTH", op_codes=[1699364067]
