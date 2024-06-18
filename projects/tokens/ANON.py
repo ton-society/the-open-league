@@ -4,5 +4,6 @@ ANON = Token(
     name='ANON',
     address='EQDv-yr41_CZ2urg2gfegVfa44PDPjIK9F-MilEDKDUIhlwZ',
     decimals=9,
-    is_meme=True
+    is_meme=True, 
+    url='https://coinmarketcap.com/currencies/anon-ton/'
 )

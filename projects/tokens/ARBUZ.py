@@ -4,5 +4,6 @@ ARBUZ = Token(
     name='ARBUZ',
     address='EQAM2KWDp9lN0YvxvfSbI0ryjBXwM70rakpNIHbuETatRWA1',
     decimals=9,
-    is_meme=True
+    is_meme=True,
+    url='https://coinmarketcap.com/currencies/arbuz/'
 )

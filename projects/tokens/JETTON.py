@@ -4,5 +4,6 @@ JETTON = Token(
     name='JETTON',
     address='EQAQXlWJvGbbFfE8F3oS8s87lIgdovS455IsWFaRdmJetTon',
     decimals=9,
-    has_boost=True
+    has_boost=True,
+    url='https://coinmarketcap.com/currencies/jetton/'
 )
