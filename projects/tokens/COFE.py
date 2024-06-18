@@ -6,5 +6,5 @@ COFE = Token(
     decimals=9,
     is_meme=True,
     has_boost=True,
-    url='https://dyor.io/ru/token/EQA9dayEKflrL-wIf-GKGizj26pvX0QCIxwmRgqzg5U_c3YB'
+    url='https://dyor.io/token/EQA9dayEKflrL-wIf-GKGizj26pvX0QCIxwmRgqzg5U_c3YB'
 )

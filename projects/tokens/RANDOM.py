@@ -4,5 +4,6 @@ RANDOM = Token(
     name='RANDOM',
     address='EQCF9oYxo37xCGX1DShZEweaVGJe6Kucp0ztKO6vCsRANDOM',
     decimals=9,
-    is_meme=False
+    is_meme=False,
+    url='https://dyor.io/token/EQCF9oYxo37xCGX1DShZEweaVGJe6Kucp0ztKO6vCsRANDOM'
 )

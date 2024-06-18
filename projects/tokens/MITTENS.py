@@ -4,5 +4,6 @@ MITTENS = Token(
     name='MITTENS',
     address='EQBwy-wJ-wCqh0mfJHoWjmulJ0oIRKEJJt75ULyrJNPcnn5z',
     decimals=9,
-    is_meme=False
+    is_meme=False,
+    url='https://coinmarketcap.com/currencies/mittenston/'
 )

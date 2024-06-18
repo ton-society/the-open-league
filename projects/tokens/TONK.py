@@ -4,5 +4,6 @@ TONK = Token(
     name='TONK',
     address='EQDv68b3JaWBO_DrP6u13Oq7KsnKhR926kMxcOJwACDY_uQC',
     decimals=9,
-    is_meme=True
+    is_meme=True,
+    url='https://coinmarketcap.com/currencies/tonk-inu/'
 )

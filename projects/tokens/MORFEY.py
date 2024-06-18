@@ -4,5 +4,6 @@ MORFEY = Token(
     name='MORFEY',
     address='EQB64Q2183H9XqsrR9h6tV83AnRlFX86MJWRCMQlsgQU2-yv',
     decimals=9,
-    is_meme=True
+    is_meme=True,
+    url='https://coinmarketcap.com/currencies/morfey/'
 )

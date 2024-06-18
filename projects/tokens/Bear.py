@@ -5,5 +5,5 @@ Bear = Token(
     address='EQBtv7I3pZpMAUChef2Vrk-U1GcCE00rROuHgMJ9CvjodRZW',
     decimals=9,
     is_meme=True,
-    url='https://dyor.io/ru/token/EQBtv7I3pZpMAUChef2Vrk-U1GcCE00rROuHgMJ9CvjodRZW'
+    url='https://dyor.io/token/EQBtv7I3pZpMAUChef2Vrk-U1GcCE00rROuHgMJ9CvjodRZW'
 )

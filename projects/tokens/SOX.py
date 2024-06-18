@@ -4,5 +4,6 @@ SOX = Token(
     name='SOX',
     address='EQBB-EMREJkIHVYG5DPiklOhWPcsCaxjL9HKmgRvuGtz_1lu',
     decimals=9,
-    is_meme=True
+    is_meme=True,
+    url='https://coinmarketcap.com/currencies/nobby-game/'
 )
