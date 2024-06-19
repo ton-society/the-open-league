@@ -65,7 +65,7 @@ class RedoubtAppBackend(CalculationBackend):
             join messages m on m.in_tx_id  = t.tx_id
     
             where
-            t.utime >= {config.start_time} and t.utime < {config.end_time}
+            t.utime >= {config.start_time}::int and t.utime < {config.end_time}::int
             and (
                         (t.action_result_code  = 0 and t.compute_exit_code  = 0)
                         or
@@ -74,7 +74,7 @@ class RedoubtAppBackend(CalculationBackend):
             """
             final_part = f"""
             insert into tol.daily_app_users(project, user_address, tx_count, period_start, period_end)
-            select project, user_address, tx_count, {config.start_time} as period_start, {config.end_time} as period_end from users_stats
+            select project, user_address, tx_count, {config.start_time}::int as period_start, {config.end_time}::int as period_end from users_stats
             """
         else:
             messages = f"""
@@ -108,37 +108,37 @@ class RedoubtAppBackend(CalculationBackend):
             JOIN jetton_wallets jw ON jw.address = jt.source_wallet and not jw.is_scam
             where
                 jt.successful and
-                jt.utime >= {config.start_time} and
-                jt.utime <  {config.end_time}
+                jt.utime >= {config.start_time}::int and
+                jt.utime <  {config.end_time}::int
         ), nft_activity_local as (
           select msg_id as id, nt.current_owner as user_address, ni.collection  from nft_transfers nt
                                                                                join nft_item ni on nt.nft_item = ni.address
-            where nt.utime >= {config.start_time}  and nt.utime <  {config.end_time}
+            where nt.utime >= {config.start_time}::int  and nt.utime <  {config.end_time}::int
               and collection is not null
             union
             select msg_id as id, new_owner as user_address, collection_address as collection
             from nft_history nh where event_type ='sale'
-                                  and utime >= {config.start_time}  and utime <  {config.end_time}
+                                  and utime >= {config.start_time}::int  and utime <  {config.end_time}::int
         ), nft_history_local as (
             select  * from nft_history
-            where utime  >= {config.start_time} and utime  < {config.end_time}
+            where utime  >= {config.start_time}::int and utime  < {config.end_time}::int
         ), nft_transfers_local as (
             select  * from nft_transfers
-            where utime  >= {config.start_time} and utime  < {config.end_time}
+            where utime  >= {config.start_time}::int and utime  < {config.end_time}::int
         ), ton20_sale_local as (
             select * from ton20_sale ts
-            where utime >= {config.start_time}  and utime <  {config.end_time}
+            where utime >= {config.start_time}::int  and utime <  {config.end_time}::int
         ), jetton_burn_local as (
             select jb.*, jw."owner" as user_address, jw.jetton_master from jetton_burn jb
             join jetton_wallets jw on jw.address  = jb.wallet and jb.successful and not jw.is_scam
-            where utime >= {config.start_time}  and utime <  {config.end_time}
+            where utime >= {config.start_time}::int  and utime <  {config.end_time}::int
         ), jetton_mint_local as (
             select jm.*, jw."owner" as user_address, jw.jetton_master from jetton_mint jm
             join jetton_wallets jw on jw.address  = jm.wallet and jm.successful and not jw.is_scam
-            where utime >= {config.start_time}  and utime <  {config.end_time}
+            where utime >= {config.start_time}::int  and utime <  {config.end_time}::int
         ), dex_swaps_local as (
             select * from dex_swap_parsed
-            where swap_utime >= {config.start_time}  and swap_utime <  {config.end_time}
+            where swap_utime >= {config.start_time}::int  and swap_utime <  {config.end_time}::int
         ),      
         nft_sales as (
             select msg_id as id, nh.current_owner  as user_address, marketplace from nft_history_local nh where
