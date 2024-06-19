@@ -15,7 +15,8 @@ Fanton = App(
         NFTActivity(
             "Project NFTs", collections=[
                 "EQBpBsShOF1EvuX3nOKwNuzr5YWlJjdpCH_2n8ybizF479Tg",
-                "EQCZKrxGwCGUHR7sBgTcADm-JrZR3YccqjDKZwzsSR2SbLL-"
+                "EQCZKrxGwCGUHR7sBgTcADm-JrZR3YccqjDKZwzsSR2SbLL-",
+                "EQDfLbr_bJaA_Zb8MQsS_RIrHKBG6gYCSO_C48b7JJHCUYi-"
             ]
         ),
         SmartContractInteraction(
