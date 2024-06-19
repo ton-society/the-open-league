@@ -65,15 +65,16 @@ class RedoubtAppBackend(CalculationBackend):
             join messages m on m.in_tx_id  = t.tx_id
     
             where
-            t.utime > {config.start_time} and t.utime < {config.end_time}
+            t.utime >= {config.start_time} and t.utime < {config.end_time}
             and (
                         (t.action_result_code  = 0 and t.compute_exit_code  = 0)
                         or
                         (t.action_result_code is null and t.compute_exit_code  is null and t.compute_skip_reason = 'cskip_no_gas')
             )
             """
-            final_part = """
-            select count(1) as mau from users_stats where tx_count > 1
+            final_part = f"""
+            insert into tol.daily_app_users(project, user_address, tx_count, period_start, period_end)
+            select project, user_address, tx_count, {config.start_time} as period_start, {config.end_time} as period_end from users_stats
             """
         else:
             messages = f"""
@@ -197,10 +198,10 @@ class RedoubtAppBackend(CalculationBackend):
 
         if self.mau_stats:
             with self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+                logger.info("Executing insert")
                 cursor.execute(SQL)
-                mau = cursor.fetchone()['mau']
-                logger.info(f"Mau calculated: {mau}")
-                return mau
+                logger.info("Query finished")
+                return
         if dry_run:
             logger.info("Running SQL query in dry_run mode")
             with self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
