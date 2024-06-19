@@ -6,7 +6,7 @@ Gleam app
 """
 
 Gleam = App(
-    name="Gleam bot for Aqua Protocol",
+    name="Gleam",
     analytics_key="Gleam",
     url="https://t.me/Gleam_AquaProtocol_Bot/app",
     metrics=[
