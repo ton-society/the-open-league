@@ -14,6 +14,7 @@ from projects.apps.GM import GM
 from projects.apps.Gamee import Gamee
 from projects.apps.Gatto import Gatto
 from projects.apps.GetGems import GetGems
+from projects.apps.Gleam import Gleam
 from projects.apps.Gram import Gram
 from projects.apps.GramillaWorld import GramillaWorld
 from projects.apps.JetTon import JetTon
@@ -170,6 +171,7 @@ S4_apps = SeasonConfig(
         EdChess,
         GramillaWorld,
         MomoAI,
+        Gleam,
     ],
     score_model=AppLeaderboardModelV2()
 )
