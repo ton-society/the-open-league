@@ -8,7 +8,7 @@ GramillaWorld app
 GramillaWorld = App(
     name="Gramilla World",
     analytics_key="GRMLA_BETA",
-    url="https://t.me/gramilla_beta_bo",
+    url="https://t.me/gramilla_beta_bot",
     metrics=[
         TokenTransferFromUser(
             "Application payment",
