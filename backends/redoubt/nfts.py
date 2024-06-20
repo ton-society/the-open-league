@@ -48,8 +48,8 @@ class RedoubtNFTsBackend(CalculationBackend):
             from nft_history nh 
             join collections c on c.address = nh.collection_address
             where event_type = 'sale'
-            and utime > {config.start_time}
-            and utime < {config.end_time}
+            and utime > {config.start_time}::int
+            and utime < {config.end_time}::int
         ),
         top as (
             select d.collection_address address, sum(d.price) / 1e9 volume
