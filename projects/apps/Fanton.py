@@ -21,6 +21,9 @@ Fanton = App(
         ),
         SmartContractInteraction(
             "Deposits", "EQB7GLGF3Xng2kMKLInjq7VWkz8qie8pQtZd1Z8EaqyCIYTw", comment_not_equals=['', 'Royalty']
+        ),
+        SmartContractInteraction(
+            "cNFT mint", "EQApZPOrKned6Ydct3TZelVcTl0-DlNjc2pxAzVzSPf3jiPA", op_codes=[20593830]
         )
     ]
 )
