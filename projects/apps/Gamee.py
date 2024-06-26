@@ -10,5 +10,8 @@ Gamee = App(
     analytics_key="Gamee",
     url='https://www.gamee.com/',
     metrics=[
+        SmartContractInteraction(
+            "Interaction", "EQBVxA9MkwWmfq46bv9-ikOQHXgelaFTvIo9gtR9ZLn0VoeS"
+        ),
     ]
 )
