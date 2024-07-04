@@ -1,5 +1,5 @@
 """
-S4 season config
+S5 season config
 """
 from models.season_config import SeasonConfig, DexPool
 from projects.apps.Arbuz import Arbuz
@@ -25,7 +25,6 @@ from projects.apps.QuackQuack import QuackQuack
 from projects.apps.RoyalFortress import RoyalFortress
 from projects.apps.Shardify import Shardify
 from projects.apps.SquidTG import SquidTG
-from projects.apps.Sphynx import Sphynx
 from projects.apps.SwapCoffee import SwapCoffee
 from projects.apps.TapFantasy import TapFantasy
 from projects.apps.ThePixels import ThePixels
@@ -130,20 +129,19 @@ from seasons.defi_models import DeFiWeightedRewards
 from seasons.nfts_models import NFTLeaderboardModelV1
 from seasons.tokens_models import TokenLeaderboardModelV4
 
-S4_START = 1718190000 # Wed Jun 12 2024 11:00:00 GMT+0000
-S4_END = 1719399600 # Wed Jun 26 2024 11:00:00 GMT+0000
+S5_START = 1720609200 # Wed Jul 10 2024 11:00:00 GMT+0000
+S5_END = 1723028400 # Wed Aug 7 2024 11:00:00 GMT+0000
 
-S4_apps = SeasonConfig(
+S5_apps = SeasonConfig(
     leaderboard=SeasonConfig.APPS,
-    name="S4",
-    start_time=S4_START,
-    end_time=S4_END,
+    name="S5",
+    start_time=S5_START,
+    end_time=S5_END,
     projects=[
         QuackQuack,
         Arbuz,
         Fanzee,
         Catizen,
-        Sphynx,
         GM,
         JetTon,
         SquidTG,
@@ -178,11 +176,11 @@ S4_apps = SeasonConfig(
     score_model=AppLeaderboardModelV2()
 )
 
-S4_tokens = SeasonConfig(
+S5_tokens = SeasonConfig(
     leaderboard=SeasonConfig.TOKENS,
-    name="S4",
-    start_time=S4_START,
-    end_time=S4_END,
+    name="S5",
+    start_time=S5_START,
+    end_time=S5_END,
     projects=[
         ARBUZ, KINGY, PUNK, GLINT, RECA, TIGER, WALL, DFC, MEH, HYDRA, WEB3, STON, BOLT,
         durev, OPEN, TGRAM, MagicCrystal, TONG, SCALE, GRAM, VIRUS, JVT, BURN, UP,
@@ -194,11 +192,11 @@ S4_tokens = SeasonConfig(
     score_model=TokenLeaderboardModelV4()
 )
 
-S4_nfts = SeasonConfig(
+S5_nfts = SeasonConfig(
     leaderboard=SeasonConfig.NFTS,
-    name="S4",
-    start_time=S4_START,
-    end_time=S4_END,
+    name="S5",
+    start_time=S5_START,
+    end_time=S5_END,
     projects=[
         TheMinersClubNFTsNFT, YNGEXPLRZNFT, GattoNFT, AnimalsRedListNFT, SmesharikiNFT,
         TONDiamondsNFT, NOTPunksNFT, TONFISHBOXNFT, PovelDurevNFTNFT, TONPunksNFT,
@@ -209,11 +207,11 @@ S4_nfts = SeasonConfig(
     score_model=NFTLeaderboardModelV1()
 )
 
-S4_defi = SeasonConfig(
+S5_defi = SeasonConfig(
     leaderboard=SeasonConfig.DEFI,
-    name="S4",
-    start_time=S4_START,
-    end_time=S4_END,
+    name="S5",
+    start_time=S5_START,
+    end_time=S5_END,
     projects=[
         DeDust, StonFi, DAOLama, StormTrade, EVAA, Tradoor
     ],
@@ -318,8 +316,5 @@ S4_defi = SeasonConfig(
             ),
         ]
     },
-    # 2024-06-12 14:59:57.000 +0400
-    block_before_start_ref='-1,8000000000000000,38319277,6D29F1A684BDA0C354E309C6BD47DD64FF5A9406D714BEBD4F7C4684D77CF339,5AB65BBD48348225CC03725564DB27EEF0C6E4FA0B275DB21B80323BBE0940E1',
-    # 2024-06-26 14:59:59.000 +0400
-    block_before_end_ref='-1,8000000000000000,38613440,7C22FBC45816296A030216121CD4A4C8E09AE9B6A2B04B4552EB486B43022C5F,F8F2FD6C285FA0FC72211EFD9014D9701131DB58AF59FB2ACD9F0140361DAB25',
+    block_before_start_ref='TODO'
 )
