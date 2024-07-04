@@ -1,6 +1,7 @@
 from models.metrics.nft_activity import NFTActivity
 from models.metrics.smc_interaction import SmartContractInteraction
 from models.project import App
+from projects.tokens.MagicCrystal import MagicCrystal
 
 """
 TAP FANTASY app
@@ -16,5 +17,6 @@ TapFantasy = App(
         NFTActivity(
             "NFT activity", collections=["EQBHG9ChK3CHRuCD5-561t6Z7nV7hub-gF6Z7pdVpqcnR4gJ"]
         )
-    ]
+    ],
+    token=MagicCrystal
 )

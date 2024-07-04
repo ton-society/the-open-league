@@ -1,5 +1,6 @@
 from models.metrics.smc_interaction import SmartContractInteraction
 from models.project import App
+from projects.tokens.ARBUZ import ARBUZ
 
 """
 Arbuz app
@@ -19,5 +20,6 @@ Arbuz = App(
         SmartContractInteraction(
             "Arbuz lottery", "EQDughgQWkIXBSQRMef7ma-q6cEWu-T4P5-2mluj9Nxn1jQJ"
         )
-    ]
+    ],
+    token=ARBUZ
 )

@@ -19,6 +19,7 @@ class App(Project):
     analytics_key: str # project name in tganalytics.xy
     metrics: List[Metric]
     url: str = None # project url
+    token: Token = None # Token of the project
 
 @dataclass
 class NFT(Project):

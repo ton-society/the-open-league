@@ -22,12 +22,9 @@ from projects.apps.MomoAI import MomoAI
 from projects.apps.MoneyGardenAI import MoneyGardenAI
 from projects.apps.PlayWallet import PlayWallet
 from projects.apps.QuackQuack import QuackQuack
-from projects.apps.RoyalFortress import RoyalFortress
 from projects.apps.Shardify import Shardify
 from projects.apps.SquidTG import SquidTG
 from projects.apps.SwapCoffee import SwapCoffee
-from projects.apps.TapFantasy import TapFantasy
-from projects.apps.ThePixels import ThePixels
 from projects.apps.TonMap import TonMap
 from projects.apps.TonPunks import TonPunks
 from projects.apps.TonUp import TonUP
@@ -124,10 +121,10 @@ from projects.nfts.TONFrogs import TONFrogs
 from projects.nfts.GBOTSSD import GBOTSSD
 from projects.nfts.TonAlchemists import TonAlchemists
 from projects.nfts.TONSharks import TONSharks
-from seasons.app_models import AppLeaderboardModelV2
+from seasons.app_models import AppLeaderboardModelV2, AppLeaderboardModelV3
 from seasons.defi_models import DeFiWeightedRewards
 from seasons.nfts_models import NFTLeaderboardModelV1
-from seasons.tokens_models import TokenLeaderboardModelV4
+from seasons.tokens_models import TokenLeaderboardModelV4, TokenLeaderboardModelV5
 
 S5_START = 1720609200 # Wed Jul 10 2024 11:00:00 GMT+0000
 S5_END = 1723028400 # Wed Aug 7 2024 11:00:00 GMT+0000
@@ -173,7 +170,7 @@ S5_apps = SeasonConfig(
         MomoAI,
         Gleam,
     ],
-    score_model=AppLeaderboardModelV2()
+    score_model=AppLeaderboardModelV3()
 )
 
 S5_tokens = SeasonConfig(
@@ -189,7 +186,7 @@ S5_tokens = SeasonConfig(
         KAKAXA, JETTON, FISH, DICK, LLAMA, TONALD, WON, HIF, RANDOM, INS, SHIT, POE, MITTENS,
         NOT
     ],
-    score_model=TokenLeaderboardModelV4()
+    score_model=TokenLeaderboardModelV5()
 )
 
 S5_nfts = SeasonConfig(
