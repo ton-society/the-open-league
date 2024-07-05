@@ -25,7 +25,6 @@ from projects.apps.QuackQuack import QuackQuack
 from projects.apps.RoyalFortress import RoyalFortress
 from projects.apps.Shardify import Shardify
 from projects.apps.SquidTG import SquidTG
-from projects.apps.Sphynx import Sphynx
 from projects.apps.SwapCoffee import SwapCoffee
 from projects.apps.TapFantasy import TapFantasy
 from projects.apps.ThePixels import ThePixels
@@ -143,7 +142,6 @@ S4_apps = SeasonConfig(
         Arbuz,
         Fanzee,
         Catizen,
-        Sphynx,
         GM,
         JetTon,
         SquidTG,
