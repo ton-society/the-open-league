@@ -10,6 +10,7 @@ TAP FANTASY app
 TapFantasy = App(
     name="TAP FANTASY",
     analytics_key=None,
+    prizes=False,
     metrics=[
         SmartContractInteraction(
             "On-chain check in", "EQB52lJbxS_RIgl19lDZYToT-Je6YwJfXF-2aKk4bh1Bj_xp"

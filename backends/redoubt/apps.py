@@ -111,7 +111,7 @@ class RedoubtAppBackend(CalculationBackend):
                 select * from project_{project.name_safe()}
                 """)
             PROJECTS_NAMES.append(f"""
-            select '{project.name}' as project, '{project.url if project.url else ""}' as url
+            select '{project.name}' as project, {project.prizes} as prizes, '{project.url if project.url else ""}' as url
             """)
         PROJECTS = ",\n".join(PROJECTS)
         PROJECTS_ALIASES = "\nUNION ALL\n".join(PROJECTS_ALIASES)
@@ -154,7 +154,7 @@ class RedoubtAppBackend(CalculationBackend):
             group by 1
             )
             select project, coalesce(tx_count, 0) as tx_count,  coalesce(total_users,0 )as total_users, 
-            coalesce(median_tx, 0) as median_tx, url 
+            coalesce(median_tx, 0) as median_tx, url, prizes
             from project_names
             left join tx_stat using(project)
                      left join good_users using(project)
@@ -277,6 +277,7 @@ class RedoubtAppBackend(CalculationBackend):
                         metrics={}
                     )
                     results[row['project']].metrics[ProjectStat.URL] = row['url']
+                    results[row['project']].metrics[ProjectStat.PRIZES] = row['prizes']
                     results[row['project']].metrics[ProjectStat.APP_ONCHAIN_TOTAL_TX] = int(row['tx_count'])
                     results[row['project']].metrics[ProjectStat.APP_ONCHAIN_UAW] = int(row['total_users'])
                     results[row['project']].metrics[ProjectStat.APP_ONCHAIN_MEDIAN_TX] = int(row['median_tx'])
