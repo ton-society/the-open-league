@@ -1,6 +1,7 @@
 from models.metrics.nft_activity import NFTActivity
 from models.metrics.smc_interaction import SmartContractInteraction
 from models.project import App
+from projects.tokens.PUNK import PUNK
 
 """
 TonPunks app
@@ -20,5 +21,6 @@ TonPunks = App(
         NFTActivity(
             "NFT activity", collections=["EQAo92DYMokxghKcq-CkCGSk_MgXY5Fo1SPW20gkvZl75iCN"]
         )
-    ]
+    ],
+    token=PUNK
 )
