@@ -2,6 +2,7 @@ from models.metrics.nft_activity import NFTActivity
 from models.metrics.smc_interaction import SmartContractInteraction
 from models.metrics.token_transfer_from_user import TokenTransferFromUser
 from models.project import App
+from projects.tokens.UP import UP
 
 """
 TonUp app
@@ -29,5 +30,6 @@ TonUP = App(
 
             ]
         )
-    ]
+    ],
+    token=UP
 )

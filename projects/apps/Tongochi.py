@@ -2,6 +2,7 @@ from models.metrics.nft_activity import NFTActivity
 from models.metrics.smc_interaction import SmartContractInteraction
 from models.metrics.token_transfer_from_user import TokenTransferFromUser
 from models.project import App
+from projects.tokens.PET import PET
 
 """
 Tongochi app
@@ -37,5 +38,6 @@ Tongochi = App(
             address='EQDsQeFKUlh8iFjF_7DyUA7j0Y6kvI4CFEXiU7Gd7qQgks-7', comment_required=True,
             comment_not_equals=["Royalty"]
         )
-    ]
+    ],
+    token=PET
 )

@@ -3,6 +3,7 @@ from models.metrics.smc_interaction import SmartContractInteraction
 from models.metrics.token_transfer_from_user import TokenTransferFromUser
 from models.metrics.token_transfer_to_user import TokenTransferToUser
 from models.project import App
+from projects.tokens.GRAM import GRAM
 
 """
 Gram app
@@ -36,5 +37,6 @@ Gram = App(
             destinations=["EQAic3zPce496ukFDhbco28FVsKKl2WUX_iJwaL87CBxSiLQ"]
 
         )
-    ]
+    ],
+    token=GRAM
 )

@@ -12,6 +12,7 @@ class Token(Project):
     has_boost: bool = False
     url: str = None # project url
     boost_link: str = None
+    prizes: bool = True # flat to ignore project in reward calculation
 
 
 @dataclass
@@ -19,6 +20,8 @@ class App(Project):
     analytics_key: str # project name in tganalytics.xy
     metrics: List[Metric]
     url: str = None # project url
+    token: Token = None # Token of the project
+    prizes: bool = True # flat to ignore project in reward calculation
 
 @dataclass
 class NFT(Project):
