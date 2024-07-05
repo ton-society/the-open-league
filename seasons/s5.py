@@ -6,6 +6,7 @@ from projects.apps.Arbuz import Arbuz
 from projects.apps.BountyBay import BountyBay
 from projects.apps.CatGoldMiner import CatGoldMiner
 from projects.apps.Catizen import Catizen
+from projects.apps.Sphynx import Sphynx
 from projects.apps.ChickCoop import ChickCoop
 from projects.apps.EdChess import EdChess
 from projects.apps.Fanton import Fanton
@@ -142,6 +143,7 @@ S5_apps = SeasonConfig(
         Arbuz,
         Fanzee,
         Catizen,
+        Sphynx,
         GM,
         JetTon,
         SquidTG,
