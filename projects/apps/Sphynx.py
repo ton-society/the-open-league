@@ -26,8 +26,4 @@ Sphynx = App(
             op_codes=[52516493]
         )
     ]
-<<<<<<< HEAD
 )
-=======
-)
->>>>>>> b85fc8fa51f75c8247d1f3ec43512f0c52e7e4ec
