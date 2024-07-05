@@ -1,9 +1,11 @@
+import time
 from typing import Dict
 
 from models.backend import CalculationBackend
 from models.backends import BACKEND_REDOUBT
 from models.metric import MetricImpl, CalculationContext
 from models.results import ProjectStat, CalculationResults
+from models.scores import ScoreModel
 from models.season_config import SeasonConfig
 import psycopg2
 import psycopg2.extras
@@ -30,6 +32,63 @@ class RedoubtAppBackend(CalculationBackend):
             return cursor.fetchone()['last_time']
 
     def _do_calculate(self, config: SeasonConfig, dry_run: bool = False):
+        logger.info("Requesting token new holders stats for the apps with tokens")
+        PROJECTS = []
+
+        for project in config.projects:
+            if project.token is not None:
+                PROJECTS.append(f"""
+                    select '{project.name}' as symbol, '{project.token.address}' as address, 
+                    {project.token.decimals} as decimals
+                    """)
+        PROJECTS = "\nunion all\n".join(PROJECTS)
+
+        balances_table = "mview_jetton_balances"
+        if (time.time()) > config.end_time:
+            balances_table = f"tol.token_balances_snapshot_{config.safe_season_name()}"
+
+        NEW_HOLDERS_SQL = f"""
+            with tol_tokens as (
+                {PROJECTS}                
+            ),
+            latest_balances as (
+                select * from {balances_table}
+            ), target_wallets as (
+              -- target jetton wallets
+              select distinct tol_tokens.symbol, tol_tokens.address, jw.address as wallet_address, jw.owner as owner_address from jetton_wallets jw
+              join tol_tokens on jw.jetton_master = tol_tokens.address where not jw.is_scam
+            ), wallet_activity as (
+              -- all transfers by target wallets
+              select symbol, tw.address, destination_owner as owner_address, utime as event_time
+              from jetton_transfers jt
+              join target_wallets tw on tw.wallet_address = jt.source_wallet and jt.successful
+            ), first_activity as (
+              -- timestamp of the first event
+              select symbol, address, owner_address, min(event_time) as first_interaction
+              from wallet_activity group by 1, 2, 3
+            )  
+            , new_holders as (
+              -- new holder has a first incoming transfer during the season
+              -- and currenly has 1+TON worth value of ton
+              select  fa.symbol, count(distinct owner_address) as new_holders
+              from first_activity fa
+              join jetton_wallets jw on jw.jetton_master = fa.address and jw.owner = fa.owner_address
+              join latest_balances mjb on mjb.wallet_address = jw.address
+              where first_interaction >= {config.start_time} and first_interaction <  {config.end_time} and 
+              mjb.balance / pow(10, (select decimals from tol_tokens tt where tt.symbol = fa.symbol))
+              * (select price_ton from chartingview.token_agg_price_history taph where taph.address = fa.address
+              and taph.build_time < to_timestamp({config.end_time} ) order by build_time desc limit 1)
+              >= {config.score_model.param(ScoreModel.PARAM_TOKEN_MIN_VALUE_FOR_NEW_HOLDER)}
+              group by 1
+            )
+            select tol_tokens.symbol,
+            tol_tokens.address,
+            coalesce(new_holders, 0) as new_holders
+            from tol_tokens
+            left join new_holders on new_holders.symbol = tol_tokens.symbol
+        """
+        logger.info(f"Generated SQL: {NEW_HOLDERS_SQL}")
+
         logger.info("Running re:doubt backend for App leaderboard SQL generation")
         PROJECTS = []
         PROJECTS_ALIASES = []
@@ -52,7 +111,7 @@ class RedoubtAppBackend(CalculationBackend):
                 select * from project_{project.name_safe()}
                 """)
             PROJECTS_NAMES.append(f"""
-            select '{project.name}' as project, '{project.url if project.url else ""}' as url
+            select '{project.name}' as project, {project.prizes} as prizes, '{project.url if project.url else ""}' as url
             """)
         PROJECTS = ",\n".join(PROJECTS)
         PROJECTS_ALIASES = "\nUNION ALL\n".join(PROJECTS_ALIASES)
@@ -95,7 +154,7 @@ class RedoubtAppBackend(CalculationBackend):
             group by 1
             )
             select project, coalesce(tx_count, 0) as tx_count,  coalesce(total_users,0 )as total_users, 
-            coalesce(median_tx, 0) as median_tx, url 
+            coalesce(median_tx, 0) as median_tx, url, prizes
             from project_names
             left join tx_stat using(project)
                      left join good_users using(project)
@@ -218,9 +277,11 @@ class RedoubtAppBackend(CalculationBackend):
                         metrics={}
                     )
                     results[row['project']].metrics[ProjectStat.URL] = row['url']
+                    results[row['project']].metrics[ProjectStat.PRIZES] = row['prizes']
                     results[row['project']].metrics[ProjectStat.APP_ONCHAIN_TOTAL_TX] = int(row['tx_count'])
                     results[row['project']].metrics[ProjectStat.APP_ONCHAIN_UAW] = int(row['total_users'])
                     results[row['project']].metrics[ProjectStat.APP_ONCHAIN_MEDIAN_TX] = int(row['median_tx'])
+                    results[row['project']].metrics[ProjectStat.TOKEN_NEW_USERS_WITH_MIN_AMOUNT] = 0
             logger.info("Main query finished")
         if not dry_run:
             logger.info("Requesting off-chain tganalytics.xyz metrics")
@@ -266,6 +327,14 @@ class RedoubtAppBackend(CalculationBackend):
 
             logger.info("Off-chain processing is finished")
 
+
+            logger.info("Requesting token new holders")
+            with self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+                cursor.execute(NEW_HOLDERS_SQL)
+                for row in cursor.fetchall():
+                    results[row['symbol']].metrics[ProjectStat.TOKEN_NEW_USERS_WITH_MIN_AMOUNT] = int(row['new_holders'])
+                    results[row['symbol']].metrics[ProjectStat.TOKEN_ADDRESS] = row['address']
+            
         return CalculationResults(ranking=results.values(), build_time=1)  # TODO build time
 
 

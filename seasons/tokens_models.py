@@ -26,3 +26,21 @@ class TokenLeaderboardModelV4(ScoreModel):
                             30 * self.normalized_min_max(project, ProjectStat.TOKEN_PRICE_CHANGE_NORMED, metrics)
 
         return sorted(metrics, key=lambda m: m.score, reverse=True)
+
+
+"""
+Token leaderboard score model, launched since S5. The only metrics is price change
+"""
+class TokenLeaderboardModelV5(ScoreModel):
+    def __init__(self):
+        super().__init__()
+        self.params[ScoreModel.PARAM_TOKEN_MIN_VALUE_FOR_NEW_HOLDER] = 1.0 # 1 TON
+
+    def calculate(self, metrics: List[ProjectStat]):
+        MIN_TVL = 14106 # $100,000 nominated in TON
+        for project in metrics:
+            logger.info(f"Calculating score for {project}")
+            project.score = project.metrics[ProjectStat.TOKEN_LAST_TVL] - \
+                            max(MIN_TVL, project.metrics[ProjectStat.TOKEN_START_TVL])
+
+        return sorted(metrics, key=lambda m: m.score, reverse=True)

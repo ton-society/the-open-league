@@ -7,6 +7,7 @@ from models.metrics.token_transfer_from_user import TokenTransferFromUser
 from models.metrics.token_transfer_to_user import TokenTransferToUser
 from models.metrics.ton20_sales import Ton20Sales
 from models.project import App
+from projects.tokens.jNANO import jNANO
 
 """
 Tonano app
@@ -53,5 +54,6 @@ Tonano = App(
         SmartContractInteraction(
             "fomoTON (https://x.com/cofejp/status/1789310174995648527?s=46&t=K0mfb3BTzb1TuLJ_4h-SaQ)", "EQDNIDq9LETKbioifSl1hIGjxUquFWoD8XYEDc9cyvablOev", comment_regexp='fomo'
         )
-    ]
+    ],
+    token=jNANO
 )
