@@ -5,7 +5,7 @@ from models.project import App
 GasPump app
 """
 
-GetGems = App(
+GasPump = App(
     name="GasPump",
     analytics_key="gaspump",
     url='https://t.me/gaspump_bot',
