@@ -16,8 +16,10 @@ class ProjectStat:
     APP_ONCHAIN_UAW = 'onchain_uaw'
     APP_ONCHAIN_MEDIAN_TX = 'onchain_median_tx'
 
+    TOKEN_TVL_CATEGORY = 'token_tvl_category'
     TOKEN_TVL_CHANGE = 'token_tvl_change'
     TOKEN_START_TVL = 'token_start_tvl'
+    TOKEN_START_TVL_USD = 'token_start_tvl_usd'
     TOKEN_LAST_TVL = 'token_last_tvl'
     TOKEN_PRICE_BEFORE = 'token_price_before'
     TOKEN_PRICE_AFTER = 'token_price_after'
