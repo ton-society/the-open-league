@@ -99,6 +99,21 @@ from projects.tokens.RANDOM import RANDOM
 from projects.tokens.INS import INS
 from projects.tokens.SHIT import SHIT
 from projects.tokens.POE import POE
+from projects.tokens.DMT import DMT
+from projects.tokens.Spotty import Spotty
+from projects.tokens.PLANE  import PLANE 
+from projects.tokens.UTYA import UTYA
+from projects.tokens.M5 import M5
+from projects.tokens.TDOG import TDOG
+from projects.tokens.GLITCH import GLITCH
+from projects.tokens.RUS import RUS
+from projects.tokens.BTC25 import BTC25
+from projects.tokens.MY import MY
+from projects.tokens.OR import OR
+from projects.tokens.MAN import MAN
+from projects.tokens.DYOR import DYOR
+from projects.tokens.CAVI import CAVI
+from projects.tokens.PET import PET
 from projects.nfts.TheMinersClubNFTs import TheMinersClubNFTsNFT
 from projects.nfts.YNGEXPLRZ import YNGEXPLRZNFT
 from projects.nfts.Gatto import GattoNFT
@@ -186,7 +201,8 @@ S5_tokens = SeasonConfig(
         GEMSTON, SQD, CATS, RUSD, REDO, Bear, MEM,
         FNZ, SHIP, LAVE, TONK, CES, TON_STARS, SOX, COFE, PEPE, REGI, WIF, ANON,
         KAKAXA, JETTON, FISH, DICK, LLAMA, TONALD, WON, HIF, RANDOM, INS, SHIT, POE, MITTENS,
-        NOT
+        NOT, DMT, Spotty, PLANE, UTYA, M5, TDOG, GLITCH, RUS, BTC25, MY, OR, MAN, DYOR, CAVI,
+        PET
     ],
     score_model=TokenLeaderboardModelV5()
 )
