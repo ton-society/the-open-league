@@ -122,6 +122,7 @@ class DefillamaDeFiBackend(CalculationBackend):
                     ProjectStat.DEFI_TVL_DELTA: latest_tvl - snapshot_tvl,
                     ProjectStat.DEFI_TVL_DELTA_COUNTED: latest_tvl + correction_latest - snapshot_tvl - correction_snapshot,
                     ProjectStat.URL: project.url,
+                    ProjectStat.PRIZES: project.prizes,
                 }
             ))
 
