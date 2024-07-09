@@ -5,6 +5,7 @@ from typing import Dict, List
 @dataclass
 class ProjectStat:
     PRIZES = 'prizes'
+    REWARD = 'reward'
 
     APP_OFFCHAIN_NON_PREMIUM_USERS = 'offchain_non_premium_users'
     APP_OFFCHAIN_PREMIUM_USERS = 'offchain_premium_users'
