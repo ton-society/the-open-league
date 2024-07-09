@@ -121,6 +121,8 @@ from projects.nfts.TONFrogs import TONFrogs
 from projects.nfts.GBOTSSD import GBOTSSD
 from projects.nfts.TonAlchemists import TonAlchemists
 from projects.nfts.TONSharks import TONSharks
+from projects.nfts.PovelDurevNFT2 import PovelDurevNFT2
+from projects.nfts.TONTanks import TONTanks
 from seasons.app_models import AppLeaderboardModelV2, AppLeaderboardModelV3
 from seasons.defi_models import DeFiWeightedRewards
 from seasons.nfts_models import NFTLeaderboardModelV1
@@ -198,7 +200,8 @@ S5_nfts = SeasonConfig(
         TheMinersClubNFTsNFT, YNGEXPLRZNFT, GattoNFT, AnimalsRedListNFT, SmesharikiNFT,
         TONDiamondsNFT, NOTPunksNFT, TONFISHBOXNFT, PovelDurevNFTNFT, TONPunksNFT,
         TonedApeClubNFT, RunestonNFT, FantonFantasyFootballNFT, RoOLZNFT, GlitchesNFT,
-        MarketMakers, Parachute, NFTWeb3TON, TONFrogs, GBOTSSD, TonAlchemists, TONSharks
+        MarketMakers, Parachute, NFTWeb3TON, TONFrogs, GBOTSSD, TonAlchemists, TONSharks,
+        PovelDurevNFT2, TONTanks
 
     ],
     score_model=NFTLeaderboardModelV1()
