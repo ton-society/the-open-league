@@ -12,7 +12,11 @@ Uniton = App(
     metrics=[
         SmartContractInteraction(
             "Daily Check-in", 
-            address="EQAzEfZT2kiUeTUHiuGIMgKYOFkWtyO8YZlexzE372Y5PYNv",
+            address="EQCWilCkyzHmxZZMo9z7_G85wiXlnwWMLqZAP3Lj_BC4vv7z",
+        ),
+        SmartContractInteraction(
+            "Boost", 
+            address="EQCmcNNW6_8hcwEyK46fAJiEeFkiZ4RaWsr4v8z9tohE_zwa",
         )
     ]
 )
