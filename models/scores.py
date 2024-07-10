@@ -80,14 +80,25 @@ class ScoreModel:
     Distributes and assigns rewards from reward list
     """
     def calculate_rewards(self, projects: List[ProjectStat]) -> List[ProjectStat]:
+        remains = 0
         if not self.reward_list:
             return projects
         reward_iterator = iter(self.reward_list)
         for project in projects:
             if project.metrics[ProjectStat.PRIZES]:
-                project.metrics[ProjectStat.REWARD] = next(reward_iterator, 0)
+                reward = next(reward_iterator, 0)
+                if project.metrics[ProjectStat.POSSIBLE_REWARD] and project.metrics[ProjectStat.POSSIBLE_REWARD] < reward:
+                    project.metrics[ProjectStat.REWARD] = project.metrics[ProjectStat.POSSIBLE_REWARD]
+                    remains += reward - project.metrics[ProjectStat.POSSIBLE_REWARD]
+                else:
+                    project.metrics[ProjectStat.REWARD] = reward
             else:
                 project.metrics[ProjectStat.REWARD] = 0
+        if remains:
+            assigned_rewards = sum(self.reward_list) - remains
+            for project in projects:
+                if project.metrics[ProjectStat.REWARD] and not project.metrics[ProjectStat.POSSIBLE_REWARD]:
+                    project.metrics[ProjectStat.REWARD] = remains * project.metrics[ProjectStat.REWARD] / assigned_rewards
         return projects
 
     def calculate(self, metrics: List[ProjectStat]):

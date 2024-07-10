@@ -6,6 +6,7 @@ from typing import Dict, List
 class ProjectStat:
     PRIZES = 'prizes'
     REWARD = 'reward'
+    POSSIBLE_REWARD = 'possible_reward'
 
     APP_OFFCHAIN_NON_PREMIUM_USERS = 'offchain_non_premium_users'
     APP_OFFCHAIN_PREMIUM_USERS = 'offchain_premium_users'
