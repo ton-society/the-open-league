@@ -156,6 +156,7 @@ class RedoubtTokensBackend(CalculationBackend):
             tol_tokens.address,
             is_meme,
             has_boost,
+            prizes,
             url, boost_link,
             coalesce(tvl_change, 0) as tvl_change, coalesce(start_tvl, 0) as start_tvl,
             coalesce(new_holders, 0) as new_holders,
