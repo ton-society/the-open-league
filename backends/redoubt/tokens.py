@@ -71,27 +71,69 @@ class RedoubtTokensBackend(CalculationBackend):
               from tvl_history_datamart thd join tol_tokens on tol_tokens.address = thd.jetton_b
               where jetton_a in (select address from tol_ton_or_stable)
               and build_time >=  to_timestamp({config.start_time}) - interval '7 day'
-            ), tvl_prior_start_all as (
-              -- TVL for 14 days before the start
-              select distinct on(thd.address ) build_time, p.symbol, tvl_ton
-              from tvl_history_datamart thd join pools p on thd.address = p.pool
-              and build_time >=  to_timestamp({config.start_time}) - interval '20 day' -- just for performance
-              and build_time <  to_timestamp({config.start_time}) - interval '14 day' -- end of the S4 season
-              order by thd.address, build_time desc
             ), tvl_prior_start as (
-              select symbol, sum(tvl_ton) as start_tvl
-              from tvl_prior_start_all
+              -- TVL for 7 days before the start
+              select build_time, p.symbol, sum(tvl_ton) as tvl
+              from tvl_history_datamart thd join pools p on thd.address = p.pool
+              and build_time >=  to_timestamp({config.start_time}) - interval '7 day'
+              and build_time <  to_timestamp({config.start_time})
+              group by 1, 2
+            ), avg_tvl_prior_start as (
+              -- average it
+              select symbol, count(1) as cnt, round(avg(tvl)) as start_tvl from tvl_prior_start
               group by 1
             ), current_tvl as (
               -- TVL during the season
-              select distinct on(thd.address ) build_time, p.symbol, tvl_ton
+              select build_time, p.symbol, sum(tvl_ton) as tvl
               from tvl_history_datamart thd join pools p on thd.address = p.pool
               and build_time >=  to_timestamp({config.start_time})
               and build_time <  to_timestamp({config.end_time})
-              order by thd.address, build_time desc
+              group by 1, 2
             ), last_tvl as (
               -- latest values
-              select symbol, sum(tvl_ton) as tvl from current_tvl
+              select distinct on (symbol) symbol, tvl from current_tvl
+              order by symbol, build_time desc
+            ), avg_daily_tvl as (
+              -- avg daily TVL
+              select symbol, build_time::date as bd, avg(tvl) as tvl from current_tvl
+              group by 1, 2
+            ), days_with_tvl as (
+              -- days with TVL (if project created during the season it would be less)
+              select symbol, count(1) as days from avg_daily_tvl
+              group by 1
+            ), tvl_weighted as (
+              -- calcylate weighted TVL change for each project
+              select symbol, start_tvl, days, sum(tvl - start_tvl) / days as tvl_change from avg_daily_tvl
+              join days_with_tvl using(symbol)
+              join avg_tvl_prior_start using(symbol)
+              group by 1, 2, 3
+            ), target_wallets as (
+              -- target jetton wallets
+              select distinct tol_tokens.symbol, tol_tokens.address, jw.address as wallet_address, jw.owner as owner_address from jetton_wallets jw
+              join tol_tokens on jw.jetton_master = tol_tokens.address where not jw.is_scam
+            ), wallet_activity as (
+              -- all transfers by target wallets
+              -- TODO - add filter on the start/end date?
+              select symbol, tw.address, destination_owner as owner_address, utime as event_time
+              from jetton_transfers jt
+              join target_wallets tw on tw.wallet_address = jt.source_wallet and jt.successful
+            ), first_activity as (
+              -- timestamp of the first event
+              select symbol, address, owner_address, min(event_time) as first_interaction
+              from wallet_activity group by 1, 2, 3
+            )  
+            , new_holders as (
+              -- new holder has a first incoming transfer during the season
+              -- and currenly has 1+TON worth value of ton
+              select  fa.symbol, count(distinct owner_address) as new_holders
+              from first_activity fa
+              join jetton_wallets jw on jw.jetton_master = fa.address and jw.owner = fa.owner_address
+              join latest_balances mjb on mjb.wallet_address = jw.address
+              where first_interaction >= {config.start_time} and first_interaction <  {config.end_time} and 
+              mjb.balance / pow(10, (select decimals from tol_tokens tt where tt.symbol = fa.symbol))
+              * (select price_ton from chartingview.token_agg_price_history taph where taph.address = fa.address
+              and taph.build_time < to_timestamp({config.end_time} ) order by build_time desc limit 1)
+              >= {config.score_model.param(ScoreModel.PARAM_TOKEN_MIN_VALUE_FOR_NEW_HOLDER)}
               group by 1
             )
             , price_snapshots as (
@@ -114,16 +156,17 @@ class RedoubtTokensBackend(CalculationBackend):
             tol_tokens.address,
             is_meme,
             has_boost,
-            prizes,
             url, boost_link,
-            coalesce(start_tvl, 0) as start_tvl,
+            coalesce(tvl_change, 0) as tvl_change, coalesce(start_tvl, 0) as start_tvl,
+            coalesce(new_holders, 0) as new_holders,
             coalesce(last_tvl.tvl, 0) as last_tvl,
             coalesce(100 * coalesce(price_change, 0), 0) as price_delta,
+            coalesce(100 * coalesce(price_change, 0) * ( sqrt(last_tvl.tvl) / 1000), 0) as price_delta_normed,
             coalesce(price_before, 0) as price_before,
             coalesce(price_after, 0) as price_after
-            from tol_tokens 
+            from tol_tokens left join tvl_weighted on tvl_weighted.symbol = tol_tokens.symbol 
             left join last_tvl on last_tvl.symbol = tol_tokens.symbol
-            left join tvl_prior_start on tvl_prior_start.symbol = tol_tokens.symbol
+            left join new_holders on new_holders.symbol = tol_tokens.symbol
             left join price_delta on price_delta.symbol = tol_tokens.symbol
         """
         logger.info(f"Generated SQL: {SQL}")
@@ -154,6 +197,7 @@ class RedoubtTokensBackend(CalculationBackend):
                     results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_BEFORE] = float(row['price_before'])
                     results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_AFTER] = float(row['price_after'])
                     results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_CHANGE_SIMPLE] = float(row['price_delta'])
+                    results[row['symbol']].metrics[ProjectStat.TOKEN_NEW_USERS_WITH_MIN_AMOUNT] = int(row['new_holders'])
                     results[row['symbol']].metrics[ProjectStat.URL] = row['url']
                     results[row['symbol']].metrics[ProjectStat.TOKEN_BOOST_LINK] = row['boost_link']
             logger.info("Tokens query finished")

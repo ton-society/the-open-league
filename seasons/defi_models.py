@@ -40,5 +40,6 @@ class DeFiWeightedRewards(ScoreModel):
                             f"prize pool is {prize_pool}")
             logger.info(f"Calculating score for {project}")
             project.score = reward
+            project.metrics[ProjectStat.REWARD] = reward
 
         return sorted(metrics, key=lambda m: m.score, reverse=True)
