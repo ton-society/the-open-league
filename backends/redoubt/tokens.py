@@ -79,12 +79,7 @@ class RedoubtTokensBackend(CalculationBackend):
               and build_time <  to_timestamp({config.start_time}) - interval '14 day' -- end of the S4 season
               order by thd.address, build_time desc
             ), tvl_prior_start as (
-              select symbol, sum(tvl_ton) as start_tvl,
-              (
-                select rate from ton_usd_rates 
-                where build_time < to_timestamp({config.start_time}) - interval '14 day' 
-                order by build_time desc limit 1
-              ) * sum(tvl_ton) as start_tvl_usd
+              select symbol, sum(tvl_ton) as start_tvl
               from tvl_prior_start_all
               group by 1
             ), current_tvl as (
@@ -122,7 +117,6 @@ class RedoubtTokensBackend(CalculationBackend):
             prizes,
             url, boost_link,
             coalesce(start_tvl, 0) as start_tvl,
-            coalesce(start_tvl_usd, 0) as start_tvl_usd,
             coalesce(last_tvl.tvl, 0) as last_tvl,
             coalesce(100 * coalesce(price_change, 0), 0) as price_delta,
             coalesce(price_before, 0) as price_before,
@@ -156,7 +150,6 @@ class RedoubtTokensBackend(CalculationBackend):
                     results[row['symbol']].metrics[ProjectStat.TOKEN_IS_MEME] = row['is_meme']
                     results[row['symbol']].metrics[ProjectStat.TOKEN_HAS_BOOST] = row['has_boost']
                     results[row['symbol']].metrics[ProjectStat.TOKEN_START_TVL] = int(row['start_tvl'])
-                    results[row['symbol']].metrics[ProjectStat.TOKEN_START_TVL_USD] = int(row['start_tvl_usd'])
                     results[row['symbol']].metrics[ProjectStat.TOKEN_LAST_TVL] = int(row['last_tvl'])
                     results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_BEFORE] = float(row['price_before'])
                     results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_AFTER] = float(row['price_after'])
