@@ -13,7 +13,7 @@ class Token(Project):
     url: str = None # project url
     boost_link: str = None
     prizes: bool = True # flat to ignore project in reward calculation
-
+    possible_reward: int = 0
 
 @dataclass
 class App(Project):
@@ -22,6 +22,7 @@ class App(Project):
     url: str = None # project url
     token: Token = None # Token of the project
     prizes: bool = True # flat to ignore project in reward calculation
+    possible_reward: int = 0
 
 @dataclass
 class NFT(Project):

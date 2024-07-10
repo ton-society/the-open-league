@@ -11,6 +11,7 @@ TonPunks = App(
     name="TON Punks",
     analytics_key="TONPunks",
     url='https://t.me/TonPunksBot',
+    possible_reward = 109325,
     metrics=[
         SmartContractInteraction(
             "@cubesonthewater_bot", "EQCtEy4bAxYrDZLetcP9wyAKL3MkgMxDoe_1BxLeo-1B9F2A", comment_required=True

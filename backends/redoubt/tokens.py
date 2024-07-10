@@ -31,7 +31,8 @@ class RedoubtTokensBackend(CalculationBackend):
         for project in config.projects:
             PROJECTS.append(f"""
             select '{project.name}' as symbol, '{project.address}' as address, {project.decimals} as decimals,
-            {project.is_meme} as is_meme, {project.prizes} as prizes, {project.has_boost} as has_boost, '{project.url if project.url else ""}' as url,
+            {project.is_meme} as is_meme, {project.prizes} as prizes, {project.has_boost} as has_boost, 
+            {project.possible_reward} as possible_reward, '{project.url if project.url else ""}' as url,
             '{project.boost_link if project.boost_link else ""}' as boost_link
             """)
         PROJECTS = "\nunion all\n".join(PROJECTS)
@@ -157,6 +158,7 @@ class RedoubtTokensBackend(CalculationBackend):
             is_meme,
             has_boost,
             prizes,
+            possible_reward,
             url, boost_link,
             coalesce(tvl_change, 0) as tvl_change, coalesce(start_tvl, 0) as start_tvl,
             coalesce(new_holders, 0) as new_holders,
@@ -191,6 +193,7 @@ class RedoubtTokensBackend(CalculationBackend):
                     results[row['symbol']].metrics[ProjectStat.TOKEN_ADDRESS] = row['address']
                     results[row['symbol']].metrics[ProjectStat.PRIZES] = row['prizes']
                     results[row['symbol']].metrics[ProjectStat.REWARD] = 0
+                    results[row['symbol']].metrics[ProjectStat.POSSIBLE_REWARD] = row['possible_reward']
                     results[row['symbol']].metrics[ProjectStat.TOKEN_IS_MEME] = row['is_meme']
                     results[row['symbol']].metrics[ProjectStat.TOKEN_HAS_BOOST] = row['has_boost']
                     results[row['symbol']].metrics[ProjectStat.TOKEN_TVL_CHANGE] = int(row['tvl_change'])
