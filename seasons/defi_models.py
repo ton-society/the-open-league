@@ -22,7 +22,7 @@ class DeFiWeightedRewards(ScoreModel):
         total_tvl_delta = 0
         for project in metrics:
             delta = project.metrics[ProjectStat.DEFI_TVL_DELTA_COUNTED]
-            if delta > 0:
+            if delta > 0 and project.metrics[ProjectStat.PRIZES]:
                 total_tvl_delta += delta
         logger.info(f"Total positive TVL delta is {total_tvl_delta:0.2f}$")
 
@@ -30,7 +30,7 @@ class DeFiWeightedRewards(ScoreModel):
         counted_tvl = 0
         for project in sorted(metrics, key=lambda m: m.metrics[ProjectStat.DEFI_TVL_DELTA_COUNTED], reverse=True):
             delta = project.metrics[ProjectStat.DEFI_TVL_DELTA_COUNTED]
-            if total_tvl_delta <=0 or delta < 0:
+            if total_tvl_delta <=0 or delta < 0 or not project.metrics[ProjectStat.PRIZES]:
                 reward = 0
             else:
                 reward = min(prize_pool * delta / (total_tvl_delta - counted_tvl), self.max_prize)

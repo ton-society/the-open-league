@@ -19,6 +19,7 @@ class ScoreModel:
 
     def __init__(self):
         self.params = {}
+        self.reward_list = []
 
     def param(self, key):
         return self.params[key]
@@ -74,6 +75,20 @@ class ScoreModel:
             logger.error(f"Max = min for {field}")
             return 0
         return (p.metrics[field] - min_) / (max_ - min_)
+
+    """
+    Distributes and assigns rewards from reward list
+    """
+    def calculate_rewards(self, projects: List[ProjectStat]) -> List[ProjectStat]:
+        if not self.reward_list:
+            return projects
+        reward_iterator = iter(self.reward_list)
+        for project in projects:
+            if project.metrics[ProjectStat.PRIZES]:
+                project.metrics[ProjectStat.REWARD] = next(reward_iterator, 0)
+            else:
+                project.metrics[ProjectStat.REWARD] = 0
+        return projects
 
     def calculate(self, metrics: List[ProjectStat]):
         raise NotImplemented()

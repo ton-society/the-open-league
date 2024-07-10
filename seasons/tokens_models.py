@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from models.results import ProjectStat
 from models.scores import ScoreModel
@@ -35,9 +35,10 @@ Token leaderboard score model, launched since S5
 30% - base Price change (normalised on sqrt(TVL)) weight
 """
 class TokenLeaderboardModelV5(ScoreModel):
-    def __init__(self):
+    def __init__(self, reward_list: Optional[List[int]] = None):
         super().__init__()
         self.params[ScoreModel.PARAM_TOKEN_MIN_VALUE_FOR_NEW_HOLDER] = 1.0 # 1 TON
+        self.reward_list = reward_list
         self.tvl_category = {
             "10M – 20M": {"low": 10_000_000, "high": None, "coefficient": 1},
             "5M – 10M": {"low": 5_000_000, "high": 10_000_000, "coefficient": 0.8},
@@ -63,4 +64,4 @@ class TokenLeaderboardModelV5(ScoreModel):
                             tvl_change_weight * self.normalized_min_max(project, ProjectStat.TOKEN_TVL_CHANGE, metrics) + \
                             price_change_weight * self.normalized_min_max(project, ProjectStat.TOKEN_PRICE_CHANGE_NORMED, metrics)
 
-        return sorted(metrics, key=lambda m: m.score, reverse=True)
+        return self.calculate_rewards(sorted(metrics, key=lambda m: m.score, reverse=True))

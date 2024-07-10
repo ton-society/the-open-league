@@ -33,3 +33,4 @@ class NFT(Project):
 class DeFi(Project):
     url: str # project url
     defillama_slug: str # Defillama slug
+    prizes: bool = True # flat to ignore project in reward calculation
