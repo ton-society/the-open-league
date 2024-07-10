@@ -278,6 +278,7 @@ class RedoubtAppBackend(CalculationBackend):
                     )
                     results[row['project']].metrics[ProjectStat.URL] = row['url']
                     results[row['project']].metrics[ProjectStat.PRIZES] = row['prizes']
+                    results[row['project']].metrics[ProjectStat.REWARD] = 0
                     results[row['project']].metrics[ProjectStat.APP_ONCHAIN_TOTAL_TX] = int(row['tx_count'])
                     results[row['project']].metrics[ProjectStat.APP_ONCHAIN_UAW] = int(row['total_users'])
                     results[row['project']].metrics[ProjectStat.APP_ONCHAIN_MEDIAN_TX] = int(row['median_tx'])

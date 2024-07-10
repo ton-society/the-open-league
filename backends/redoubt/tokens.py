@@ -152,6 +152,7 @@ class RedoubtTokensBackend(CalculationBackend):
                     )
                     results[row['symbol']].metrics[ProjectStat.TOKEN_ADDRESS] = row['address']
                     results[row['symbol']].metrics[ProjectStat.PRIZES] = row['prizes']
+                    results[row['symbol']].metrics[ProjectStat.REWARD] = 0
                     results[row['symbol']].metrics[ProjectStat.TOKEN_IS_MEME] = row['is_meme']
                     results[row['symbol']].metrics[ProjectStat.TOKEN_HAS_BOOST] = row['has_boost']
                     results[row['symbol']].metrics[ProjectStat.TOKEN_START_TVL] = int(row['start_tvl'])
