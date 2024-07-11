@@ -6,19 +6,14 @@ Gleam app
 """
 
 Gleam = App(
-    name="Gleam",
+    name="Gleam bot",
     analytics_key="Gleam",
-    url="https://t.me/Gleam_AquaProtocol_Bot/app",
+    url="https://t.me/GleamRewardsBot",
     metrics=[
         SmartContractInteraction(
-            "In-game points purchase", 
-            address="EQAFZftT5VrtXl99fq7HFK0uiPwwnNKTf4CIYzH8d4RX_oDu",
-            op_codes=[2019279690]
-        ),
-        SmartContractInteraction(
-            "Completing a quest", 
-            address="EQADW_UziWpTavUApnKj9ejTrGtOuIBDdIe2zxamdNkta95p",
-            op_codes=[-1858389630]
+            "Payment", 
+            address="EQAaP62gcmar9uRh0AkIP9wrABT6dWHLet4_RmVrbwNRlrpJ",
+            op_codes=[-284173732]
         )
     ]
 )

@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from models.results import ProjectStat
 from models.scores import ScoreModel
@@ -35,9 +35,10 @@ App leaderboard score model, launched since S5
 20% - Stickiness Factor (off-chain) (avg.DAU / Season Active Users)
 """
 class AppLeaderboardModelV3(ScoreModel):
-    def __init__(self):
+    def __init__(self, reward_list: Optional[List[int]] = None):
         super().__init__()
         self.params[ScoreModel.PARAM_TOKEN_MIN_VALUE_FOR_NEW_HOLDER] = 1.0 # 1 TON
+        self.reward_list = reward_list
 
     def calculate(self, metrics: List[ProjectStat]):
         for project in metrics:
@@ -48,4 +49,4 @@ class AppLeaderboardModelV3(ScoreModel):
                             15 * self.normalized_max(project, ProjectStat.APP_OFFCHAIN_PREMIUM_USERS, metrics) + \
                             20 * self.normalized_max(project, ProjectStat.APP_STICKINESS, metrics)
 
-        return sorted(metrics, key=lambda m: m.score, reverse=True)
+        return self.calculate_rewards(sorted(metrics, key=lambda m: m.score, reverse=True))

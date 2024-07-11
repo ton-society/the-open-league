@@ -187,7 +187,9 @@ S5_apps = SeasonConfig(
         MomoAI,
         Gleam,
     ],
-    score_model=AppLeaderboardModelV3()
+    score_model=AppLeaderboardModelV3(
+        reward_list=[160000, 130000, 100000, 50000, 30000, 20000, 10000]
+    )
 )
 
 S5_tokens = SeasonConfig(
@@ -204,7 +206,9 @@ S5_tokens = SeasonConfig(
         NOT, DMT, Spotty, PLANE, UTYA, M5, TDOG, GLITCH, RUS, BTC25, MY, OR, MAN, DYOR, CAVI,
         PET
     ],
-    score_model=TokenLeaderboardModelV5()
+    score_model=TokenLeaderboardModelV5(
+        reward_list=[160000, 130000, 100000, 50000, 30000, 20000, 10000]
+    )
 )
 
 S5_nfts = SeasonConfig(
@@ -332,5 +336,5 @@ S5_defi = SeasonConfig(
             ),
         ]
     },
-    block_before_start_ref='TODO'
+    block_before_start_ref='-1,8000000000000000,38924248,AA9587D2F4A22FF3F389F0C6C86074AD07370F3BABEA2691B8E433488221DBDE,8538C9E3455521539170E9328F75B14CC84668F09F2CB8218824F78A65A5ECF9'
 )
