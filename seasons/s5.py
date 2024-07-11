@@ -25,6 +25,7 @@ from projects.apps.PlayWallet import PlayWallet
 from projects.apps.QuackQuack import QuackQuack
 from projects.apps.Shardify import Shardify
 from projects.apps.Sphynx import Sphynx
+from projects.apps.SpinnerCoin import SpinnerCoin
 from projects.apps.SquidTG import SquidTG
 from projects.apps.SwapCoffee import SwapCoffee
 from projects.apps.TonMap import TonMap
@@ -194,6 +195,7 @@ S5_apps = SeasonConfig(
         WheelOfFate,
         TypoCurator,
         Sphynx,
+        SpinnerCoin,
     ],
     score_model=AppLeaderboardModelV3(
         reward_list=[160000, 130000, 100000, 50000, 30000, 20000, 10000]
