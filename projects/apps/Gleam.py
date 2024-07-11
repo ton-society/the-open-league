@@ -6,7 +6,7 @@ Gleam app
 """
 
 Gleam = App(
-    name="Gleam bot - platform for Crypto projects",
+    name="Gleam bot",
     analytics_key="Gleam",
     url="https://t.me/GleamRewardsBot",
     metrics=[
