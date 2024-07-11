@@ -6,6 +6,7 @@ from projects.apps.Arbuz import Arbuz
 from projects.apps.BountyBay import BountyBay
 from projects.apps.CatGoldMiner import CatGoldMiner
 from projects.apps.Catizen import Catizen
+from projects.apps.CatXWar import CatXWar
 from projects.apps.ChickCoop import ChickCoop
 from projects.apps.EdChess import EdChess
 from projects.apps.Fanton import Fanton
@@ -23,6 +24,7 @@ from projects.apps.MoneyGardenAI import MoneyGardenAI
 from projects.apps.PlayWallet import PlayWallet
 from projects.apps.QuackQuack import QuackQuack
 from projects.apps.Shardify import Shardify
+from projects.apps.Sphynx import Sphynx
 from projects.apps.SquidTG import SquidTG
 from projects.apps.SwapCoffee import SwapCoffee
 from projects.apps.TonMap import TonMap
@@ -31,8 +33,10 @@ from projects.apps.TonUp import TonUP
 from projects.apps.Tonano import Tonano
 from projects.apps.Tongochi import Tongochi
 from projects.apps.TonsOfFriends import TonsOfFriends
+from projects.apps.TypoCurator import TypoCurator
 from projects.apps.Uniton import Uniton
 from projects.apps.Vertus import Vertus
+from projects.apps.WheelOfFate import WheelOfFate
 from projects.apps.XPLUS import XPLUS
 from projects.apps.YesCoin import YesCoin
 from projects.apps.xRare import xRare
@@ -186,6 +190,10 @@ S5_apps = SeasonConfig(
         GramillaWorld,
         MomoAI,
         Gleam,
+        CatXWar,
+        WheelOfFate,
+        TypoCurator,
+        Sphynx,
     ],
     score_model=AppLeaderboardModelV3(
         reward_list=[160000, 130000, 100000, 50000, 30000, 20000, 10000]
