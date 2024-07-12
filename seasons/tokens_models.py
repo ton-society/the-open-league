@@ -40,14 +40,14 @@ class TokenLeaderboardModelV5(ScoreModel):
         self.params[ScoreModel.PARAM_TOKEN_MIN_VALUE_FOR_NEW_HOLDER] = 1.0 # 1 TON
         self.reward_list = reward_list
         self.tvl_category = {
-            "10M – 20M": {"low": 10_000_000, "high": None, "coefficient": 1},
-            "5M – 10M": {"low": 5_000_000, "high": 10_000_000, "coefficient": 0.8},
-            "2M – 5M": {"low": 2_000_000, "high": 5_000_000, "coefficient": 0.6},
-            "1M – 2M": {"low": 1_000_000, "high": 2_000_000, "coefficient": 0.5},
-            "500K – 1M": {"low": 500_000, "high": 1_000_000, "coefficient": 0.4},
-            "100K – 500K": {"low": None, "high": 500_000, "coefficient": 0.3},
+            "$10M - $20M TVL": {"low": 10_000_000, "high": None, "coefficient": 1},
+            "$5M - $10M TVL": {"low": 5_000_000, "high": 10_000_000, "coefficient": 0.8},
+            "$2M - $5M TVL": {"low": 2_000_000, "high": 5_000_000, "coefficient": 0.6},
+            "$1M - $2M TVL": {"low": 1_000_000, "high": 2_000_000, "coefficient": 0.5},
+            "$0.5M - $1M TVL": {"low": 500_000, "high": 1_000_000, "coefficient": 0.4},
+            "$0.1M - $0.5M TVL": {"low": None, "high": 500_000, "coefficient": 0.3},
         }
-        self.ton_usd_rate = 7.50648  # 2024-06-26 11:00:00
+        self.ton_usd_rate = 7.50648
 
     def get_tvl_category(self, tvl_value) -> str:
         for category_name, limits in self.tvl_category.items():
