@@ -13,10 +13,8 @@ class GasPumpJettonsBuysRedoubtImpl(RedoubtMetricImpl):
         BUY_OP_CODE = 1825825968
         admin_addresses_filter = " OR ".join(map(lambda addr: f"jm.admin_address = '{addr}'", metric.admin_addresses))
 
-        # TODO CHECK:
-        # Below we use "from jetton_master" assuming that such table exists.
-        # This part of query is tested in Tonalytica (but with redoubt.jetton_master table)
         return f"""
+        (
         with jetton_masters as (
             select jm.address as jetton_master_address from jetton_master jm
             where {admin_addresses_filter}
@@ -29,6 +27,7 @@ class GasPumpJettonsBuysRedoubtImpl(RedoubtMetricImpl):
         from messages_local m
         join jetton_masters jm on m.destination = jm.jetton_master_address
         where m.op = {BUY_OP_CODE}
+        )
         """
 
 """
@@ -52,10 +51,8 @@ class GasPumpJettonsSellsAndUnwrapsRedoubtImpl(RedoubtMetricImpl):
 
         admin_addresses_filter = " OR ".join(map(lambda addr: f"jm.admin_address = '{addr}'", metric.admin_addresses))
 
-        # TODO CHECK:
-        # Below we use "from jetton_master" assuming that such table exists.
-        # This part of query is tested in Tonalytica (but with redoubt.jetton_master table)
         return f"""
+        (
         with jetton_masters as (
             select jm.address as jetton_master_address from jetton_master jm
             where {admin_addresses_filter}
@@ -67,6 +64,7 @@ class GasPumpJettonsSellsAndUnwrapsRedoubtImpl(RedoubtMetricImpl):
             jb.user_address as user_address
         from jetton_burn_local jb
         join jetton_masters jm on jb.jetton_master = jm.jetton_master_address
+        )
         """
 
 """
