@@ -33,6 +33,7 @@ from projects.apps.TonMap import TonMap
 from projects.apps.TonPunks import TonPunks
 from projects.apps.TonUp import TonUP
 from projects.apps.Tonano import Tonano
+from projects.apps.TonGifts import TonGifts
 from projects.apps.Tongochi import Tongochi
 from projects.apps.TonsOfFriends import TonsOfFriends
 from projects.apps.TypoCurator import TypoCurator
@@ -198,6 +199,7 @@ S5_apps = SeasonConfig(
         Sphynx,
         SpinnerCoin,
         # GasPump,
+        TonGifts,
     ],
     score_model=AppLeaderboardModelV3(
         reward_list=[160000, 130000, 100000, 50000, 30000, 20000, 10000]
