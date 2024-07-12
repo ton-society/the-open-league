@@ -198,7 +198,7 @@ S5_apps = SeasonConfig(
         TypoCurator,
         Sphynx,
         SpinnerCoin,
-        # GasPump,
+        GasPump,
         TonGifts,
     ],
     score_model=AppLeaderboardModelV3(
