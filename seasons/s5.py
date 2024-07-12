@@ -197,7 +197,7 @@ S5_apps = SeasonConfig(
         TypoCurator,
         Sphynx,
         SpinnerCoin,
-        GasPump,
+        # GasPump,
     ],
     score_model=AppLeaderboardModelV3(
         reward_list=[160000, 130000, 100000, 50000, 30000, 20000, 10000]
