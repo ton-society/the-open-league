@@ -81,6 +81,7 @@ class ScoreModel:
     """
     def calculate_rewards(self, projects: List[ProjectStat]) -> List[ProjectStat]:
         remains = 0
+        assigned_full_rewards = 0
         if not self.reward_list:
             return projects
         reward_iterator = iter(self.reward_list)
@@ -92,13 +93,14 @@ class ScoreModel:
                     remains += reward - project.metrics[ProjectStat.POSSIBLE_REWARD]
                 else:
                     project.metrics[ProjectStat.REWARD] = reward
+                    if not project.metrics[ProjectStat.POSSIBLE_REWARD]:
+                        assigned_full_rewards += reward
             else:
                 project.metrics[ProjectStat.REWARD] = 0
         if remains:
-            assigned_rewards = sum(self.reward_list) - remains
             for project in projects:
                 if project.metrics[ProjectStat.REWARD] and not project.metrics[ProjectStat.POSSIBLE_REWARD]:
-                    project.metrics[ProjectStat.REWARD] += remains * project.metrics[ProjectStat.REWARD] / assigned_rewards
+                    project.metrics[ProjectStat.REWARD] += remains * project.metrics[ProjectStat.REWARD] / assigned_full_rewards
         return projects
 
     def calculate(self, metrics: List[ProjectStat]):

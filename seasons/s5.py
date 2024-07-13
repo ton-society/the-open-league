@@ -13,6 +13,7 @@ from projects.apps.Fanton import Fanton
 from projects.apps.Fanzee import Fanzee
 from projects.apps.GM import GM
 from projects.apps.Gamee import Gamee
+from projects.apps.GasPump import GasPump
 from projects.apps.Gatto import Gatto
 from projects.apps.GetGems import GetGems
 from projects.apps.Gleam import Gleam
@@ -32,6 +33,7 @@ from projects.apps.TonMap import TonMap
 from projects.apps.TonPunks import TonPunks
 from projects.apps.TonUp import TonUP
 from projects.apps.Tonano import Tonano
+from projects.apps.TonGifts import TonGifts
 from projects.apps.Tongochi import Tongochi
 from projects.apps.TonsOfFriends import TonsOfFriends
 from projects.apps.TypoCurator import TypoCurator
@@ -106,7 +108,7 @@ from projects.tokens.SHIT import SHIT
 from projects.tokens.POE import POE
 from projects.tokens.DMT import DMT
 from projects.tokens.Spotty import Spotty
-from projects.tokens.PLANE  import PLANE 
+from projects.tokens.PLANE  import PLANE
 from projects.tokens.UTYA import UTYA
 from projects.tokens.M5 import M5
 from projects.tokens.TDOG import TDOG
@@ -196,6 +198,8 @@ S5_apps = SeasonConfig(
         TypoCurator,
         Sphynx,
         SpinnerCoin,
+        GasPump,
+        TonGifts,
     ],
     score_model=AppLeaderboardModelV3(
         reward_list=[160000, 130000, 100000, 50000, 30000, 20000, 10000]
