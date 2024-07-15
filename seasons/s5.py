@@ -2,7 +2,6 @@
 S5 season config
 """
 from models.season_config import SeasonConfig, DexPool
-from projects.apps.Arbuz import Arbuz
 from projects.apps.BountyBay import BountyBay
 from projects.apps.CatGoldMiner import CatGoldMiner
 from projects.apps.Catizen import Catizen
@@ -11,7 +10,6 @@ from projects.apps.ChickCoop import ChickCoop
 from projects.apps.EdChess import EdChess
 from projects.apps.Fanton import Fanton
 from projects.apps.Fanzee import Fanzee
-from projects.apps.GM import GM
 from projects.apps.Gamee import Gamee
 from projects.apps.GasPump import GasPump
 from projects.apps.Gatto import Gatto
@@ -49,8 +47,6 @@ from projects.defi.EVAA import EVAA
 from projects.defi.StonFi import StonFi
 from projects.defi.StormTrade import StormTrade
 from projects.defi.Tradoor import Tradoor
-from projects.tokens.ARBUZ import ARBUZ
-from projects.tokens.KINGY import KINGY
 from projects.tokens.NOT import NOT
 from projects.tokens.PUNK import PUNK
 from projects.tokens.GLINT import GLINT
@@ -160,10 +156,8 @@ S5_apps = SeasonConfig(
     end_time=S5_END,
     projects=[
         QuackQuack,
-        Arbuz,
         Fanzee,
         Catizen,
-        GM,
         JetTon,
         SquidTG,
         XPLUS,
@@ -212,7 +206,7 @@ S5_tokens = SeasonConfig(
     start_time=S5_START,
     end_time=S5_END,
     projects=[
-        ARBUZ, KINGY, PUNK, GLINT, RECA, TIGER, WALL, DFC, MEH, HYDRA, WEB3, STON, BOLT,
+        PUNK, GLINT, RECA, TIGER, WALL, DFC, MEH, HYDRA, WEB3, STON, BOLT,
         durev, OPEN, TGRAM, MagicCrystal, TONG, SCALE, GRAM, VIRUS, JVT, BURN, UP,
         GEMSTON, SQD, CATS, RUSD, REDO, Bear, MEM,
         FNZ, SHIP, LAVE, TONK, CES, TON_STARS, SOX, COFE, PEPE, REGI, WIF, ANON,
