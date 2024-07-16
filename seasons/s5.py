@@ -117,6 +117,7 @@ from projects.tokens.MAN import MAN
 from projects.tokens.DYOR import DYOR
 from projects.tokens.CAVI import CAVI
 from projects.tokens.PET import PET
+from projects.tokens.CRYPTON import CRYPTON
 from projects.nfts.TheMinersClubNFTs import TheMinersClubNFTsNFT
 from projects.nfts.YNGEXPLRZ import YNGEXPLRZNFT
 from projects.nfts.Gatto import GattoNFT
@@ -212,7 +213,7 @@ S5_tokens = SeasonConfig(
         FNZ, SHIP, LAVE, TONK, CES, TON_STARS, SOX, COFE, PEPE, REGI, WIF, ANON,
         KAKAXA, JETTON, FISH, DICK, LLAMA, TONALD, WON, HIF, RANDOM, INS, SHIT, POE, MITTENS,
         NOT, DMT, Spotty, PLANE, UTYA, M5, TDOG, GLITCH, RUS, BTC25, MY, OR, MAN, DYOR, CAVI,
-        PET
+        PET, CRYPTON
     ],
     score_model=TokenLeaderboardModelV5(
         reward_list=[160000, 130000, 100000, 50000, 30000, 20000, 10000]
