@@ -1,5 +1,8 @@
-from models.metrics.pumpers_metrics import JettonMasterInteraction, ProxyContractInteraction, TokenTransferToJettonMaster
+from models.metrics.jetton_master_interaction import JettonMasterInteraction
+from models.metrics.contracts_by_code_hash import ProxyContractInteraction
+from models.metrics.token_transfer_to_jetton_master import TokenTransferToJettonMaster
 from models.project import App
+
 
 """
 Pumpers app
