@@ -21,6 +21,7 @@ from projects.apps.JetTon import JetTon
 from projects.apps.MomoAI import MomoAI
 from projects.apps.MoneyGardenAI import MoneyGardenAI
 from projects.apps.PlayWallet import PlayWallet
+from projects.apps.Pumpers import Pumpers
 from projects.apps.QuackQuack import QuackQuack
 from projects.apps.Shardify import Shardify
 from projects.apps.Sphynx import Sphynx
@@ -195,6 +196,7 @@ S5_apps = SeasonConfig(
         SpinnerCoin,
         GasPump,
         TonGifts,
+        Pumpers,
     ],
     score_model=AppLeaderboardModelV3(
         reward_list=[160000, 130000, 100000, 50000, 30000, 20000, 10000]
