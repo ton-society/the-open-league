@@ -21,7 +21,6 @@ class TokenTransferToJettonMasterRedoubtImpl(RedoubtMetricImpl):
             from jetton_transfers_local jt
             join jetton_masters jm on jt.destination_owner = jm.jetton_master_address
             join jetton_masters jm2 on jt.jetton_master = jm2.jetton_master_address
-            )
         )
         """
 
