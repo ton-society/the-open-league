@@ -10,7 +10,7 @@ class ProxyContractInteractionRedoubtImpl(RedoubtMetricImpl):
         return f"""
         (
             with proxy_contracts as (
-                select distinct(address) from account_state where code_hash = {metric.code_hash}
+                select distinct(address) from account_state where code_hash = '{metric.code_hash}'
             )
             select msg_id as id, '{context.project.name}' as project, 1 as weight, source as user_address 
             from messages_local m
