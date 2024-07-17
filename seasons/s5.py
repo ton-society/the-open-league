@@ -304,31 +304,25 @@ S5_defi = SeasonConfig(
             DexPool(  # NOT/TON
                 address='EQCaY8Ifl2S6lRBMBJeY35LIuMXPc8JfItWG4tl7lBGrSoR2',
                 dex=DexPool.DEX_STON,
-                asset_position=DexPool.POSITION_LEFT,
-                asset_currency=DexPool.ASSET_TON
-            ),
-            DexPool(  # NOT/TON
-                address='EQCaY8Ifl2S6lRBMBJeY35LIuMXPc8JfItWG4tl7lBGrSoR2',
-                dex=DexPool.DEX_STON,
-                asset_position=DexPool.POSITION_LEFT,
+                asset_position=DexPool.POSITION_RIGHT,
                 asset_currency=DexPool.ASSET_TON
             ),
             DexPool(  # REGI/TON
                 address='EQD54uVMibZPAdHdoA_vcTDFmFLfEnlJ5SEgu4vDiFpTzdnr',
                 dex=DexPool.DEX_STON,
-                asset_position=DexPool.POSITION_LEFT,
+                asset_position=DexPool.POSITION_RIGHT,
                 asset_currency=DexPool.ASSET_TON
             ),
             DexPool(  # REDO/TON
                 address='EQBCwe_IObXA4Mt3RbcHil2s4-v4YQS3wUDt1-DvZOceeMGO',
                 dex=DexPool.DEX_STON,
-                asset_position=DexPool.POSITION_LEFT,
+                asset_position=DexPool.POSITION_RIGHT,
                 asset_currency=DexPool.ASSET_TON
             ),
             DexPool(  # RECA/TON
                 address='EQC5_Js0m5eO2BF4gAppApvOao9idv7uDALfHDfbMDO67b9Y',
                 dex=DexPool.DEX_STON,
-                asset_position=DexPool.POSITION_LEFT,
+                asset_position=DexPool.POSITION_RIGHT,
                 asset_currency=DexPool.ASSET_TON
             ),
         ]
