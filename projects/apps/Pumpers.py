@@ -10,7 +10,7 @@ Pumpers app
 
 Pumpers = App(
     name="Pumpers",
-    analytics_key=None,
+    analytics_key="pumpers",
     url="https://pumpers.tg/",
     metrics=[
         JettonMasterInteraction(
