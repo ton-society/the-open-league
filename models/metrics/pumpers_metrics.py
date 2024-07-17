@@ -96,9 +96,7 @@ class ProxyContractInteractionRedoubtImpl(RedoubtMetricImpl):
             select msg_id as id, '{context.project.name}' as project, 1 as weight, source as user_address 
             from messages_local m
             join proxy_contracts pc on pc.address = m.destination
-            AND (
-                {op_codes_filter}
-            )
+            where {op_codes_filter}
         )
         """
 
