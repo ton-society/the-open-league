@@ -47,7 +47,6 @@ class TokenLeaderboardModelV5(ScoreModel):
             "$0.5M - $1M": {"low": 500_000, "high": 1_000_000, "coefficient": 0.4},
             "$0.1M - $0.5M": {"low": None, "high": 500_000, "coefficient": 0.3},
         }
-        self.ton_usd_rate = 7.50648
 
     def get_tvl_category(self, tvl_value) -> str:
         for category_name, limits in self.tvl_category.items():
@@ -57,7 +56,7 @@ class TokenLeaderboardModelV5(ScoreModel):
     def calculate(self, metrics: List[ProjectStat]):
         for project in metrics:
             logger.info(f"Calculating score for {project}")
-            start_tvl_usd = project.metrics[ProjectStat.TOKEN_START_TVL] * self.ton_usd_rate
+            start_tvl_usd = project.metrics[ProjectStat.TOKEN_TVL_CATEGORY_VALUE]
             project.metrics[ProjectStat.TOKEN_TVL_CATEGORY] = self.get_tvl_category(start_tvl_usd)
             price_change_weight = 30 * self.tvl_category[project.metrics[ProjectStat.TOKEN_TVL_CATEGORY]]["coefficient"]
             tvl_change_weight = 30 + (30 - price_change_weight) * 3 / 7
