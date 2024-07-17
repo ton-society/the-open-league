@@ -21,6 +21,7 @@ from projects.apps.JetTon import JetTon
 from projects.apps.MomoAI import MomoAI
 from projects.apps.MoneyGardenAI import MoneyGardenAI
 from projects.apps.PlayWallet import PlayWallet
+from projects.apps.Pumpers import Pumpers
 from projects.apps.QuackQuack import QuackQuack
 from projects.apps.Shardify import Shardify
 from projects.apps.Sphynx import Sphynx
@@ -117,6 +118,7 @@ from projects.tokens.MAN import MAN
 from projects.tokens.DYOR import DYOR
 from projects.tokens.CAVI import CAVI
 from projects.tokens.PET import PET
+from projects.tokens.CRYPTON import CRYPTON
 from projects.nfts.TheMinersClubNFTs import TheMinersClubNFTsNFT
 from projects.nfts.YNGEXPLRZ import YNGEXPLRZNFT
 from projects.nfts.Gatto import GattoNFT
@@ -194,6 +196,7 @@ S5_apps = SeasonConfig(
         SpinnerCoin,
         GasPump,
         TonGifts,
+        Pumpers,
     ],
     score_model=AppLeaderboardModelV3(
         reward_list=[160000, 130000, 100000, 50000, 30000, 20000, 10000]
@@ -212,7 +215,7 @@ S5_tokens = SeasonConfig(
         FNZ, SHIP, LAVE, TONK, CES, TON_STARS, SOX, COFE, PEPE, REGI, WIF, ANON,
         KAKAXA, JETTON, FISH, DICK, LLAMA, TONALD, WON, HIF, RANDOM, INS, SHIT, POE, MITTENS,
         NOT, DMT, Spotty, PLANE, UTYA, M5, TDOG, GLITCH, RUS, BTC25, MY, OR, MAN, DYOR, CAVI,
-        PET
+        PET, CRYPTON
     ],
     score_model=TokenLeaderboardModelV5(
         reward_list=[160000, 130000, 100000, 50000, 30000, 20000, 10000]
