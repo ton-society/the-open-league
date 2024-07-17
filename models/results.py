@@ -21,6 +21,7 @@ class ProjectStat:
     TOKEN_TVL_CATEGORY = 'token_tvl_category'
     TOKEN_TVL_CHANGE = 'token_tvl_change'
     TOKEN_START_TVL = 'token_start_tvl'
+    TOKEN_TVL_CATEGORY_VALUE = 'token_tvl_category_value'
     TOKEN_START_TVL_USD = 'token_start_tvl_usd'
     TOKEN_LAST_TVL = 'token_last_tvl'
     TOKEN_PRICE_BEFORE = 'token_price_before'
