@@ -90,6 +90,18 @@ class RedoubtTokensBackend(CalculationBackend):
               and build_time >=  to_timestamp({config.start_time})
               and build_time <  to_timestamp({config.end_time})
               group by 1, 2
+            ), last_7day_tvl as (
+              -- TVL for the last 7 days
+              select build_time, p.symbol, sum(tvl_ton) *
+                (select rate from ton_usd_rates tur where tur.build_time < thd.build_time order by tur.build_time desc limit 1) as tvl_usd
+              from tvl_history_datamart thd join pools p on thd.address = p.pool
+              and build_time >=  least(now(), to_timestamp({config.end_time})) - interval '7 day'
+              and build_time <  least(now(), to_timestamp({config.end_time}))
+              group by 1, 2
+            ), tvl_for_catogory as (
+              -- average it
+              select symbol, count(1) as cnt, round(avg(tvl_usd)) as tvl_usd from last_7day_tvl
+              group by 1
             ), last_tvl as (
               -- latest values
               select distinct on (symbol) symbol, tvl from current_tvl
@@ -103,7 +115,7 @@ class RedoubtTokensBackend(CalculationBackend):
               select symbol, count(1) as days from avg_daily_tvl
               group by 1
             ), tvl_weighted as (
-              -- calcylate weighted TVL change for each project
+              -- calculate weighted TVL change for each project
               select symbol, start_tvl, days, sum(tvl - start_tvl) / days as tvl_change from avg_daily_tvl
               join days_with_tvl using(symbol)
               join avg_tvl_prior_start using(symbol)
@@ -161,6 +173,7 @@ class RedoubtTokensBackend(CalculationBackend):
             possible_reward,
             url, boost_link,
             coalesce(tvl_change, 0) as tvl_change, coalesce(start_tvl, 0) as start_tvl,
+            coalesce(tvl_for_catogory.tvl_usd, 0) as tvl_for_catogory,
             coalesce(new_holders, 0) as new_holders,
             coalesce(last_tvl.tvl, 0) as last_tvl,
             coalesce(100 * coalesce(price_change, 0), 0) as price_delta,
@@ -169,6 +182,7 @@ class RedoubtTokensBackend(CalculationBackend):
             coalesce(price_after, 0) as price_after
             from tol_tokens left join tvl_weighted on tvl_weighted.symbol = tol_tokens.symbol 
             left join last_tvl on last_tvl.symbol = tol_tokens.symbol
+            left join tvl_for_catogory on tvl_for_catogory.symbol = tol_tokens.symbol
             left join new_holders on new_holders.symbol = tol_tokens.symbol
             left join price_delta on price_delta.symbol = tol_tokens.symbol
         """
@@ -198,6 +212,7 @@ class RedoubtTokensBackend(CalculationBackend):
                     results[row['symbol']].metrics[ProjectStat.TOKEN_HAS_BOOST] = row['has_boost']
                     results[row['symbol']].metrics[ProjectStat.TOKEN_TVL_CHANGE] = int(row['tvl_change'])
                     results[row['symbol']].metrics[ProjectStat.TOKEN_START_TVL] = int(row['start_tvl'])
+                    results[row['symbol']].metrics[ProjectStat.TOKEN_TVL_CATEGORY_VALUE] = int(row['tvl_for_catogory'])
                     results[row['symbol']].metrics[ProjectStat.TOKEN_LAST_TVL] = int(row['last_tvl'])
                     results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_BEFORE] = float(row['price_before'])
                     results[row['symbol']].metrics[ProjectStat.TOKEN_PRICE_AFTER] = float(row['price_after'])

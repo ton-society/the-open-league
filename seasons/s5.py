@@ -21,6 +21,7 @@ from projects.apps.JetTon import JetTon
 from projects.apps.MomoAI import MomoAI
 from projects.apps.MoneyGardenAI import MoneyGardenAI
 from projects.apps.PlayWallet import PlayWallet
+from projects.apps.Pumpers import Pumpers
 from projects.apps.QuackQuack import QuackQuack
 from projects.apps.Shardify import Shardify
 from projects.apps.Sphynx import Sphynx
@@ -195,6 +196,7 @@ S5_apps = SeasonConfig(
         SpinnerCoin,
         GasPump,
         TonGifts,
+        Pumpers,
     ],
     score_model=AppLeaderboardModelV3(
         reward_list=[160000, 130000, 100000, 50000, 30000, 20000, 10000]
@@ -304,31 +306,25 @@ S5_defi = SeasonConfig(
             DexPool(  # NOT/TON
                 address='EQCaY8Ifl2S6lRBMBJeY35LIuMXPc8JfItWG4tl7lBGrSoR2',
                 dex=DexPool.DEX_STON,
-                asset_position=DexPool.POSITION_LEFT,
-                asset_currency=DexPool.ASSET_TON
-            ),
-            DexPool(  # NOT/TON
-                address='EQCaY8Ifl2S6lRBMBJeY35LIuMXPc8JfItWG4tl7lBGrSoR2',
-                dex=DexPool.DEX_STON,
-                asset_position=DexPool.POSITION_LEFT,
+                asset_position=DexPool.POSITION_RIGHT,
                 asset_currency=DexPool.ASSET_TON
             ),
             DexPool(  # REGI/TON
                 address='EQD54uVMibZPAdHdoA_vcTDFmFLfEnlJ5SEgu4vDiFpTzdnr',
                 dex=DexPool.DEX_STON,
-                asset_position=DexPool.POSITION_LEFT,
+                asset_position=DexPool.POSITION_RIGHT,
                 asset_currency=DexPool.ASSET_TON
             ),
             DexPool(  # REDO/TON
                 address='EQBCwe_IObXA4Mt3RbcHil2s4-v4YQS3wUDt1-DvZOceeMGO',
                 dex=DexPool.DEX_STON,
-                asset_position=DexPool.POSITION_LEFT,
+                asset_position=DexPool.POSITION_RIGHT,
                 asset_currency=DexPool.ASSET_TON
             ),
             DexPool(  # RECA/TON
                 address='EQC5_Js0m5eO2BF4gAppApvOao9idv7uDALfHDfbMDO67b9Y',
                 dex=DexPool.DEX_STON,
-                asset_position=DexPool.POSITION_LEFT,
+                asset_position=DexPool.POSITION_RIGHT,
                 asset_currency=DexPool.ASSET_TON
             ),
         ]
