@@ -39,6 +39,7 @@ from projects.apps.TypoCurator import TypoCurator
 from projects.apps.Uniton import Uniton
 from projects.apps.Vertus import Vertus
 from projects.apps.WheelOfFate import WheelOfFate
+from projects.apps.WowFish import WowFish
 from projects.apps.XPLUS import XPLUS
 from projects.apps.YesCoin import YesCoin
 from projects.apps.xRare import xRare
@@ -197,6 +198,7 @@ S5_apps = SeasonConfig(
         GasPump,
         TonGifts,
         Pumpers,
+        WowFish,
     ],
     score_model=AppLeaderboardModelV3(
         reward_list=[160000, 130000, 100000, 50000, 30000, 20000, 10000]
