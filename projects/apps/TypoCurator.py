@@ -15,6 +15,10 @@ TypoCurator = App(
             "Withdraw", 
             address="EQBk6_OV_6Kgg2_-nkI_j-3-xxOrOWiH9B5u9fwT1z_vlwFY"
         ),
+        SmartContractInteraction(
+            "SBT", 
+            address="EQDsA8rP8HUmB0QppNqFKwkaTSP6_zbxzOY2JGlxBOeUYNxk"
+        ),
         TokenTransferFromUser(
             "Deposit",
             jetton_masters=[
