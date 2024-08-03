@@ -10,6 +10,7 @@ Catizen = App(
     analytics_key="catizen",
     url='https://t.me/catizenbot',
     possible_reward=20000,
+    prizes=False,
     metrics=[
         SmartContractInteraction(
             "Airdop claim", "EQAMl6BVegC0IOZPLhLzWBHCnK4iO4G5eNu4qn_NKQnoISvm"
