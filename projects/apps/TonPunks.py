@@ -9,9 +9,9 @@ TonPunks app
 
 TonPunks = App(
     name="TON Punks",
-    analytics_key="TONPunks",
+    analytics_key=None,
     url='https://t.me/TonPunksBot',
-    possible_reward = 109325,
+    possible_reward=109325,
     metrics=[
         SmartContractInteraction(
             "@cubesonthewater_bot", "EQCtEy4bAxYrDZLetcP9wyAKL3MkgMxDoe_1BxLeo-1B9F2A", comment_required=True
@@ -23,5 +23,5 @@ TonPunks = App(
             "NFT activity", collections=["EQAo92DYMokxghKcq-CkCGSk_MgXY5Fo1SPW20gkvZl75iCN"]
         )
     ],
-    token=PUNK
+    token=PUNK,
 )
