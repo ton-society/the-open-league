@@ -9,7 +9,7 @@ TonPunks app
 
 TonPunks = App(
     name="TON Punks",
-    analytics_key=None,
+    analytics_key="TONPunks",
     url='https://t.me/TonPunksBot',
     possible_reward=109325,
     metrics=[
