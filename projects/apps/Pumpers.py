@@ -2,6 +2,7 @@ from models.metrics.jetton_master_interaction import JettonMasterInteraction
 from models.metrics.contracts_by_code_hash import ProxyContractInteraction
 from models.metrics.token_transfer_to_jetton_master import TokenTransferToJettonMaster
 from models.project import App
+from projects.tokens.PUMP import PUMP
 
 
 """
@@ -28,4 +29,5 @@ Pumpers = App(
             admin_addresses=["EQBmZ4IuzZc5YJfAJSvXmkD_8I7qnQ5uq7N3U4MtH_N9YLNd"],
         ),
     ],
+    token=PUMP,
 )
