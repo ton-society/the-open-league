@@ -79,6 +79,8 @@ class RedoubtAppBackend(CalculationBackend):
               * (select price_ton from chartingview.token_agg_price_history taph where taph.address = fa.address
               and taph.build_time < to_timestamp({config.end_time} ) order by build_time desc limit 1)
               >= {config.score_model.param(ScoreModel.PARAM_TOKEN_MIN_VALUE_FOR_NEW_HOLDER)}
+              -- new holder should have deployed wallet. at least at the past.
+              and exists (select from account_state as2 where as2.address = owner_address and code_hash is not null)
               group by 1
             )
             select tol_tokens.symbol,
