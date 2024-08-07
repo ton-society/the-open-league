@@ -149,6 +149,7 @@ class RedoubtTokensBackend(CalculationBackend):
               >= {config.score_model.param(ScoreModel.PARAM_TOKEN_MIN_VALUE_FOR_NEW_HOLDER)}
               -- new holder should have deployed wallet. at least at the past.
               and exists (select from account_state as2 where as2.address = owner_address and code_hash is not null)
+              and not exists (select from tol.banned_users b where b.address = owner_address)
               group by 1
             )
             , price_snapshots as (
