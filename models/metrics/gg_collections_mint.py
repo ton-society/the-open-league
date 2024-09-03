@@ -7,7 +7,7 @@ class GetGemsCollectionsMintsRedoubtImpl(RedoubtMetricImpl):
 
         return f"""
         select id, '{context.project.name}' as project, 1 as weight, 
-        (select destination from messages m where m.hash = nh.hash limit 1) as user_address
+        (select destination from messages m where m.hash = nh.hash limit 1) as user_address, ts
         from nft_history_local nh where
         collection_address in (
             select distinct nc.address as collection  from nft_collection nc 

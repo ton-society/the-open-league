@@ -17,7 +17,7 @@ class TokenTransferToJettonMasterRedoubtImpl(RedoubtMetricImpl):
                 where {admin_addresses_filter}
             )
             select jt.msg_id as id, '{context.project.name}' as project, 1 as weight,
-            jt.source_owner as user_address
+            jt.source_owner as user_address, ts
             from jetton_transfers_local jt
             join jetton_masters jm on jt.destination_owner = jm.jetton_master_address
             join jetton_masters jm2 on jt.jetton_master = jm2.jetton_master_address

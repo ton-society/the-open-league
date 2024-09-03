@@ -12,7 +12,7 @@ class ProxyContractInteractionRedoubtImpl(RedoubtMetricImpl):
             with proxy_contracts as (
                 select distinct(address) from account_state where code_hash = '{metric.code_hash}'
             )
-            select msg_id as id, '{context.project.name}' as project, 1 as weight, source as user_address 
+            select msg_id as id, '{context.project.name}' as project, 1 as weight, source as user_address, ts
             from messages_local m
             join proxy_contracts pc on pc.address = m.destination
             where {op_codes_filter}

@@ -23,7 +23,7 @@ class GasPumpJettonsBuysRedoubtImpl(RedoubtMetricImpl):
             m.msg_id as id,
             '{context.project.name}' as project,
             1 as weight,
-            m.source as user_address
+            m.source as user_address, ts
         from messages_local m
         join jetton_masters jm on m.destination = jm.jetton_master_address
         where m.op = {BUY_OP_CODE}
@@ -61,7 +61,7 @@ class GasPumpJettonsSellsAndUnwrapsRedoubtImpl(RedoubtMetricImpl):
             jb.msg_id as id,
             '{context.project.name}' as project,
             1 as weight,
-            jb.user_address as user_address
+            jb.user_address as user_address, ts
         from jetton_burn_local jb
         join jetton_masters jm on jb.jetton_master = jm.jetton_master_address
         )

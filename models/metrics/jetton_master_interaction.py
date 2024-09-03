@@ -24,7 +24,7 @@ class JettonMasterInteractionRedoubtImpl(RedoubtMetricImpl):
                 m.msg_id as id,
                 '{context.project.name}' as project,
                 1 as weight,
-                m.source as user_address
+                m.source as user_address, ts
             from messages_local m
             join jetton_masters jm on m.destination = jm.jetton_master_address
             where {op_codes_filter}

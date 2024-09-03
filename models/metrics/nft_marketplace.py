@@ -6,7 +6,7 @@ class NFTMarketplaceRedoubtImpl(RedoubtMetricImpl):
     def calculate(self, context: CalculationContext, metric):
 
         return f"""
-        select id, '{context.project.name}' as project, 1 as weight, user_address 
+        select id, '{context.project.name}' as project, 1 as weight, user_address, ts
         from nft_sales where marketplace = '{metric.marketplace}'
         """
 
