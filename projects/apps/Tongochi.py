@@ -12,6 +12,13 @@ Tongochi = App(
     name="Tongochi",
     analytics_key=None,
     url='https://t.me/TonGochi_bot',
+    nfts=[
+        "EQBHcQFym6BAxdOmU2abpTYX5ci-WG92sbjTDMC2fFzqNu8M",
+        "EQBaKtgtqzI_C6SkjjkhPkXdjggnDtfXPY2Sr6p3iVVmMyIN",
+        "EQDbE6ABTq1zQJZLMKOCKvIlfhx3Z6t_tbhkEm8eZ6kBjVbM",
+        "EQApGxeI3NnmmSGpa0DdMfj_MXH0fC7E94nJrejYSsO-qrgk",
+        "EQArhEFS4oAqBGxH8GEwUNpZBivM8moF5sEaBXxM6X3v6NAj"
+    ],
     metrics=[
         NFTActivity(
             "Project's NFTs", collections=[

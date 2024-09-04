@@ -16,13 +16,18 @@ from loguru import logger
 Second version of redoubt backed apps backend.
 It aggregates all actions by the users on the daily basis and stores number of days with activity by the user.
 Results are stored directly to the table with the following structure:
+
 create table tol.apps_users_stats_{season_name}(
 id serial primary key,
 project varchar,
 address varchar,
 days smallint[],
-added_at timestamp default now()
+token_value_ton decimal(10, 2),
+nfts_count int8,
+added_at timestamp default now(),
+updated_at timestamp
 )
+
 create unique index unique_apps_users_stats_{season_name} on tol.apps_users_stats_{season_name} (project, address)
 """
 
@@ -46,20 +51,28 @@ class RedoubtAppBackendV2(CalculationBackend):
             return cursor.fetchone()['last_time']
 
     def _do_calculate(self, config: SeasonConfig, dry_run: bool = False):
-        logger.info("Requesting token new holders stats for the apps with tokens")
-        PROJECTS = []
+        TOKENS = []
+        PROJECT_NFTS = []
 
         for project in config.projects:
             if project.token is not None:
-                PROJECTS.append(f"""
+                TOKENS.append(f"""
                     select '{project.name}' as project, '{project.token.address}' as address, 
-                    {project.token.decimals} as decimals, 
+                    {project.token.decimals} as decimals
                     """)
-        PROJECTS = "\nunion all\n".join(PROJECTS)
+            if project.nfts is not None:
+                for nft in project.nfts:
+                    PROJECT_NFTS.append(f"""
+                        select '{project.name}' as project, '{nft}' as address
+                        """)
+        TOKENS = "\nunion all\n".join(TOKENS)
+        PROJECT_NFTS = "\nunion all\n".join(PROJECT_NFTS)
 
         balances_table = "mview_jetton_balances"
         if (time.time()) > config.end_time:
             balances_table = f"tol.token_balances_snapshot_{config.safe_season_name()}"
+        
+        nft_table = "mview_nft_actual"
 
 
         logger.info("Running re:doubt backend for App leaderboard SQL generation")
@@ -84,8 +97,7 @@ class RedoubtAppBackendV2(CalculationBackend):
                 select * from project_{project.name_safe()}
                 """)
             PROJECTS_NAMES.append(f"""
-            select '{project.name}' as project, {project.prizes} as prizes, {project.possible_reward} as possible_reward,
-            '{project.url if project.url else ""}' as url
+            select '{project.name}' as project
             """)
         PROJECTS = ",\n".join(PROJECTS)
         PROJECTS_ALIASES = "\nUNION ALL\n".join(PROJECTS_ALIASES)
@@ -97,7 +109,7 @@ class RedoubtAppBackendV2(CalculationBackend):
         """
 
         SQL = f"""
-        insert into tol.apps_users_stats_{config.safe_season_name()} (project, address, days)
+        insert into tol.apps_users_stats_{config.safe_season_name()} (project, address, days, token_value_ton, nfts_count, updated_at)
         with messages_local as (
             {messages}            
         ), jetton_transfers_local as (
@@ -151,6 +163,15 @@ class RedoubtAppBackendV2(CalculationBackend):
         {PROJECTS_ALIASES}        
         ), project_names as (
         {PROJECTS_NAMES}
+        ), tokens as (
+            {TOKENS}
+        ), nfts as (
+            {PROJECT_NFTS}
+        ), tokens_price as (
+          select *,  pow(10, -1 * decimals)
+              * (select price_ton from chartingview.token_agg_price_history taph where taph.address = tokens.address
+              and taph.build_time < to_timestamp({config.end_time} ) order by build_time desc limit 1) as price_ton
+               from tokens
         ),
         all_projects as (
           -- exclude banned users
@@ -160,10 +181,29 @@ class RedoubtAppBackendV2(CalculationBackend):
         ), events_with_days as (
             -- adding day since the start of the season
             select *, (ts - {config.start_time}::int) / 86400 + 1 as day from all_projects_raw
-        )
+        ), results as (
         select project, user_address, array_agg(distinct day) as days from events_with_days
         group by 1, 2
-        on conflict (project, address) do update SET days = EXCLUDED.days
+        ), tokens_holders as (
+            select r.project, r.user_address, tp.price_ton * b.balance as token_value_ton from results r
+            join tokens_price tp on tp.project = r.project
+            join {balances_table} b on b.jetton_master = tp.address and b."owner" = r.user_address
+        ), nft_holders as (
+            select r.project, r.user_address, count(1) as nfts_count from results r
+            join nfts on nfts.project = r.project
+            join {nft_table} n on n.collection = nfts.address and n."owner" = r.user_address
+            group by 1, 2
+        ), output as (
+          select results.*, coalesce(th.token_value_ton, 0) as token_value_ton, coalesce(nh.nfts_count, 0) as nfts_count, 
+          now() as updated from results 
+          left join tokens_holders th on results.project = th.project and results.user_address = th.user_address
+          left join nft_holders nh on results.project = nh.project and results.user_address = nh.user_address
+        )
+        select * from output
+        on conflict (project, address) do update SET
+           days = EXCLUDED.days,
+           token_value_ton = EXCLUDED.token_value_ton,
+           nfts_count = EXCLUDED.nfts_count
         """
         logger.info(f"Generated SQL: {SQL}")
 
