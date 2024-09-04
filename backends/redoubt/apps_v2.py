@@ -29,6 +29,8 @@ updated_at timestamp
 )
 
 create unique index unique_apps_users_stats_{season_name} on tol.apps_users_stats_{season_name} (project, address)
+
+Also it filters for only enrolled users, tol.enrolled_users_{season_name} is used.
 """
 
 class RedoubtAppBackendV2(CalculationBackend):
@@ -176,6 +178,7 @@ class RedoubtAppBackendV2(CalculationBackend):
         all_projects as (
           -- exclude banned users
          select f.* from all_projects_raw f
+         join tol.enrollment_{config.safe_season_name()} enr on enr.address = f.user_address
          left join tol.banned_users b on b.address = f.user_address -- exclude banned users
          where b.address is null
         ), events_with_days as (
