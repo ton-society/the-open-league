@@ -9,6 +9,7 @@ from loguru import logger
 
 from backends.contracts_executor import ContractsExecutor
 from backends.defi import DefillamaDeFiBackend
+from backends.sbt_enrollment import SBTEnrollmentSync
 from backends.redoubt.apps import RedoubtAppBackend
 from backends.redoubt.apps_v2 import RedoubtAppBackendV2
 from backends.redoubt.nfts import RedoubtNFTsBackend
@@ -41,6 +42,13 @@ if __name__ == "__main__":
                 executor=ContractsExecutor(os.getenv('CONTRACTS_EXECUTOR_URL'))
             )
             season = S5_defi
+        elif sys.argv[1] == 'sbt':
+            backend = SBTEnrollmentSync(conn,
+                tonapi=TonapiAdapter(),
+                executor=ContractsExecutor(os.getenv('CONTRACTS_EXECUTOR_URL')))
+            season = S6_apps
+            backend.sync(season)
+            sys.exit(0)
         else:
             raise Exception(f"leaderboard not supported: {sys.argv[1]}")
 
