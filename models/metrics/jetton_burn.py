@@ -7,7 +7,7 @@ class JettonBurnRedoubtImpl(RedoubtMetricImpl):
         jetton_masters = "\nor\n".join(map(lambda addr: f"jetton_master  = '{addr}'", metric.jetton_masters))
 
         return f"""
-        select msg_id as id, '{context.project.name}' as project, 1 as weight, user_address
+        select msg_id as id, '{context.project.name}' as project, 1 as weight, user_address, ts
         from jetton_burn_local
         WHERE {jetton_masters}
         """

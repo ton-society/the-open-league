@@ -25,7 +25,7 @@ class SmartContractInteractionRedoubtImpl(RedoubtMetricImpl):
         return f"""
         select 
                 msg_id as id, '{context.project.name}' as project, {0.5 if metric.is_custodial else 1} as weight, 
-                source as user_address from messages_local m
+                source as user_address, ts from messages_local m
         where ({address_filter}) {'and length("comment") > 0' if metric.comment_required else ''}
          {comment_regexp_filter} {comment_not_equals_filter}
         AND (

@@ -21,6 +21,7 @@ class App(Project):
     metrics: List[Metric]
     url: str = None # project url
     token: Token = None # Token of the project
+    nfts: List[str] = None # Project NFTs
     prizes: bool = True # flat to ignore project in reward calculation
     possible_reward: int = 0
 

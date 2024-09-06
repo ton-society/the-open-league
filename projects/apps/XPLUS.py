@@ -11,6 +11,7 @@ XPLUS = App(
     name="XPLUS",
     analytics_key="XPLUS",
     url='https://t.me/xplusio_bot',
+    nfts=["EQD4-peNeFh7IqZdy-oXoyoHoPVyNP0K1RNY3xTeYj8tenCP"],
     metrics=[
         SmartContractInteraction(
             "Check-in", "EQCU80ddWxsL0JFiRh3pYxDqwPG777t4qDBv6wde7MpsyJTH", op_codes=[1699364067]

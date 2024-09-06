@@ -22,7 +22,7 @@ class TokenTransferToUserRedoubtImpl(RedoubtMetricImpl):
 
         return f"""
         select jt.msg_id as id, '{context.project.name}' as project, {0.5 if metric.is_custodial else 1} as weight,
-        jt.destination_owner as user_address
+        jt.destination_owner as user_address, ts
         from jetton_transfers_local jt
         WHERE (
             {destinations}

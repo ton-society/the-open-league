@@ -9,7 +9,7 @@ class NFTActivityRedoubtImpl(RedoubtMetricImpl):
         return f"""
         select id, '{context.project.name}' as project,
         {0.5 if metric.is_custodial else 1} as weight, 
-        nft.user_address
+        nft.user_address, ts
         from nft_activity_local nft
         WHERE (
             {collections}

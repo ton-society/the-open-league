@@ -11,6 +11,11 @@ Fanton = App(
     name="Fanton",
     analytics_key="Fanton",
     url='https://t.me/FanTonGameBot',
+    nfts=[
+        "EQBpBsShOF1EvuX3nOKwNuzr5YWlJjdpCH_2n8ybizF479Tg",
+        "EQCZKrxGwCGUHR7sBgTcADm-JrZR3YccqjDKZwzsSR2SbLL-",
+        "EQDfLbr_bJaA_Zb8MQsS_RIrHKBG6gYCSO_C48b7JJHCUYi-"
+    ],
     metrics=[
         NFTActivity(
             "Project NFTs", collections=[
