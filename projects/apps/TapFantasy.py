@@ -13,7 +13,7 @@ TapFantasy = App(
     prizes=False,
     nfts=[
         "EQBHG9ChK3CHRuCD5-561t6Z7nV7hub-gF6Z7pdVpqcnR4gJ"
-    ]
+    ],
     metrics=[
         SmartContractInteraction(
             "On-chain check in", "EQB52lJbxS_RIgl19lDZYToT-Je6YwJfXF-2aKk4bh1Bj_xp"

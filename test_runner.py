@@ -16,8 +16,8 @@ from backends.redoubt.tokens import RedoubtTokensBackend
 from backends.tonapi import TonapiAdapter
 from models.render_method import JsonRenderMethod, HTMLRenderMethod
 from models.season_config import SeasonConfig
-from seasons.s5 import S5_apps, S5_tokens, S5_nfts, S5_defi
-from seasons.s6 import S6_apps
+from seasons.s5 import S5_apps, S5_tokens, S5_defi
+from seasons.s6 import S6_apps, S6_nfts
 
 if __name__ == "__main__":
     with psycopg2.connect() as conn:
@@ -34,7 +34,7 @@ if __name__ == "__main__":
             sys.exit(0)
         elif sys.argv[1] == 'nfts':
             backend = RedoubtNFTsBackend(conn)
-            season = S5_nfts
+            season = S6_nfts
         elif sys.argv[1] == 'defi':
             backend = DefillamaDeFiBackend(
                 tonapi=TonapiAdapter(),
