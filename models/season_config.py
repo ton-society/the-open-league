@@ -50,6 +50,11 @@ class SeasonConfig:
     block_before_start_ref: str = None # ref for the last block exactly before the start_time
     block_before_end_ref: str = None # ref for the last block of the season (i.e. before end_time)
 
+
+    """
+    Address of SBT collection which is used for enrollment
+    """
+    enrollment_sbt: str = None 
     # for SQL usage
     def safe_season_name(self):
         return self.name.replace(".", '_')
