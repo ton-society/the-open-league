@@ -8,7 +8,7 @@ from models.season_config import SeasonConfig
 import psycopg2
 import psycopg2.extras
 from loguru import logger
-from tonsdk.utils import Address
+from backends.toncenter_cpp.utils import to_raw, to_user_friendly
 
 class ToncenterCppNFTsBackend(CalculationBackend):
     def __init__(self, connection):
@@ -33,7 +33,7 @@ class ToncenterCppNFTsBackend(CalculationBackend):
         
         projects = []
         for project in config.projects:
-            projects.append(f"select '{project.name}' as name, '{Address(project.address).to_string(0).upper()}' as address, '{project.url if project.url else ''}' as url")
+            projects.append(f"select '{project.name}' as name, '{to_raw(project.address)}' as address, '{project.url if project.url else ''}' as url")
         PROJECTS = "\nunion all\n".join(projects)
 
         SQL = f"""
@@ -54,8 +54,8 @@ class ToncenterCppNFTsBackend(CalculationBackend):
             from history nh 
             left join parsed.nft_history nh2 on nh.nft_item_address = nh2.nft_item_address and nh.current_owner = nh2.new_owner and nh.new_owner = nh2.current_owner
             where nh2.nft_item_address is null
-            and nh.marketplace != '{Address("EQD_e1RdLx-t4-D0OCpxzsNFTDRBBpMkMi4TBQEz48awW_qW").to_string(0).upper()}'
-            and nh.marketplace != '{Address("EQC7rCsyYf4DVva0xOFfAOZbA2-g29FAQe4nhUqWAs1tC9hh").to_string(0).upper()}'
+            and nh.marketplace != '{to_raw("EQD_e1RdLx-t4-D0OCpxzsNFTDRBBpMkMi4TBQEz48awW_qW")}'
+            and nh.marketplace != '{to_raw("EQC7rCsyYf4DVva0xOFfAOZbA2-g29FAQe4nhUqWAs1tC9hh")}'
         ),
         top as (
             select d.collection_address address, sum(d.price) / 1e9 volume
@@ -84,7 +84,7 @@ class ToncenterCppNFTsBackend(CalculationBackend):
                         name=row['name'],
                         metrics={
                             ProjectStat.NFT_VOLUME: int(row['volume']),
-                            ProjectStat.URL:  row['url'] if len(row['url']) > 0 else ("https://getgems.io/collection/" + Address(row['address']).to_string(1, 1, 1))
+                            ProjectStat.URL:  row['url'] if len(row['url']) > 0 else ("https://getgems.io/collection/" + to_user_friendly(row['address']))
                         }
                     )
 
