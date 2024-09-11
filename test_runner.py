@@ -12,7 +12,7 @@ from backends.defi import DefillamaDeFiBackend
 from backends.sbt_enrollment import SBTEnrollmentSync
 from backends.redoubt.apps import RedoubtAppBackend
 from backends.redoubt.apps_v2 import RedoubtAppBackendV2
-from backends.redoubt.nfts import RedoubtNFTsBackend
+from backends.toncenter_cpp.nfts import ToncenterCppNFTsBackend
 from backends.redoubt.tokens import RedoubtTokensBackend
 from backends.tonapi import TonapiAdapter
 from backends.toncenter_cpp.apps_v2_projects import ToncenterCppAppsScores2Projects
@@ -39,7 +39,7 @@ if __name__ == "__main__":
             season = S6_apps
             backend.calculate(season, dry_run=len(sys.argv) > 2 and sys.argv[2] == '--dryrun')
         elif sys.argv[1] == 'nfts':
-            backend = RedoubtNFTsBackend(conn)
+            backend = ToncenterCppNFTsBackend(conn)
             season = S6_nfts
         elif sys.argv[1] == 'defi_tvl':
             backend = DefillamaDeFiBackend(
