@@ -43,7 +43,7 @@ class RedoubtNFTsBackend(CalculationBackend):
         ),
         history as (
             select nh.*
-            from nft_history nh 
+            from parsed.nft_history nh 
             join collections c on c.address = nh.collection_address
             where event_type = 'sale'
             and utime > {config.start_time}::int
@@ -52,7 +52,7 @@ class RedoubtNFTsBackend(CalculationBackend):
         deals as (
             select nh.collection_address, nh.current_owner, nh.new_owner, nh.price, nh.marketplace
             from history nh 
-            left join nft_history nh2 on nh.nft_item_address = nh2.nft_item_address and nh.current_owner = nh2.new_owner and nh.new_owner = nh2.current_owner
+            left join parsed.nft_history nh2 on nh.nft_item_address = nh2.nft_item_address and nh.current_owner = nh2.new_owner and nh.new_owner = nh2.current_owner
             where nh2.nft_item_address is null
             and nh.marketplace != '{Address("EQD_e1RdLx-t4-D0OCpxzsNFTDRBBpMkMi4TBQEz48awW_qW").to_string(0).upper()}'
             and nh.marketplace != '{Address("EQC7rCsyYf4DVva0xOFfAOZbA2-g29FAQe4nhUqWAs1tC9hh").to_string(0).upper()}'
