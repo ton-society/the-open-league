@@ -50,3 +50,11 @@ class AppLeaderboardModelV3(ScoreModel):
                             20 * self.normalized_max(project, ProjectStat.APP_STICKINESS, metrics)
 
         return self.calculate_rewards(sorted(metrics, key=lambda m: m.score, reverse=True))
+    
+    
+class AppLeaderboardModelS6(ScoreModel):
+    def __init__(self):
+        super().__init__()
+
+    def calculate(self, metrics: List[ProjectStat]):
+        return metrics

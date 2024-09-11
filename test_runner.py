@@ -15,6 +15,7 @@ from backends.redoubt.apps_v2 import RedoubtAppBackendV2
 from backends.redoubt.nfts import RedoubtNFTsBackend
 from backends.redoubt.tokens import RedoubtTokensBackend
 from backends.tonapi import TonapiAdapter
+from backends.toncenter_cpp.apps_v2_projects import ToncenterCppAppsScores2Projects
 from models.render_method import JsonRenderMethod, HTMLRenderMethod
 from models.season_config import SeasonConfig
 from seasons.s5 import S5_apps, S5_tokens, S5_defi
@@ -33,6 +34,10 @@ if __name__ == "__main__":
             season = S6_apps
             backend.calculate(season, dry_run=len(sys.argv) > 2 and sys.argv[2] == '--dryrun')
             sys.exit(0)
+        elif sys.argv[1] == 'apps_v2_projects':
+            backend = ToncenterCppAppsScores2Projects(conn)
+            season = S6_apps
+            backend.calculate(season, dry_run=len(sys.argv) > 2 and sys.argv[2] == '--dryrun')
         elif sys.argv[1] == 'nfts':
             backend = RedoubtNFTsBackend(conn)
             season = S6_nfts
