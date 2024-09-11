@@ -18,8 +18,8 @@ from backends.tonapi import TonapiAdapter
 from backends.toncenter_cpp.apps_v2_projects import ToncenterCppAppsScores2Projects
 from models.render_method import JsonRenderMethod, HTMLRenderMethod
 from models.season_config import SeasonConfig
-from seasons.s5 import S5_apps, S5_tokens, S5_defi
-from seasons.s6 import S6_apps, S6_nfts
+from seasons.s5 import S5_apps, S5_tokens
+from seasons.s6 import S6_apps, S6_nfts, S6_defi_tvl
 
 if __name__ == "__main__":
     with psycopg2.connect() as conn:
@@ -41,12 +41,12 @@ if __name__ == "__main__":
         elif sys.argv[1] == 'nfts':
             backend = RedoubtNFTsBackend(conn)
             season = S6_nfts
-        elif sys.argv[1] == 'defi':
+        elif sys.argv[1] == 'defi_tvl':
             backend = DefillamaDeFiBackend(
                 tonapi=TonapiAdapter(),
                 executor=ContractsExecutor(os.getenv('CONTRACTS_EXECUTOR_URL'))
             )
-            season = S5_defi
+            season = S6_defi_tvl
         elif sys.argv[1] == 'sbt':
             backend = SBTEnrollmentSync(conn,
                 tonapi=TonapiAdapter(),

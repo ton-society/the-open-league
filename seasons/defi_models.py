@@ -43,3 +43,27 @@ class DeFiWeightedRewards(ScoreModel):
             project.metrics[ProjectStat.REWARD] = reward
 
         return sorted(metrics, key=lambda m: m.score, reverse=True)
+        
+
+"""
+Returns contributin of positive TVL into overall TVL growth
+"""
+class DeFiContribution(ScoreModel):
+
+    def calculate(self, metrics: List[ProjectStat]):
+        total_tvl_delta = 0
+        for project in metrics:
+            delta = project.metrics[ProjectStat.DEFI_TVL_DELTA_COUNTED]
+            if delta > 0:
+                total_tvl_delta += delta
+        logger.info(f"Total positive TVL delta is {total_tvl_delta:0.2f}$")
+
+        for project in metrics:
+            delta = project.metrics[ProjectStat.DEFI_TVL_DELTA_COUNTED]
+            if delta > 0 and total_tvl_delta > 0:
+                project.score = delta / total_tvl_delta
+            else:
+                project.score = 0
+
+        return sorted(metrics, key=lambda m: m.score, reverse=True)
+        

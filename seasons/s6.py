@@ -74,7 +74,7 @@ from projects.nfts.TONSharks import TONSharks
 from projects.nfts.PovelDurevNFT2 import PovelDurevNFT2
 from projects.nfts.TONTanks import TONTanks
 from seasons.app_models import AppLeaderboardModelS6
-from seasons.defi_models import DeFiWeightedRewards
+from seasons.defi_models import DeFiContribution, DeFiWeightedRewards
 from seasons.nfts_models import NFTLeaderboardModelV1
 
 S6_START = 1726138800 # Thu Sep 12 2024 11:00:00 GMT+0000
@@ -146,4 +146,16 @@ S6_nfts = SeasonConfig(
 
     ],
     score_model=NFTLeaderboardModelV1()
+)
+
+S6_defi_tvl = SeasonConfig(
+    leaderboard=SeasonConfig.DEFI,
+    name="S6",
+    start_time=S6_START,
+    end_time=S6_END,
+    projects=[
+        DAOLama, Tradoor
+    ],
+    score_model=DeFiContribution(),
+    options={SeasonConfig.OPTION_DEFI_EXCLUDED_POOLS: []}
 )
