@@ -10,7 +10,7 @@ import psycopg2.extras
 from loguru import logger
 from tonsdk.utils import Address
 
-class RedoubtNFTsBackend(CalculationBackend):
+class ToncenterCppNFTsBackend(CalculationBackend):
     def __init__(self, connection):
         CalculationBackend.__init__(self, "Toncenter CPP backend for NFTs leaderboard",
                                     leaderboards=[SeasonConfig.NFTS])
