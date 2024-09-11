@@ -19,6 +19,7 @@ class ScoreModel:
 
     def __init__(self):
         self.params = {}
+        self.reward_list = []
 
     def param(self, key):
         return self.params[key]
@@ -74,6 +75,61 @@ class ScoreModel:
             logger.error(f"Max = min for {field}")
             return 0
         return (p.metrics[field] - min_) / (max_ - min_)
+
+    """
+    Distributes and assigns rewards from reward list
+    """
+    def calculate_rewards(self, projects: List[ProjectStat]) -> List[ProjectStat]:
+        if not self.reward_list:
+            return projects
+
+        remains = 0
+        reward_iterator = iter(self.reward_list)
+        for project in projects:
+            if project.metrics[ProjectStat.PRIZES] or project.metrics[ProjectStat.POSSIBLE_REWARD]:
+                reward = next(reward_iterator, 0)
+                if project.metrics[ProjectStat.POSSIBLE_REWARD] and project.metrics[ProjectStat.POSSIBLE_REWARD] < reward:
+                    project.metrics[ProjectStat.REWARD] = project.metrics[ProjectStat.POSSIBLE_REWARD]
+                    remains += reward - project.metrics[ProjectStat.POSSIBLE_REWARD]
+                else:
+                    project.metrics[ProjectStat.REWARD] = reward
+            else:
+                project.metrics[ProjectStat.REWARD] = 0
+
+        while remains:
+            extra_remains = 0
+            assigned_full_rewards = sum(
+                project.metrics[ProjectStat.REWARD]
+                for project in projects
+                if project.metrics[ProjectStat.REWARD]
+                and (
+                    not project.metrics[ProjectStat.POSSIBLE_REWARD]
+                    or project.metrics[ProjectStat.POSSIBLE_REWARD] > project.metrics[ProjectStat.REWARD]
+                )
+            )
+            pass
+            for project in projects:
+                if project.metrics[ProjectStat.REWARD] and (
+                    not project.metrics[ProjectStat.POSSIBLE_REWARD]
+                    or project.metrics[ProjectStat.POSSIBLE_REWARD] > project.metrics[ProjectStat.REWARD]
+                ):
+                    extra_reward = round(remains * project.metrics[ProjectStat.REWARD] / assigned_full_rewards)
+                    if (
+                        project.metrics[ProjectStat.POSSIBLE_REWARD]
+                        and project.metrics[ProjectStat.POSSIBLE_REWARD]
+                        < project.metrics[ProjectStat.REWARD] + extra_reward
+                    ):
+                        extra_remains += (
+                            extra_reward
+                            + project.metrics[ProjectStat.REWARD]
+                            - project.metrics[ProjectStat.POSSIBLE_REWARD]
+                        )
+                        project.metrics[ProjectStat.REWARD] = project.metrics[ProjectStat.POSSIBLE_REWARD]
+                    else:
+                        project.metrics[ProjectStat.REWARD] += extra_reward
+            remains = extra_remains
+
+        return projects
 
     def calculate(self, metrics: List[ProjectStat]):
         raise NotImplemented()

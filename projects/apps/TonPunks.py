@@ -1,6 +1,7 @@
 from models.metrics.nft_activity import NFTActivity
 from models.metrics.smc_interaction import SmartContractInteraction
 from models.project import App
+from projects.tokens.PUNK import PUNK
 
 """
 TonPunks app
@@ -8,8 +9,9 @@ TonPunks app
 
 TonPunks = App(
     name="TON Punks",
-    analytics_key=None,
+    analytics_key="TONPunks",
     url='https://t.me/TonPunksBot',
+    nfts=["EQAo92DYMokxghKcq-CkCGSk_MgXY5Fo1SPW20gkvZl75iCN"],
     metrics=[
         SmartContractInteraction(
             "@cubesonthewater_bot", "EQCtEy4bAxYrDZLetcP9wyAKL3MkgMxDoe_1BxLeo-1B9F2A", comment_required=True
@@ -20,5 +22,6 @@ TonPunks = App(
         NFTActivity(
             "NFT activity", collections=["EQAo92DYMokxghKcq-CkCGSk_MgXY5Fo1SPW20gkvZl75iCN"]
         )
-    ]
+    ],
+    token=PUNK,
 )

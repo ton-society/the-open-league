@@ -6,7 +6,7 @@ class DexSwapsRedoubtImpl(RedoubtMetricImpl):
     def calculate(self, context: CalculationContext, metric):
         return f"""
         select msg_id as id, '{context.project.name}' as project, 1 as weight,
-        swap_user  as user_address
+        swap_user  as user_address, ts
         from dex_swaps_local
         WHERE referral_address = '{metric.referral_address}'
         """

@@ -6,7 +6,7 @@ class NFTTransfersContractTypeRedoubtImpl(RedoubtMetricImpl):
     def calculate(self, context: CalculationContext, metric):
         return f"""
         select nt.msg_id as id, '{context.project.name}' as project, 1 as weight,
-        current_owner as user_address
+        current_owner as user_address, ts
         from nft_transfers_local nt
         where nt.new_owner in (select  distinct address from account_state as2 
           where as2.code_hash ='{metric.contract_code_hash}') 
@@ -14,7 +14,7 @@ class NFTTransfersContractTypeRedoubtImpl(RedoubtMetricImpl):
         union all
         
         select nt.msg_id as id, '{context.project.name}' as project, 1 as weight,
-        new_owner as user_address
+        new_owner as user_address, ts
         from nft_transfers_local nt
         where nt.current_owner in (select  distinct address from account_state as2 
           where as2.code_hash ='{metric.contract_code_hash}')

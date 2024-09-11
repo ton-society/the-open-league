@@ -7,7 +7,7 @@ class Ton20SalesRedoubtImpl(RedoubtMetricImpl):
 
         return f"""
         select id, '{context.project.name}' as project, 1 as weight, 
-        buyer as user_address
+        buyer as user_address, ts
         from ton20_sale_local ts where
         ts.referral_address = '{metric.marketplace}'
         """

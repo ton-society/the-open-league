@@ -21,7 +21,7 @@ class CalculationBackend:
         if isinstance(res, CalculationResults):
             logger.info(f"Applying scoring model to {res}")
             res.ranking = config.score_model.calculate(res.ranking)
-        if not dry_run:
+        if not dry_run and res:
             res.build_time = update_time
         return res
 

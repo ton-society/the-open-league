@@ -11,6 +11,7 @@ Gatto = App(
     name="Gatto",
     analytics_key="Gatto",
     url='https://t.me/gatto_gamebot',
+    nfts=["EQA2glKDbvezR0KZstAqNmHLEpkOHId1RYAGwza06XLCOLTl"],
     metrics=[
         SmartContractInteraction(
             "User actions", "EQBi01YXMYnPnv_rddXJeU4CD47lHyzlZ45JmKObIPL5V9rV", comment_required=True

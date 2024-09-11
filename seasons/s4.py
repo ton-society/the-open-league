@@ -14,8 +14,11 @@ from projects.apps.GM import GM
 from projects.apps.Gamee import Gamee
 from projects.apps.Gatto import Gatto
 from projects.apps.GetGems import GetGems
+from projects.apps.Gleam import Gleam
 from projects.apps.Gram import Gram
+from projects.apps.GramillaWorld import GramillaWorld
 from projects.apps.JetTon import JetTon
+from projects.apps.MomoAI import MomoAI
 from projects.apps.MoneyGardenAI import MoneyGardenAI
 from projects.apps.PlayWallet import PlayWallet
 from projects.apps.QuackQuack import QuackQuack
@@ -166,6 +169,9 @@ S4_apps = SeasonConfig(
         Vertus,
         Uniton,
         EdChess,
+        GramillaWorld,
+        MomoAI,
+        Gleam,
     ],
     score_model=AppLeaderboardModelV2()
 )
@@ -311,5 +317,7 @@ S4_defi = SeasonConfig(
         ]
     },
     # 2024-06-12 14:59:57.000 +0400
-    block_before_start_ref='-1,8000000000000000,38319277,6D29F1A684BDA0C354E309C6BD47DD64FF5A9406D714BEBD4F7C4684D77CF339,5AB65BBD48348225CC03725564DB27EEF0C6E4FA0B275DB21B80323BBE0940E1'
+    block_before_start_ref='-1,8000000000000000,38319277,6D29F1A684BDA0C354E309C6BD47DD64FF5A9406D714BEBD4F7C4684D77CF339,5AB65BBD48348225CC03725564DB27EEF0C6E4FA0B275DB21B80323BBE0940E1',
+    # 2024-06-26 14:59:59.000 +0400
+    block_before_end_ref='-1,8000000000000000,38613440,7C22FBC45816296A030216121CD4A4C8E09AE9B6A2B04B4552EB486B43022C5F,F8F2FD6C285FA0FC72211EFD9014D9701131DB58AF59FB2ACD9F0140361DAB25',
 )

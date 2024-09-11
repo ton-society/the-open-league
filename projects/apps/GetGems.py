@@ -14,6 +14,10 @@ GetGems = App(
     name="GetGems",
     analytics_key=None,
     url='https://getgems.io/',
+    prizes=False,
+    nfts=[
+        "EQDhlVq6cknyPk_SCGZUoXZRbZixNODfcBMCZ3wDfDWLFze7"
+    ],
     metrics=[
         NFTMarketplace("Marketplace sales", "EQBYTuYbLf8INxFtD8tQeNk5ZLy-nAX9ahQbG_yl1qQ-GEMS"),
         NFTMarketplace("Marketplace sales", "EQCjk1hh952vWaE9bRguFkAhDAL5jj3xj9p0uPWrFBq_GEMS"),

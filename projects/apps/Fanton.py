@@ -11,15 +11,24 @@ Fanton = App(
     name="Fanton",
     analytics_key="Fanton",
     url='https://t.me/FanTonGameBot',
+    nfts=[
+        "EQBpBsShOF1EvuX3nOKwNuzr5YWlJjdpCH_2n8ybizF479Tg",
+        "EQCZKrxGwCGUHR7sBgTcADm-JrZR3YccqjDKZwzsSR2SbLL-",
+        "EQDfLbr_bJaA_Zb8MQsS_RIrHKBG6gYCSO_C48b7JJHCUYi-"
+    ],
     metrics=[
         NFTActivity(
             "Project NFTs", collections=[
                 "EQBpBsShOF1EvuX3nOKwNuzr5YWlJjdpCH_2n8ybizF479Tg",
-                "EQCZKrxGwCGUHR7sBgTcADm-JrZR3YccqjDKZwzsSR2SbLL-"
+                "EQCZKrxGwCGUHR7sBgTcADm-JrZR3YccqjDKZwzsSR2SbLL-",
+                "EQDfLbr_bJaA_Zb8MQsS_RIrHKBG6gYCSO_C48b7JJHCUYi-"
             ]
         ),
         SmartContractInteraction(
             "Deposits", "EQB7GLGF3Xng2kMKLInjq7VWkz8qie8pQtZd1Z8EaqyCIYTw", comment_not_equals=['', 'Royalty']
+        ),
+        SmartContractInteraction(
+            "cNFT mint", "EQApZPOrKned6Ydct3TZelVcTl0-DlNjc2pxAzVzSPf3jiPA", op_codes=[20593830]
         )
     ]
 )
