@@ -33,7 +33,7 @@ class RedoubtNFTsBackend(CalculationBackend):
         
         projects = []
         for project in config.projects:
-            projects.append(f"select '{project.name}' as name, '{Address(project.address).to_string()}' as address, '{project.url if project.url else ''}' as url")
+            projects.append(f"select '{project.name}' as name, '{Address(project.address).to_string(0).upper()}' as address, '{project.url if project.url else ''}' as url")
         PROJECTS = "\nunion all\n".join(projects)
 
         SQL = f"""
@@ -54,8 +54,8 @@ class RedoubtNFTsBackend(CalculationBackend):
             from history nh 
             left join nft_history nh2 on nh.nft_item_address = nh2.nft_item_address and nh.current_owner = nh2.new_owner and nh.new_owner = nh2.current_owner
             where nh2.nft_item_address is null
-            and nh.marketplace != '{Address("EQD_e1RdLx-t4-D0OCpxzsNFTDRBBpMkMi4TBQEz48awW_qW").to_string()}'
-            and nh.marketplace != '{Address("EQC7rCsyYf4DVva0xOFfAOZbA2-g29FAQe4nhUqWAs1tC9hh").to_string()}'
+            and nh.marketplace != '{Address("EQD_e1RdLx-t4-D0OCpxzsNFTDRBBpMkMi4TBQEz48awW_qW").to_string(0).upper()}'
+            and nh.marketplace != '{Address("EQC7rCsyYf4DVva0xOFfAOZbA2-g29FAQe4nhUqWAs1tC9hh").to_string(0).upper()}'
         ),
         top as (
             select d.collection_address address, sum(d.price) / 1e9 volume
