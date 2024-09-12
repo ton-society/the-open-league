@@ -8,8 +8,8 @@ import psycopg2
 from loguru import logger
 
 from backends.contracts_executor import ContractsExecutor
-from backends.defi import DefillamaDeFiBackend
-from backends.defi_volume import DefillamaDeFiVolumeBackend
+from backends.defillama.tvl import DefillamaDeFiTVLBackend
+from backends.defillama.volume import DefillamaDeFiVolumeBackend
 from backends.sbt_enrollment import SBTEnrollmentSync
 from backends.redoubt.apps import RedoubtAppBackend
 from backends.redoubt.apps_v2 import RedoubtAppBackendV2
@@ -43,7 +43,7 @@ if __name__ == "__main__":
             backend = ToncenterCppNFTsBackend(conn)
             season = S6_nfts
         elif sys.argv[1] == 'defi_tvl':
-            backend = DefillamaDeFiBackend(
+            backend = DefillamaDeFiTVLBackend(
                 tonapi=TonapiAdapter(),
                 executor=ContractsExecutor(os.getenv('CONTRACTS_EXECUTOR_URL'))
             )
