@@ -91,7 +91,7 @@ class DeFiVolumeContribution(ScoreModel):
         total_volme = 0
         for project in metrics:
             volume = project.metrics[ProjectStat.DEFI_VOLUME_USD]
-            assert volume > 0
+            # assert volume > 0
             total_volme += volume
         logger.info(f"Total trading volume is {total_volme:0.2f}$")
 

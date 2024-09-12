@@ -47,6 +47,7 @@ from projects.defi.DAOLama import DAOLama
 from projects.defi.DeDust import DeDust
 from projects.defi.EVAA import EVAA
 from projects.defi.GasPump import GasPumpDeFi
+from projects.defi.RainbowSwap import RainbowSwap
 from projects.defi.StonFi import StonFi
 from projects.defi.StormTrade import StormTrade
 from projects.defi.Tradoor import Tradoor
@@ -171,7 +172,7 @@ S6_defi_volume = SeasonConfig(
     start_time=S6_START,
     end_time=S6_END,
     projects=[
-        Tradoor, GasPumpDeFi
+        Tradoor, GasPumpDeFi, RainbowSwap
     ],
     score_model=DeFiVolumeContribution(squads=[
         (lambda tvl: tvl >= 50 * 1e6, "50M$+"),
