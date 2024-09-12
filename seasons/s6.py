@@ -70,6 +70,13 @@ from projects.defi.RainbowSwap import RainbowSwap
 from projects.defi.StonFi import StonFi
 from projects.defi.StormTrade import StormTrade
 from projects.defi.Tradoor import Tradoor
+from projects.defi.Wonton import Wonton
+from projects.defi.SettleTON import SettleTON
+from projects.defi.JVault import JVault
+from projects.defi.TONHedge import TONHedge
+from projects.defi.TonStable import TonStable
+from projects.defi.Parraton import Parraton
+from projects.defi.TonPools import TonPools
 from projects.nfts.TheMinersClubNFTs import TheMinersClubNFTsNFT
 from projects.nfts.YNGEXPLRZ import YNGEXPLRZNFT
 from projects.nfts.Gatto import GattoNFT
@@ -194,7 +201,8 @@ S6_defi_tvl = SeasonConfig(
     start_time=S6_START,
     end_time=S6_END,
     projects=[
-        DAOLama, Tradoor
+        DAOLama, Tradoor, GasPumpDeFi, SettleTON, JVault,
+        TONHedge, TonStable, Parraton, TonPools
     ],
     score_model=DeFiTVLContribution(squads=[
         (lambda tvl: tvl >= 5e6, "5M$+"),
@@ -210,7 +218,7 @@ S6_defi_volume = SeasonConfig(
     start_time=S6_START,
     end_time=S6_END,
     projects=[
-        Tradoor, GasPumpDeFi, RainbowSwap
+        Tradoor, GasPumpDeFi, RainbowSwap, Wonton
     ],
     score_model=DeFiVolumeContribution(squads=[
         (lambda tvl: tvl >= 50 * 1e6, "50M$+"),
