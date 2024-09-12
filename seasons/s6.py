@@ -68,6 +68,9 @@ from projects.apps.MemeTv import MemeTv
 from projects.apps.BeeHarvest import BeeHarvest
 from projects.apps.GemGame import GemGame
 from projects.apps.TeleverseOdyssey import TeleverseOdyssey
+from projects.apps.Agent301 import Agent301
+from projects.apps.GrandCombat import GrandCombat
+from projects.apps.MakeFrens import MakeFrens
 from projects.defi.DAOLama import DAOLama
 from projects.defi.DeDust import DeDust
 from projects.defi.EVAA import EVAA
@@ -187,6 +190,9 @@ S6_apps = SeasonConfig(
         BeeHarvest,
         GemGame,
         TeleverseOdyssey,
+        Agent301,
+        GrandCombat,
+        MakeFrens,
     ],
     score_model=AppLeaderboardModelS6(),
     enrollment_sbt="EQDZ81ZvxRfutjkALcUK0q3Cuusm1XtmhEwUiGSeviLpPARH"
