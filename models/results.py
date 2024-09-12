@@ -44,6 +44,7 @@ class ProjectStat:
     DEFI_TVL_AFTER_COUNTED = 'defi_tvl_after_counted'
     DEFI_TVL_DELTA = 'defi_tvl_delta_full'
     DEFI_TVL_DELTA_COUNTED = 'defi_tvl_delta'
+    DEFI_VOLUME_USD = 'volume_usd'
 
     TITLE = 'title'
     URL = 'url'
