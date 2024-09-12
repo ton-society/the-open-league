@@ -37,3 +37,4 @@ class DeFi(Project):
     defillama_slug: str # Defillama slug
     prizes: bool = True # flat to ignore project in reward calculation
     category: str = "dexs" # category for the project (for the Volume Leaderboard)
+    chain: str = "TON" # Chain for TVL queries - allows to override default TON into TON-Staking
