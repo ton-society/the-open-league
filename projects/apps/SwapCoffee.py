@@ -5,7 +5,6 @@ from models.metrics.jetton_mint import JettonMint
 from models.metrics.smc_interaction import SmartContractInteraction
 from models.metrics.token_transfer_from_user import TokenTransferFromUser
 from models.metrics.token_transfer_to_user import TokenTransferToUser
-from models.metrics.ton20_sales import Ton20Sales
 from models.project import App
 
 """

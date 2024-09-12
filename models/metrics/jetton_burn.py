@@ -1,4 +1,4 @@
-from models.metric import Metric, CalculationContext, RedoubtMetricImpl
+from models.metric import Metric, CalculationContext, RedoubtMetricImpl, ToncenterCppMetricImpl
 
 
 class JettonBurnRedoubtImpl(RedoubtMetricImpl):
@@ -12,6 +12,11 @@ class JettonBurnRedoubtImpl(RedoubtMetricImpl):
         WHERE {jetton_masters}
         """
 
+class JettonBurnToncenterCppImpl(ToncenterCppMetricImpl):
+    def calculate(self, context: CalculationContext, metric):
+        return f"""
+select '1' as id, 'x' as project, null as address, 1 as ts
+        """
 
 """
 TEP-74 token (jetton) burn
@@ -19,6 +24,6 @@ TEP-74 token (jetton) burn
 class JettonBurn(Metric):
     def __init__(self, description, jetton_masters=[]):
         assert type(jetton_masters) == list
-        Metric.__init__(self, description, [JettonBurnRedoubtImpl()])
+        Metric.__init__(self, description, [JettonBurnRedoubtImpl(), JettonBurnToncenterCppImpl()])
         self.jetton_masters = jetton_masters
 

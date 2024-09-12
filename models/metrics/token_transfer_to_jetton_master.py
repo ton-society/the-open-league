@@ -1,4 +1,4 @@
-from models.metric import Metric, CalculationContext, RedoubtMetricImpl
+from models.metric import Metric, CalculationContext, RedoubtMetricImpl, ToncenterCppMetricImpl
 
 
 class TokenTransferToJettonMasterRedoubtImpl(RedoubtMetricImpl):
@@ -24,12 +24,18 @@ class TokenTransferToJettonMasterRedoubtImpl(RedoubtMetricImpl):
         )
         """
 
+class TokenTransferToJettonMasterToncenterCppImpl(ToncenterCppMetricImpl):
+    def calculate(self, context: CalculationContext, metric):
+        return f"""
+select '1' as id, 'x' as project, null as address, 1 as ts
+        """
+
 
 """
 Token (jetton) transfer from user to jetton masters related to specific list of admin addresses 
 """
 class TokenTransferToJettonMaster(Metric):
     def __init__(self, description, admin_addresses=[]):
-        Metric.__init__(self, description, [TokenTransferToJettonMasterRedoubtImpl()])
+        Metric.__init__(self, description, [TokenTransferToJettonMasterRedoubtImpl(), TokenTransferToJettonMasterToncenterCppImpl()])
         assert type(admin_addresses) == list
         self.admin_addresses = admin_addresses

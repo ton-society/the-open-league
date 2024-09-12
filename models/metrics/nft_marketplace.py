@@ -1,4 +1,4 @@
-from models.metric import Metric, CalculationContext, RedoubtMetricImpl
+from models.metric import Metric, CalculationContext, RedoubtMetricImpl, ToncenterCppMetricImpl
 
 
 class NFTMarketplaceRedoubtImpl(RedoubtMetricImpl):
@@ -10,12 +10,17 @@ class NFTMarketplaceRedoubtImpl(RedoubtMetricImpl):
         from nft_sales where marketplace = '{metric.marketplace}'
         """
 
+class NFTMarketplaceToncenterCppImpl(ToncenterCppMetricImpl):
+    def calculate(self, context: CalculationContext, metric):
+        return f"""
+select '1' as id, 'x' as project, null as address, 1 as ts
+        """
 
 """
 All sales-related operations for particular marketplace. Includes sales and init/cancel sale events
 """
 class NFTMarketplace(Metric):
     def __init__(self, description, marketplace=""):
-        Metric.__init__(self, description, [NFTMarketplaceRedoubtImpl()])
+        Metric.__init__(self, description, [NFTMarketplaceRedoubtImpl(), NFTMarketplaceToncenterCppImpl()])
         self.marketplace = marketplace
 

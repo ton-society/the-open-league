@@ -1,4 +1,4 @@
-from models.metric import Metric, CalculationContext, RedoubtMetricImpl
+from models.metric import Metric, CalculationContext, RedoubtMetricImpl, ToncenterCppMetricImpl
 
 
 class NFTTransfersToAddressRedoubtImpl(RedoubtMetricImpl):
@@ -11,12 +11,17 @@ class NFTTransfersToAddressRedoubtImpl(RedoubtMetricImpl):
         where nt.new_owner = '{metric.address}'
         """
 
+class NFTTransfersToAddressToncenterCppImpl(ToncenterCppMetricImpl):
+    def calculate(self, context: CalculationContext, metric):
+        return f"""
+select '1' as id, 'x' as project, null as address, 1 as ts
+        """
 
 """
 All NFT transfers to the contract. 
 """
 class NFTTransfersToAddress(Metric):
     def __init__(self, description, address):
-        Metric.__init__(self, description, [NFTTransfersToAddressRedoubtImpl()])
+        Metric.__init__(self, description, [NFTTransfersToAddressRedoubtImpl(), NFTTransfersToAddressToncenterCppImpl()])
         self.address = address
 

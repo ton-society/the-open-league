@@ -1,4 +1,4 @@
-from models.metric import Metric, CalculationContext, RedoubtMetricImpl
+from models.metric import Metric, CalculationContext, RedoubtMetricImpl, ToncenterCppMetricImpl
 
 
 class ProxyContractInteractionRedoubtImpl(RedoubtMetricImpl):
@@ -19,6 +19,11 @@ class ProxyContractInteractionRedoubtImpl(RedoubtMetricImpl):
         )
         """
 
+class ProxyContractInteractionToncenterCppImpl(ToncenterCppMetricImpl):
+    def calculate(self, context: CalculationContext, metric):
+        return f"""
+select '1' as id, 'x' as project, null as address, 1 as ts
+        """
 
 """
 Interaction with a smart contract with a specific code hash
@@ -28,6 +33,6 @@ Options:
 """
 class ProxyContractInteraction(Metric):
     def __init__(self, description, code_hash=None, op_codes=[]):
-        Metric.__init__(self, description, [ProxyContractInteractionRedoubtImpl()])
+        Metric.__init__(self, description, [ProxyContractInteractionRedoubtImpl(), ProxyContractInteractionToncenterCppImpl()])
         self.code_hash = code_hash
         self.op_codes = op_codes
