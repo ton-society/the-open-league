@@ -46,6 +46,7 @@ from projects.apps.xRare import xRare
 from projects.defi.DAOLama import DAOLama
 from projects.defi.DeDust import DeDust
 from projects.defi.EVAA import EVAA
+from projects.defi.GasPump import GasPumpDeFi
 from projects.defi.StonFi import StonFi
 from projects.defi.StormTrade import StormTrade
 from projects.defi.Tradoor import Tradoor
@@ -74,7 +75,7 @@ from projects.nfts.TONSharks import TONSharks
 from projects.nfts.PovelDurevNFT2 import PovelDurevNFT2
 from projects.nfts.TONTanks import TONTanks
 from seasons.app_models import AppLeaderboardModelS6
-from seasons.defi_models import DeFiContribution, DeFiWeightedRewards
+from seasons.defi_models import DeFiTVLContribution, DeFiVolumeContribution
 from seasons.nfts_models import NFTLeaderboardModelV1
 
 S6_START = 1726138800 # Thu Sep 12 2024 11:00:00 GMT+0000
@@ -156,6 +157,17 @@ S6_defi_tvl = SeasonConfig(
     projects=[
         DAOLama, Tradoor
     ],
-    score_model=DeFiContribution(),
+    score_model=DeFiTVLContribution(),
     options={SeasonConfig.OPTION_DEFI_EXCLUDED_POOLS: []}
+)
+
+S6_defi_volume = SeasonConfig(
+    leaderboard=SeasonConfig.DEFI,
+    name="S6",
+    start_time=S6_START,
+    end_time=S6_END,
+    projects=[
+        Tradoor, GasPumpDeFi
+    ],
+    score_model=DeFiVolumeContribution()
 )

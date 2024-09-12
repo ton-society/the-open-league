@@ -30,7 +30,7 @@ class DefillamaDeFiBackend(CalculationBackend):
         }
     }
     def __init__(self, tonapi: TonapiAdapter, executor: ContractsExecutor):
-        CalculationBackend.__init__(self, "defillama backend for defi leaderboard",
+        CalculationBackend.__init__(self, "defillama backend for defi leaderboard (TVL)",
                                     leaderboards=[SeasonConfig.DEFI])
         self.tonapi = tonapi
         self.executor = executor
@@ -72,7 +72,7 @@ class DefillamaDeFiBackend(CalculationBackend):
         snapshot_ton_rate = self.ton_rate(config.start_time)
         logger.info(f"Snapshot TON rate: {snapshot_ton_rate}$, current TON rate: {current_ton_rate}$")
 
-        assert config.block_before_start_ref is not None, "Start block is required for the DeFi leaderboard"
+        # assert config.block_before_start_ref is not None, "Start block is required for the DeFi leaderboard"
 
         end_block = None
         if int(time.time()) > config.end_time:

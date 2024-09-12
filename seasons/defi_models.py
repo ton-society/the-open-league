@@ -48,7 +48,7 @@ class DeFiWeightedRewards(ScoreModel):
 """
 Returns contributin of positive TVL into overall TVL growth
 """
-class DeFiContribution(ScoreModel):
+class DeFiTVLContribution(ScoreModel):
 
     def calculate(self, metrics: List[ProjectStat]):
         total_tvl_delta = 0
@@ -62,6 +62,28 @@ class DeFiContribution(ScoreModel):
             delta = project.metrics[ProjectStat.DEFI_TVL_DELTA_COUNTED]
             if delta > 0 and total_tvl_delta > 0:
                 project.score = delta / total_tvl_delta
+            else:
+                project.score = 0
+
+        return sorted(metrics, key=lambda m: m.score, reverse=True)
+    
+"""
+Returns contributin of trading volume into overall trading volume
+"""
+class DeFiVolumeContribution(ScoreModel):
+
+    def calculate(self, metrics: List[ProjectStat]):
+        total_volme = 0
+        for project in metrics:
+            volume = project.metrics[ProjectStat.DEFI_VOLUME_USD]
+            assert volume > 0
+            total_volme += volume
+        logger.info(f"Total trading volume is {total_volme:0.2f}$")
+
+        for project in metrics:
+            volume = project.metrics[ProjectStat.DEFI_VOLUME_USD]
+            if total_volme > 0:
+                project.score = volume / total_volme
             else:
                 project.score = 0
 
