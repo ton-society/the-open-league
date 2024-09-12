@@ -1,4 +1,4 @@
-from models.metric import Metric, CalculationContext, RedoubtMetricImpl
+from models.metric import Metric, CalculationContext, RedoubtMetricImpl, ToncenterCppMetricImpl
 
 
 class GetGemsCollectionsMintsRedoubtImpl(RedoubtMetricImpl):
@@ -17,6 +17,11 @@ class GetGemsCollectionsMintsRedoubtImpl(RedoubtMetricImpl):
         ) and event_type = 'mint'        
         """
 
+class GetGemsCollectionsMintsToncenterCppImpl(ToncenterCppMetricImpl):
+    def calculate(self, context: CalculationContext, metric):
+        return f"""
+select '1' as id, 'x' as project, null as address, 1 as ts
+        """
 
 """
 GetGems specific metrics, counts all mints for collections with off-chain metadata url
@@ -26,5 +31,5 @@ in tol.gg_banned_collections table
 """
 class GetGemsCollectionsMints(Metric):
     def __init__(self, description):
-        Metric.__init__(self, description, [GetGemsCollectionsMintsRedoubtImpl()])
+        Metric.__init__(self, description, [GetGemsCollectionsMintsRedoubtImpl(), GetGemsCollectionsMintsToncenterCppImpl()])
 

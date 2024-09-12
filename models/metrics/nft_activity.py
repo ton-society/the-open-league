@@ -1,4 +1,4 @@
-from models.metric import Metric, CalculationContext, RedoubtMetricImpl
+from models.metric import Metric, CalculationContext, RedoubtMetricImpl, ToncenterCppMetricImpl
 
 
 class NFTActivityRedoubtImpl(RedoubtMetricImpl):
@@ -16,6 +16,11 @@ class NFTActivityRedoubtImpl(RedoubtMetricImpl):
         )
         """
 
+class NFTActivityToncenterCppImpl(ToncenterCppMetricImpl):
+    def calculate(self, context: CalculationContext, metric):
+        return f"""
+select '1' as id, 'x' as project, null as address, 1 as ts
+        """
 
 """
 All actions with NFTs for specified collections. Includes transfers and sales (activity by seller)
@@ -23,7 +28,7 @@ All actions with NFTs for specified collections. Includes transfers and sales (a
 class NFTActivity(Metric):
     def __init__(self, description, collections=[], is_custodial=False):
         assert type(collections) == list
-        Metric.__init__(self, description, [NFTActivityRedoubtImpl()])
+        Metric.__init__(self, description, [NFTActivityRedoubtImpl(), NFTActivityToncenterCppImpl()])
         self.collections = collections
         self.is_custodial = is_custodial
 

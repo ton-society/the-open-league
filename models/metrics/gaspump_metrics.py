@@ -1,4 +1,4 @@
-from models.metric import Metric, CalculationContext, RedoubtMetricImpl
+from models.metric import Metric, CalculationContext, RedoubtMetricImpl, ToncenterCppMetricImpl
 
 
 class GasPumpJettonsBuysRedoubtImpl(RedoubtMetricImpl):
@@ -29,13 +29,19 @@ class GasPumpJettonsBuysRedoubtImpl(RedoubtMetricImpl):
         where m.op = {BUY_OP_CODE}
         )
         """
+    
+class GasPumpJettonsBuysToncenterCppImpl(ToncenterCppMetricImpl):
+    def calculate(self, context: CalculationContext, metric):
+        return f"""
+select '1' as id, 'x' as project, null as address, 1 as ts
+        """
 
 """
 Counts all buys across all GasPump jettons
 """
 class GasPumpJettonsBuys(Metric):
     def __init__(self, description, admin_addresses):
-        Metric.__init__(self, description, [GasPumpJettonsBuysRedoubtImpl()])
+        Metric.__init__(self, description, [GasPumpJettonsBuysRedoubtImpl(), GasPumpJettonsBuysToncenterCppImpl()])
         assert type(admin_addresses) == list
         self.admin_addresses = admin_addresses
 
@@ -67,11 +73,17 @@ class GasPumpJettonsSellsAndUnwrapsRedoubtImpl(RedoubtMetricImpl):
         )
         """
 
+class GasPumpJettonsSellsAndUnwrapsToncenterCppImpl(ToncenterCppMetricImpl):
+    def calculate(self, context: CalculationContext, metric):
+        return f"""
+select '1' as id, 'x' as project, null as address, 1 as ts
+        """
+
 """
 Counts all sells and unwraps across all GasPump jettons
 """
 class GasPumpJettonsSellsAndUnwraps(Metric):
     def __init__(self, description, admin_addresses):
-        Metric.__init__(self, description, [GasPumpJettonsSellsAndUnwrapsRedoubtImpl()])
+        Metric.__init__(self, description, [GasPumpJettonsSellsAndUnwrapsRedoubtImpl(), GasPumpJettonsSellsAndUnwrapsToncenterCppImpl()])
         assert type(admin_addresses) == list
         self.admin_addresses = admin_addresses

@@ -1,4 +1,4 @@
-from models.metric import Metric, CalculationContext, RedoubtMetricImpl
+from models.metric import Metric, CalculationContext, RedoubtMetricImpl, ToncenterCppMetricImpl
 
 
 class JettonMasterInteractionRedoubtImpl(RedoubtMetricImpl):
@@ -31,6 +31,11 @@ class JettonMasterInteractionRedoubtImpl(RedoubtMetricImpl):
         )
         """
 
+class JettonMasterInteractionToncenterCppImpl(ToncenterCppMetricImpl):
+    def calculate(self, context: CalculationContext, metric):
+        return f"""
+select '1' as id, 'x' as project, null as address, 1 as ts
+        """
 
 """
 Jetton master interaction
@@ -40,7 +45,7 @@ Options:
 """
 class JettonMasterInteraction(Metric):
     def __init__(self, description, admin_addresses=[], op_codes=[]):
-        Metric.__init__(self, description, [JettonMasterInteractionRedoubtImpl()])
+        Metric.__init__(self, description, [JettonMasterInteractionRedoubtImpl(), JettonMasterInteractionToncenterCppImpl()])
         assert type(admin_addresses) == list
         assert type(op_codes) == list
         self.admin_addresses = admin_addresses

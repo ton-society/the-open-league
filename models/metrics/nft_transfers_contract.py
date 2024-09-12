@@ -1,4 +1,4 @@
-from models.metric import Metric, CalculationContext, RedoubtMetricImpl
+from models.metric import Metric, CalculationContext, RedoubtMetricImpl, ToncenterCppMetricImpl
 
 
 class NFTTransfersContractTypeRedoubtImpl(RedoubtMetricImpl):
@@ -21,6 +21,11 @@ class NFTTransfersContractTypeRedoubtImpl(RedoubtMetricImpl):
         
         """
 
+class NFTTransfersContractTypeToncenterCppImpl(ToncenterCppMetricImpl):
+    def calculate(self, context: CalculationContext, metric):
+        return f"""
+select '1' as id, 'x' as project, null as address, 1 as ts
+        """
 
 """
 All actions with NFTs for specific sale contract.
@@ -28,6 +33,6 @@ Includes transfer to the contract (put on sale) and from (sales)
 """
 class NFTTransfersContractType(Metric):
     def __init__(self, description, contract_code_hash):
-        Metric.__init__(self, description, [NFTTransfersContractTypeRedoubtImpl()])
+        Metric.__init__(self, description, [NFTTransfersContractTypeRedoubtImpl(), NFTTransfersContractTypeToncenterCppImpl()])
         self.contract_code_hash = contract_code_hash
 

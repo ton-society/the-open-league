@@ -1,4 +1,4 @@
-from models.metric import Metric, CalculationContext, RedoubtMetricImpl
+from models.metric import Metric, CalculationContext, RedoubtMetricImpl, ToncenterCppMetricImpl
 
 
 class TokenTransferFromUserRedoubtImpl(RedoubtMetricImpl):
@@ -23,13 +23,19 @@ class TokenTransferFromUserRedoubtImpl(RedoubtMetricImpl):
         """
 
 
+class TokenTransferFromUserToncenterCppImpl(ToncenterCppMetricImpl):
+    def calculate(self, context: CalculationContext, metric):
+        return f"""
+select '1' as id, 'x' as project, null as address, 1 as ts
+        """
+
 """
 TEP-74 token (jetton) transfer, allows to specify the list of destinations and the list of jetton addresses.
 This metric covers jetton transfer from user to smart contract
 """
 class TokenTransferFromUser(Metric):
     def __init__(self, description, jetton_masters=[], destinations=[], is_custodial=False):
-        Metric.__init__(self, description, [TokenTransferFromUserRedoubtImpl()])
+        Metric.__init__(self, description, [TokenTransferFromUserRedoubtImpl(), TokenTransferFromUserToncenterCppImpl()])
         assert type(jetton_masters) == list
         assert type(destinations) == list
         self.jetton_masters = jetton_masters
