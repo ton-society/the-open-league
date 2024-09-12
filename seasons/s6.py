@@ -224,7 +224,7 @@ S6_defi_volume = SeasonConfig(
     start_time=S6_START,
     end_time=S6_END,
     projects=[
-        Tradoor, GasPumpDeFi, RainbowSwap, Wonton
+        Tradoor, GasPumpDeFi, RainbowSwap
     ],
     score_model=DeFiVolumeContribution(squads=[
         (lambda tvl: tvl >= 50 * 1e6, "50M$+"),
