@@ -183,7 +183,7 @@ S6_apps = SeasonConfig(
         MemeTv,
     ],
     score_model=AppLeaderboardModelS6(),
-    enrollment_sbt="EQAab9xw8NOPvIIxv6wxiDNOGLCLGClA1I4vVUPLqceCh_Z7"
+    enrollment_sbt="EQDZ81ZvxRfutjkALcUK0q3Cuusm1XtmhEwUiGSeviLpPARH"
 )
 
 S6_nfts = SeasonConfig(

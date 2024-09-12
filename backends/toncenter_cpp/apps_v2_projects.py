@@ -44,8 +44,10 @@ class ToncenterCppAppsScores2Projects(CalculationBackend):
         with project_names as (
         {PROJECTS_NAMES}
         )
-        select project, url, 0 as total_uaw, 0 as enrolled_wallets, 0.0 as average_score
-        from project_names order by md5(project)
+        select project, url, count(distinct address) as total_uaw, 0 as enrolled_wallets, 0.0 as average_score
+        from project_names 
+        left join tol.apps_users_stats_{config.safe_season_name()} using(project)
+        group by 1, 2
         """
         logger.info(f"Generated SQL: {SQL}")
 
