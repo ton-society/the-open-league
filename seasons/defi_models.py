@@ -1,4 +1,4 @@
-from typing import List
+from typing import Callable, List, Tuple
 
 from models.results import ProjectStat
 from models.scores import ScoreModel
@@ -49,6 +49,12 @@ class DeFiWeightedRewards(ScoreModel):
 Returns contributin of positive TVL into overall TVL growth
 """
 class DeFiTVLContribution(ScoreModel):
+    """
+    Accepts list of squads ranges, each squad is a tuple with min limit predicate and string
+    """
+    def __init__(self, squads: List[Tuple[Callable[[int], bool], str]]):
+        super().__init__()
+        self.squads = squads
 
     def calculate(self, metrics: List[ProjectStat]):
         total_tvl_delta = 0
@@ -60,6 +66,9 @@ class DeFiTVLContribution(ScoreModel):
 
         for project in metrics:
             delta = project.metrics[ProjectStat.DEFI_TVL_DELTA_COUNTED]
+            tvl = project.metrics[ProjectStat.DEFI_TVL_AFTER_COUNTED]
+            project.metrics[ProjectStat.DEFI_SQUAD] = next(filter(lambda s: s[0](tvl), self.squads))[1]
+
             if delta > 0 and total_tvl_delta > 0:
                 project.score = delta / total_tvl_delta
             else:
@@ -71,6 +80,12 @@ class DeFiTVLContribution(ScoreModel):
 Returns contributin of trading volume into overall trading volume
 """
 class DeFiVolumeContribution(ScoreModel):
+    """
+    Accepts list of squads ranges, each squad is a tuple with min limit predicate and string
+    """
+    def __init__(self, squads: List[Tuple[Callable[[int], bool], str]]):
+        super().__init__()
+        self.squads = squads
 
     def calculate(self, metrics: List[ProjectStat]):
         total_volme = 0
@@ -82,6 +97,7 @@ class DeFiVolumeContribution(ScoreModel):
 
         for project in metrics:
             volume = project.metrics[ProjectStat.DEFI_VOLUME_USD]
+            project.metrics[ProjectStat.DEFI_SQUAD] = next(filter(lambda s: s[0](volume), self.squads))[1]
             if total_volme > 0:
                 project.score = volume / total_volme
             else:
