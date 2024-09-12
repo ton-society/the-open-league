@@ -157,7 +157,11 @@ S6_defi_tvl = SeasonConfig(
     projects=[
         DAOLama, Tradoor
     ],
-    score_model=DeFiTVLContribution(),
+    score_model=DeFiTVLContribution(squads=[
+        (lambda tvl: tvl >= 5e6, "5M$+"),
+        (lambda tvl: tvl >= 1e6, "Under 5M$"),
+        (lambda tvl: True, "Under 1M$"),
+    ]),
     options={SeasonConfig.OPTION_DEFI_EXCLUDED_POOLS: []}
 )
 
@@ -169,5 +173,9 @@ S6_defi_volume = SeasonConfig(
     projects=[
         Tradoor, GasPumpDeFi
     ],
-    score_model=DeFiVolumeContribution()
+    score_model=DeFiVolumeContribution(squads=[
+        (lambda tvl: tvl >= 50 * 1e6, "50M$+"),
+        (lambda tvl: tvl >= 10 * 1e6, "Under 50M$"),
+        (lambda tvl: True, "Under 10M$"),
+    ])
 )
