@@ -13,25 +13,19 @@ from backends.defillama.volume import DefillamaDeFiVolumeBackend
 from backends.sbt_enrollment import SBTEnrollmentSync
 from backends.redoubt.apps import RedoubtAppBackend
 from backends.redoubt.apps_v2 import RedoubtAppBackendV2
+from backends.toncenter_cpp.apps_v2_users import ToncenterCppAppBackendV2Users
 from backends.toncenter_cpp.nfts import ToncenterCppNFTsBackend
 from backends.redoubt.tokens import RedoubtTokensBackend
 from backends.tonapi import TonapiAdapter
 from backends.toncenter_cpp.apps_v2_projects import ToncenterCppAppsScores2Projects
 from models.render_method import JsonRenderMethod, HTMLRenderMethod
 from models.season_config import SeasonConfig
-from seasons.s5 import S5_apps, S5_tokens
 from seasons.s6 import S6_apps, S6_nfts, S6_defi_tvl, S6_defi_volume
 
 if __name__ == "__main__":
     with psycopg2.connect() as conn:
-        if sys.argv[1] == 'tokens':
-            backend = RedoubtTokensBackend(conn)
-            season = S5_tokens
-        elif sys.argv[1] == 'apps':
-            backend = RedoubtAppBackend(conn)
-            season = S5_apps
-        elif sys.argv[1] == 'apps_v2':
-            backend = RedoubtAppBackendV2(conn)
+        if sys.argv[1] == 'apps_v2':
+            backend = ToncenterCppAppBackendV2Users(conn)
             season = S6_apps
             backend.calculate(season, dry_run=len(sys.argv) > 2 and sys.argv[2] == '--dryrun')
             sys.exit(0)
