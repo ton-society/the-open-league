@@ -17,7 +17,7 @@ DeFi leaderboard based on DeFiLlama and tonapi:
 2. Excludes boosted pools, whitelisted in the season config using tonapi (to get pool states) and
 pool's get method invocation
 """
-class DefillamaDeFiBackend(CalculationBackend):
+class DefillamaDeFiTVLBackend(CalculationBackend):
     # DEX pool's smc signatures
     DEX_METHODS = {
         DexPool.DEX_STON: {
