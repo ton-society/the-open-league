@@ -43,6 +43,28 @@ from projects.apps.WowFish import WowFish
 from projects.apps.XPLUS import XPLUS
 from projects.apps.YesCoin import YesCoin
 from projects.apps.xRare import xRare
+from projects.apps.AKEDOG import AKEDOG
+from projects.apps.AKEFish import AKEFish
+from projects.apps.Blum import Blum
+from projects.apps.Doggers import Doggers
+from projects.apps.GHArena import GHArena
+from projects.apps.Hamsterdam import Hamsterdam
+from projects.apps.HipoGang import HipoGang
+from projects.apps.MergePals import MergePals
+from projects.apps.Mine2Mine import Mine2Mine
+from projects.apps.Molemine import Molemine
+from projects.apps.MoonApp import MoonApp
+from projects.apps.Nomis import Nomis
+from projects.apps.PiggyPiggy import PiggyPiggy
+from projects.apps.Randomtg import Randomtg
+from projects.apps.SnakeLite import SnakeLite
+from projects.apps.StarAI import StarAI
+from projects.apps.Tonalytics import Tonalytics
+from projects.apps.WONTON import WONTON
+from projects.apps.ZenCoin import ZenCoin
+from projects.apps.DEPINSIM import DEPINSIM
+from projects.apps.HOTWallet import HOTWallet
+from projects.apps.MemeTv import MemeTv
 from projects.defi.DAOLama import DAOLama
 from projects.defi.DeDust import DeDust
 from projects.defi.EVAA import EVAA
@@ -129,6 +151,28 @@ S6_apps = SeasonConfig(
         TonGifts,
         Pumpers,
         WowFish,
+        AKEDOG,
+        AKEFish,
+        Blum,
+        Doggers,
+        GHArena,
+        Hamsterdam,
+        HipoGang,
+        MergePals,
+        Mine2Mine,
+        Molemine,
+        MoonApp,
+        Nomis,
+        PiggyPiggy,
+        Randomtg,
+        SnakeLite,
+        StarAI,
+        Tonalytics,
+        WONTON,
+        ZenCoin,
+        DEPINSIM,
+        HOTWallet,
+        MemeTv,
     ],
     score_model=AppLeaderboardModelS6(),
     enrollment_sbt="EQAab9xw8NOPvIIxv6wxiDNOGLCLGClA1I4vVUPLqceCh_Z7"
