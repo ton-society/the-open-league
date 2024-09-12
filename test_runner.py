@@ -63,7 +63,7 @@ if __name__ == "__main__":
 
         res = backend.calculate(season, dry_run=len(sys.argv) > 2 and sys.argv[2] == '--dryrun')
         logger.info(res)
-        render = JsonRenderMethod("output.json", "https://the-open-league-static-data.s3.amazonaws.com/icons/")
+        render = JsonRenderMethod("output.json")
         render.render(res, season)
         render = HTMLRenderMethod("output.html")
         render.render(res, season)
