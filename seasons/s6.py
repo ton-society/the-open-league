@@ -104,6 +104,7 @@ from projects.nfts.TonAlchemists import TonAlchemists
 from projects.nfts.TONSharks import TONSharks
 from projects.nfts.PovelDurevNFT2 import PovelDurevNFT2
 from projects.nfts.TONTanks import TONTanks
+from projects.nfts.Crypton import Crypton
 from seasons.app_models import AppLeaderboardModelS6
 from seasons.defi_models import DeFiTVLContribution, DeFiVolumeContribution
 from seasons.nfts_models import NFTLeaderboardModelV1
@@ -195,7 +196,7 @@ S6_nfts = SeasonConfig(
         TONDiamondsNFT, NOTPunksNFT, TONFISHBOXNFT, PovelDurevNFTNFT, TONPunksNFT,
         TonedApeClubNFT, RunestonNFT, FantonFantasyFootballNFT, RoOLZNFT, GlitchesNFT,
         MarketMakers, Parachute, NFTWeb3TON, TONFrogs, GBOTSSD, TonAlchemists, TONSharks,
-        PovelDurevNFT2, TONTanks
+        PovelDurevNFT2, TONTanks, Crypton
 
     ],
     score_model=NFTLeaderboardModelV1()
