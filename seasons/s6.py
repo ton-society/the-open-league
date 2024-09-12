@@ -65,6 +65,9 @@ from projects.apps.ZenCoin import ZenCoin
 from projects.apps.DEPINSIM import DEPINSIM
 from projects.apps.HOTWallet import HOTWallet
 from projects.apps.MemeTv import MemeTv
+from projects.apps.BeeHarvest import BeeHarvest
+from projects.apps.GemGame import GemGame
+from projects.apps.TeleverseOdyssey import TeleverseOdyssey
 from projects.defi.DAOLama import DAOLama
 from projects.defi.DeDust import DeDust
 from projects.defi.EVAA import EVAA
@@ -181,6 +184,9 @@ S6_apps = SeasonConfig(
         DEPINSIM,
         HOTWallet,
         MemeTv,
+        BeeHarvest,
+        GemGame,
+        TeleverseOdyssey,
     ],
     score_model=AppLeaderboardModelS6(),
     enrollment_sbt="EQDZ81ZvxRfutjkALcUK0q3Cuusm1XtmhEwUiGSeviLpPARH"
