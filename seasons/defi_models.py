@@ -70,7 +70,7 @@ class DeFiTVLContribution(ScoreModel):
             project.metrics[ProjectStat.DEFI_SQUAD] = next(filter(lambda s: s[0](tvl), self.squads))[1]
 
             if delta > 0 and total_tvl_delta > 0:
-                project.score = delta / total_tvl_delta
+                project.score = 100.0 * delta / total_tvl_delta
             else:
                 project.score = 0
 
@@ -99,7 +99,7 @@ class DeFiVolumeContribution(ScoreModel):
             volume = project.metrics[ProjectStat.DEFI_VOLUME_USD]
             project.metrics[ProjectStat.DEFI_SQUAD] = next(filter(lambda s: s[0](volume), self.squads))[1]
             if total_volme > 0:
-                project.score = volume / total_volme
+                project.score = 100. * volume / total_volme
             else:
                 project.score = 0
 
