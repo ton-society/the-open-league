@@ -196,8 +196,8 @@ S6_nfts = SeasonConfig(
         TONDiamondsNFT, NOTPunksNFT, TONFISHBOXNFT, PovelDurevNFTNFT, TONPunksNFT,
         TonedApeClubNFT, RunestonNFT, FantonFantasyFootballNFT, RoOLZNFT, GlitchesNFT,
         MarketMakers, Parachute, NFTWeb3TON, TONFrogs, GBOTSSD, TonAlchemists, TONSharks,
-        PovelDurevNFT2, TONTanks, Crypton
-
+        PovelDurevNFT2, TONTanks, 
+        Crypton
     ],
     score_model=NFTLeaderboardModelV1()
 )
