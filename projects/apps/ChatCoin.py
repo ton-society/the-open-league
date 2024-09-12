@@ -11,7 +11,7 @@ ChatCoin = App(
     url="https://t.me/ChatCoinAppBot",
     metrics=[
         SmartContractInteraction(
-            "Check-in",
+            "Claiming airdrop",
             "EQA74Q8ktV6KdYOab0rAaauiYnEh6L9ThlG7uwFk1cuNQvKm",
         ),
     ],
