@@ -62,6 +62,9 @@ from projects.apps.StarAI import StarAI
 from projects.apps.Tonalytics import Tonalytics
 from projects.apps.WONTON import WONTON
 from projects.apps.ZenCoin import ZenCoin
+from projects.apps.DEPINSIM import DEPINSIM
+from projects.apps.HOTWallet import HOTWallet
+from projects.apps.MemeTv import MemeTv
 from projects.defi.DAOLama import DAOLama
 from projects.defi.DeDust import DeDust
 from projects.defi.EVAA import EVAA
@@ -167,6 +170,9 @@ S6_apps = SeasonConfig(
         Tonalytics,
         WONTON,
         ZenCoin,
+        DEPINSIM,
+        HOTWallet,
+        MemeTv,
     ],
     score_model=AppLeaderboardModelS6(),
     enrollment_sbt="EQAab9xw8NOPvIIxv6wxiDNOGLCLGClA1I4vVUPLqceCh_Z7"
