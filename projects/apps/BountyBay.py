@@ -12,7 +12,11 @@ BountyBay = App(
     metrics=[
         SmartContractInteraction(
             "Daily Check-in", 
-            address="EQAjeK7jdhIida6L78_KpOTL4HlY8zOcuqasWkaem1Nv4t1-",
+            address="EQAzIUFN8MJ3cGQiKBqHr-COHAz0D7fNnCD2kHneJxmK9gPd",
+        ),
+        SmartContractInteraction(
+            "USDT Reward Claim", 
+            address="EQCicS0nUozy2zuYHRuIV8L2UCFwb8eQZ3g0JpG9BsiCbMhv",
         )
     ]
 )
