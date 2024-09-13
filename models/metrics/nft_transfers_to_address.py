@@ -14,7 +14,10 @@ class NFTTransfersToAddressRedoubtImpl(RedoubtMetricImpl):
 class NFTTransfersToAddressToncenterCppImpl(ToncenterCppMetricImpl):
     def calculate(self, context: CalculationContext, metric):
         return f"""
-select '1' as id, 'x' as project, null as address, 1 as ts
+        select nt.tx_hash as id, '{context.project.name}' as project, 1 as weight,
+        old_owner as user_address, ts
+        from nft_transfers_local nt
+        where nt.new_owner = '{self.to_raw(metric.address)}'
         """
 
 """
