@@ -12,7 +12,7 @@ StarAI = App(
     nfts=["EQBzi2u9CZ0KIIMKWouYtHlzqzBxvGwvgedsWgEwFWdg_HyR"],
     metrics=[
         SmartContractInteraction(
-            "Сheck-in", "EQCxr1o-x7cEFb3vALiYMOW7QPuAoGHMtw1Yab5m6HrnuIuZ", comment_required=True
+            "Сheck-in", "EQCxr1o-x7cEFb3vALiYMOW7QPuAoGHMtw1Yab5m6HrnuIuZ"
         ),
     ],
 )
