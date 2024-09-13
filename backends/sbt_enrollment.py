@@ -57,7 +57,7 @@ class SBTEnrollmentSync:
             data_cell = item['data_cell']
             cell = Cell.one_from_boc(base64.b64decode(data_cell))
             # TODO check hash and extract owner
-            owner = Address(item['metadata']['owner']).to_string(1, 1, 1)
+            owner = Address(item['metadata']['owner']).to_string(0).upper()
             owners.add(owner)
           if len(owners) == total:
             break
