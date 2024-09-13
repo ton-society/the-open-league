@@ -12,7 +12,7 @@ Blum = App(
     metrics=[
         SmartContractInteraction(
             "Interaction_1",
-            "EQBVxA9MkwWmfq46bv9-ikOQHXgelaFTvIo9gtR9ZLn0VoeS",
+            "EQA9nNvUSLAebJxzhHv5sxMWK_RXrxk4MYXR39JMbqvrc040",
             comment_required=True,
         ),
         SmartContractInteraction(
