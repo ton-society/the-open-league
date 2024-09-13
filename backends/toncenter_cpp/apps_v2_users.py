@@ -33,10 +33,11 @@ unique (project, address)
 """
 
 class ToncenterCppAppBackendV2Users(CalculationBackend):
-    def __init__(self, connection):
+    def __init__(self, connection, produce_output=False):
         CalculationBackend.__init__(self, "Toncenter CPP backend for App leaderboard",
                                     leaderboards=[SeasonConfig.APPS])
         self.connection = connection
+        self.produce_output = produce_output
 
     """
     Update time for auxiliary table with messages
@@ -100,7 +101,6 @@ class ToncenterCppAppBackendV2Users(CalculationBackend):
         PROJECTS_NAMES = "\nUNION ALL\n".join(PROJECTS_NAMES)
 
         SQL = f"""
-        insert into tol.apps_users_stats_{config.safe_season_name()} (project, address, days, token_value_ton, nfts_count, updated_at)
         with jetton_transfers_local as (
             select jt.*, jt.tx_now as ts from jetton_transfers jt
             where
@@ -161,7 +161,7 @@ class ToncenterCppAppBackendV2Users(CalculationBackend):
          --where b.address is null
         ), events_with_days as (
             -- adding day since the start of the season
-            select *, (ts - {config.start_time}::int) / 86400 + 1 as day from all_projects_raw
+            select *, (ts - {config.start_time}::int) / 86400 + 1 as day from all_projects
         ), results as (
         select project, user_address, array_agg(distinct day) as days from events_with_days
         group by 1, 2
@@ -176,12 +176,25 @@ class ToncenterCppAppBackendV2Users(CalculationBackend):
           --left join tokens_holders th on results.project = th.project and results.user_address = th.user_address
           left join nft_holders nh on results.project = nh.project and results.user_address = nh.user_address
         )
-        select * from output
-        on conflict (project, address) do update SET
-           days = EXCLUDED.days,
-           token_value_ton = EXCLUDED.token_value_ton,
-           nfts_count = EXCLUDED.nfts_count
         """
+
+        if self.produce_output:
+            SQL = f"""
+{SQL}
+select project, count(distinct user_address) as uaw from all_projects
+        group by 1
+            """
+        else:
+            SQL = f"""
+insert into tol.apps_users_stats_{config.safe_season_name()} (project, address, days, token_value_ton, nfts_count, updated_at)
+{SQL}
+select * from output
+on conflict (project, address) do update SET
+    days = EXCLUDED.days,
+    token_value_ton = EXCLUDED.token_value_ton,
+    nfts_count = EXCLUDED.nfts_count
+"""
+
         def add_lines(s):
             # return s
             out = []
@@ -202,7 +215,19 @@ class ToncenterCppAppBackendV2Users(CalculationBackend):
             logger.info("Running SQL query in production mode")
             with self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
                 cursor.execute(SQL)
-            self.connection.commit()
+                if self.produce_output:
+                    logger.info("Generating output values")
+                    for row in cursor.fetchall():
+                        results[row['project']] = ProjectStat(
+                            name=row['project'],
+                            metrics={
+                                ProjectStat.APP_ONCHAIN_UAW: row['uaw'],
+                                ProjectStat.APP_ONCHAIN_ENROLLED_UAW: 0,
+                                ProjectStat.APP_AVERAGE_SCORE: 0
+                            }
+                        )
+                else:
+                    self.connection.commit()
             logger.info("Main query finished")
             
         return CalculationResults(ranking=results.values(), build_time=1)
