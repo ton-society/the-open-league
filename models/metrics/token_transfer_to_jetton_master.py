@@ -26,8 +26,22 @@ class TokenTransferToJettonMasterRedoubtImpl(RedoubtMetricImpl):
 
 class TokenTransferToJettonMasterToncenterCppImpl(ToncenterCppMetricImpl):
     def calculate(self, context: CalculationContext, metric):
+        assert len(metric.admin_addresses) > 0
+        admin_addresses_filter = " OR ".join(
+                map(lambda addr: f"jm.admin_address = '{self.to_raw(addr)}'", metric.admin_addresses)
+            )
         return f"""
-select '1' as id, 'x' as project, null as address, 1 as ts
+(
+            with target as (
+                select jm.address as jetton_master_address from jetton_masters jm
+                where {admin_addresses_filter}
+            )
+            select jt.tx_hash as id, '{context.project.name}' as project, 1 as weight,
+            jt.source as user_address, ts
+            from jetton_transfers_local jt
+            join target jm on jt.destination = jm.jetton_master_address and 
+            jt.jetton_master_address = jm.jetton_master_address
+        )
         """
 
 
