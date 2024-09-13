@@ -14,7 +14,10 @@ class DexSwapsRedoubtImpl(RedoubtMetricImpl):
 class DexSwapsToncenterCppImpl(ToncenterCppMetricImpl):
     def calculate(self, context: CalculationContext, metric):
         return f"""
-select '1' as id, 'x' as project, null as address, 1 as ts
+        select tx_hash as id, '{context.project.name}' as project, 1 as weight,
+        swap_user  as user_address, ts
+        from dex_swaps_local
+        WHERE referral_address = '{self.to_raw(metric.referral_address)}'
         """
 
 """
