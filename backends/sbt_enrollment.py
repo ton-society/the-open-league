@@ -21,12 +21,12 @@ create table tol.enrollment_{season_name} (
   id serial primary key,
   address varchar,
   sbt varchar,
-  added_at timestamp
+  root_hash varchar,
+  added_at timestamp,
+  unique(address, sbt)
 )
-
-CREATE UNIQUE INDEX enrollment_{season_name}_address_idx ON tol.enrollment_{season_name (address);
 """
-API_BASE_URL = "https://stg.globalsociety.cc/v1/csbts/"
+API_BASE_URL = "https://society.ton.org/v1/csbts/"
 
 class SBTEnrollmentSync:
     def __init__(self, connection, tonapi: TonapiAdapter, executor: ContractsExecutor):
@@ -46,7 +46,7 @@ class SBTEnrollmentSync:
         merkle_root_hex = f"{int(merkle_root):064x}"
         logger.info(f"Requesting data for {merkle_root_hex}")
         start = 0
-        PAGE = 100 # increase to 1000
+        PAGE = 1000
         total = None
         owners = set()
         while True:
@@ -57,7 +57,7 @@ class SBTEnrollmentSync:
             data_cell = item['data_cell']
             cell = Cell.one_from_boc(base64.b64decode(data_cell))
             # TODO check hash and extract owner
-            owner = Address(item['metadata']['owner']).to_string(1, 1, 1)
+            owner = Address(item['metadata']['owner']).to_string(0).upper()
             owners.add(owner)
           if len(owners) == total:
             break
@@ -67,8 +67,8 @@ class SBTEnrollmentSync:
         logger.info(f"Got {len(owners)} owners to update")
         with self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
           for owner in owners:
-            cursor.execute(f"""insert into tol.enrollment_{config.safe_season_name()}(address, added_at)
-            values (%s, now())
+            cursor.execute(f"""insert into tol.enrollment_{config.safe_season_name()}(address, added_at, sbt, root_hash)
+            values (%s, now(), %s, %s)
             on conflict do nothing
-            """, (owner, ))
+            """, (owner, config.enrollment_sbt, merkle_root_hex))
         self.connection.commit()
