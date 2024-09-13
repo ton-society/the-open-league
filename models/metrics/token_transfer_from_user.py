@@ -25,8 +25,23 @@ class TokenTransferFromUserRedoubtImpl(RedoubtMetricImpl):
 
 class TokenTransferFromUserToncenterCppImpl(ToncenterCppMetricImpl):
     def calculate(self, context: CalculationContext, metric):
+        destinations = "\nor\n".join(map(lambda addr: f"jt.destination  = '{self.to_raw(addr)}'", metric.destinations))
+        if metric.jetton_masters and len(metric.jetton_masters) > 0:
+            jetton_masters = "\nor\n".join(map(lambda addr: f"jt.jetton_master_address  = '{self.to_raw(addr)}'", 
+                                               metric.jetton_masters))
+        else:
+            jetton_masters = "TRUE"
+
         return f"""
-select '1' as id, 'x' as project, null as address, 1 as ts
+        select jt.tx_hash as id, '{context.project.name}' as project,
+        jt.source as user_address, ts
+        from jetton_transfers_local jt
+        WHERE (
+            {destinations}
+        )
+        AND (
+            {jetton_masters}
+        )
         """
 
 """
