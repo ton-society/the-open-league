@@ -8,7 +8,7 @@ CatGoldMiner app
 CatGoldMiner = App(
     name="CAT GOLD MINER",
     analytics_key="cat-gold-miner",
-    url="https://www.catgoldminer.ai/",
+    url="https://t.me/catgoldminerbot",
     metrics=[
         SmartContractInteraction(
             "Daily Check-in", 

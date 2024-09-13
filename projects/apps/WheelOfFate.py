@@ -8,7 +8,7 @@ WheelOfFate app
 WheelOfFate = App(
     name="Wheel of Fate",
     analytics_key="WheelofFate",
-    url="https://www.wheeloffate.xyz/",
+    url="https://t.me/WheelofFateOfficial_Bot",
     metrics=[
         SmartContractInteraction(
             "Check-In", 

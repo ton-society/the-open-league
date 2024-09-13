@@ -8,7 +8,7 @@ Random.tg app
 Randomtg = App(
     name="Random.tg",
     analytics_key="random",
-    url="https://random.tg",
+    url="https://t.me/Random_tg_games_bot",
     metrics=[
         SmartContractInteraction(
             "Interaction",

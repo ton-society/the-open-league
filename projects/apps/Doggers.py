@@ -8,7 +8,7 @@ Doggers app
 Doggers = App(
     name="Doggers",
     analytics_key="Doggers",
-    url="https://t.me/doggtonbot/game",
+    url="https://t.me/doggtonbot",
     metrics=[
         SmartContractInteraction(
             "Check-in",

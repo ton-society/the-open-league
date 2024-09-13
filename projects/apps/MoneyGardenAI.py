@@ -8,7 +8,7 @@ MoneyGardenAi app
 MoneyGardenAI = App(
     name="MONEY GARDEN AI",
     analytics_key="MoneyGardenAI",
-    url='https://www.moneygarden.ai/',
+    url='https://t.me/moneygardenaibot',
     metrics=[
         SmartContractInteraction(
             "Daily Check-in", 

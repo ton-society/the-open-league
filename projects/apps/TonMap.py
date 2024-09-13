@@ -8,7 +8,7 @@ TonMap app
 TonMap = App(
     name="TonMap",
     analytics_key="tonmap",
-    url='https://tonmap.app/',
+    url='https://t.me/TheTonMapBot',
     nfts=[
         "EQBQjoanL6qrduDIIsLw99BNpmfDiYi4gLq3YbQppUlVRDWb"
     ],

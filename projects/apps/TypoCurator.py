@@ -9,7 +9,7 @@ TypoCurator app
 TypoCurator = App(
     name="TypoCurator",
     analytics_key="TypoCurator",
-    url="https://www.typox.ai/",
+    url="https://t.me/typocurator_bot",
     metrics=[
         SmartContractInteraction(
             "Withdraw", 
