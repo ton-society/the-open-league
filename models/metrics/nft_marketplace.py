@@ -12,8 +12,10 @@ class NFTMarketplaceRedoubtImpl(RedoubtMetricImpl):
 
 class NFTMarketplaceToncenterCppImpl(ToncenterCppMetricImpl):
     def calculate(self, context: CalculationContext, metric):
+
         return f"""
-select '1' as id, 'x' as project, null as address, 1 as ts
+        select id, '{context.project.name}' as project, 1 as weight, user_address, ts
+        from nft_sales where marketplace = '{self.to_raw(metric.marketplace)}'
         """
 
 """
