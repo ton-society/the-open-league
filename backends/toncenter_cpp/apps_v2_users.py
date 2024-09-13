@@ -101,11 +101,7 @@ class ToncenterCppAppBackendV2Users(CalculationBackend):
 
         SQL = f"""
         insert into tol.apps_users_stats_{config.safe_season_name()} (project, address, days, token_value_ton, nfts_count, updated_at)
-        with transactions_local as (
-            select * from transactions
-            where now >= {config.start_time}::int and
-                now <  {config.end_time}::int and compute_exit_code = 0 and action_result_code = 0
-        ), jetton_transfers_local as (
+        with jetton_transfers_local as (
             select jt.*, jt.tx_now as ts from jetton_transfers jt
             where
                 jt.tx_now >= {config.start_time}::int and
@@ -187,6 +183,7 @@ class ToncenterCppAppBackendV2Users(CalculationBackend):
            nfts_count = EXCLUDED.nfts_count
         """
         def add_lines(s):
+            # return s
             out = []
             i = 1
             for line in s.split("\n"):
