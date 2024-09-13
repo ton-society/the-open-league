@@ -55,20 +55,40 @@ class SmartContractInteractionToncenterCppImpl(ToncenterCppMetricImpl):
             comment_not_equals_filter = "and " + " and ".join(map(lambda v: f"comment != '{v}'", metric.comment_not_equals))
         else:
             comment_not_equals_filter = ""
+
         return f"""
         select 
                 t.hash as id, '{context.project.name}' as project,
-                source as user_address, t.now as ts from transactions_local t
+                source as user_address, t.now as ts from transactions t
                 join messages m on m.tx_hash = t.hash and direction = 'in'
                 -- TODO replace left join to inner join for comment_required case
                 left join parsed.message_comments mc on mc.hash = m.body_hash
-        where ({address_filter}) {'and length("comment") > 0' if metric.comment_required else ''}
+        where compute_exit_code = 0 and action_result_code = 0 and 
+            now >= {context.season.start_time}::integer and
+                now < {context.season.end_time}::integer and
+        ({address_filter}) {'and length("comment") > 0' if metric.comment_required else ''}
          {comment_regexp_filter} {comment_not_equals_filter}
         AND (
             {op_codes_filter}
         )
 
         """
+    
+
+        # return f"""
+        # select 
+        #         -t.hash as id, '{context.project.name}' as project,
+        #         source as user_address, t.now as ts from transactions_local t
+        #         join messages m on m.tx_hash = t.hash and direction = 'in'
+        #         -- TODO replace left join to inner join for comment_required case
+        #         left join parsed.message_comments mc on mc.hash = m.body_hash
+        # where ({address_filter}) {'and length("comment") > 0' if metric.comment_required else ''}
+        #  {comment_regexp_filter} {comment_not_equals_filter}
+        # AND (
+        #     {op_codes_filter}
+        # )
+
+        # """
 
 
 """
