@@ -104,7 +104,7 @@ class DefillamaDeFiTVLBackend(CalculationBackend):
                 'User-Agent': 'TheOpenLeague',
                 'Accept': '*/*'
             }).json()
-            tvl_history = res['chainTvls']['TON']['tvl']
+            tvl_history = res['chainTvls'][project.chain]['tvl']
             snapshot_tvl = get_tvl_before(tvl_history, config.start_time)
             latest_tvl = get_tvl_before(tvl_history, config.end_time)
             correction_latest = -1 * excluded_current.get(project.name, 0)

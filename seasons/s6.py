@@ -65,6 +65,12 @@ from projects.apps.ZenCoin import ZenCoin
 from projects.apps.DEPINSIM import DEPINSIM
 from projects.apps.HOTWallet import HOTWallet
 from projects.apps.MemeTv import MemeTv
+from projects.apps.BeeHarvest import BeeHarvest
+from projects.apps.GemGame import GemGame
+from projects.apps.TeleverseOdyssey import TeleverseOdyssey
+from projects.apps.Agent301 import Agent301
+from projects.apps.GrandCombat import GrandCombat
+from projects.apps.MakeFrens import MakeFrens
 from projects.apps.ChatCoin import ChatCoin
 from projects.defi.DAOLama import DAOLama
 from projects.defi.DeDust import DeDust
@@ -105,6 +111,7 @@ from projects.nfts.TonAlchemists import TonAlchemists
 from projects.nfts.TONSharks import TONSharks
 from projects.nfts.PovelDurevNFT2 import PovelDurevNFT2
 from projects.nfts.TONTanks import TONTanks
+from projects.nfts.Crypton import CryptonNFT
 from seasons.app_models import AppLeaderboardModelS6
 from seasons.defi_models import DeFiTVLContribution, DeFiVolumeContribution
 from seasons.nfts_models import NFTLeaderboardModelV1
@@ -181,10 +188,16 @@ S6_apps = SeasonConfig(
         DEPINSIM,
         HOTWallet,
         MemeTv,
+        BeeHarvest,
+        GemGame,
+        TeleverseOdyssey,
+        Agent301,
+        GrandCombat,
+        MakeFrens,
         ChatCoin,
     ],
     score_model=AppLeaderboardModelS6(),
-    enrollment_sbt="EQAab9xw8NOPvIIxv6wxiDNOGLCLGClA1I4vVUPLqceCh_Z7"
+    enrollment_sbt="EQDZ81ZvxRfutjkALcUK0q3Cuusm1XtmhEwUiGSeviLpPARH"
 )
 
 S6_nfts = SeasonConfig(
@@ -197,8 +210,7 @@ S6_nfts = SeasonConfig(
         TONDiamondsNFT, NOTPunksNFT, TONFISHBOXNFT, PovelDurevNFTNFT, TONPunksNFT,
         TonedApeClubNFT, RunestonNFT, FantonFantasyFootballNFT, RoOLZNFT, GlitchesNFT,
         MarketMakers, Parachute, NFTWeb3TON, TONFrogs, GBOTSSD, TonAlchemists, TONSharks,
-        PovelDurevNFT2, TONTanks
-
+        PovelDurevNFT2, TONTanks, CryptonNFT
     ],
     score_model=NFTLeaderboardModelV1()
 )
