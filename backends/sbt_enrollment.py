@@ -26,7 +26,7 @@ create table tol.enrollment_{season_name} (
   unique(address, sbt)
 )
 """
-API_BASE_URL = "https://stg.globalsociety.cc/v1/csbts/"
+API_BASE_URL = "https://society.ton.org/v1/csbts/"
 
 class SBTEnrollmentSync:
     def __init__(self, connection, tonapi: TonapiAdapter, executor: ContractsExecutor):
