@@ -118,6 +118,7 @@ from projects.nfts.Diamore import Diamore
 from projects.nfts.TheSaudisTON import TheSaudisTONNFT
 from projects.nfts.NUTCRACKERS import NUTCRACKERSNFT
 from projects.nfts.BIGBALLSBIRDS import BIGBALLSBIRDSNFT
+from projects.nfts.FRAM3SALPHABET import FRAM3SALPHABETNFT
 from projects.nfts.DigitalResistance import DigitalResistanceNFT
 from seasons.app_models import AppLeaderboardModelS6
 from seasons.defi_models import DeFiTVLContribution, DeFiVolumeContribution
@@ -220,7 +221,7 @@ S6_nfts = SeasonConfig(
         TonedApeClubNFT, RunestonNFT, FantonFantasyFootballNFT, RoOLZNFT, GlitchesNFT,
         MarketMakers, Parachute, NFTWeb3TON, TONFrogs, GBOTSSD, TonAlchemists, TONSharks,
         PovelDurevNFT2, TONTanks, CryptonNFT, DigitalResistanceNFT, Diamore, TheSaudisTONNFT,
-        NUTCRACKERSNFT, BIGBALLSBIRDSNFT
+        NUTCRACKERSNFT, BIGBALLSBIRDSNFT, FRAM3SALPHABETNFT
     ],
     score_model=NFTLeaderboardModelV1()
 )
