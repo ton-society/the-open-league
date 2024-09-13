@@ -8,7 +8,7 @@ ChatCoin app
 ChatCoin = App(
     name="ChatCoin",
     analytics_key="ChatCoin",
-    url="https://t.me/ChatCoinAppBot",
+    url="https://t.me/ChatCoinAppBot?start=openleague",
     metrics=[
         SmartContractInteraction(
             "Claiming airdrop",
