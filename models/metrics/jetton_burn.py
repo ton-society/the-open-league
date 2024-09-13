@@ -14,8 +14,11 @@ class JettonBurnRedoubtImpl(RedoubtMetricImpl):
 
 class JettonBurnToncenterCppImpl(ToncenterCppMetricImpl):
     def calculate(self, context: CalculationContext, metric):
+        jetton_masters = "\nor\n".join(map(lambda addr: f"jetton_master_address  = '{self.to_raw(addr)}'", metric.jetton_masters))
         return f"""
-select '1' as id, 'x' as project, null as address, 1 as ts
+        select tx_hash as id, '{context.project.name}' as project, "owner" as user_address, ts
+        from jetton_burn_local
+        WHERE {jetton_masters}
         """
 
 """
