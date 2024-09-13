@@ -18,8 +18,16 @@ class NFTActivityRedoubtImpl(RedoubtMetricImpl):
 
 class NFTActivityToncenterCppImpl(ToncenterCppMetricImpl):
     def calculate(self, context: CalculationContext, metric):
+        collections = "\nor\n".join(map(lambda addr: f"collection  = '{self.to_raw(addr)}'", metric.collections))
+
+
         return f"""
-select '1' as id, 'x' as project, null as address, 1 as ts
+        select id, '{context.project.name}' as project,
+        nft.user_address, ts
+        from nft_activity_local nft
+        WHERE (
+            {collections}
+        )
         """
 
 """
