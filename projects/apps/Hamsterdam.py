@@ -8,7 +8,7 @@ Hamsterdam app
 Hamsterdam = App(
     name="Hamsterdam",
     analytics_key="Hamsterdam",
-    url="https://t.me/HamsterdamPlayBot/game?startapp=1",
+    url="https://t.me/HamsterdamPlayBot",
     metrics=[
         SmartContractInteraction(
             "Deposit",
