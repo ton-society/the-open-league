@@ -8,7 +8,7 @@ WONTON app
 WONTON = App(
     name="WONTON",
     analytics_key="WONTON",
-    url="https://t.me/WontonOrgBot/gameapp?startapp",
+    url="https://t.me/WontonOrgBot",
     metrics=[
         SmartContractInteraction(
             "Deposit", "EQD_QUnVTBzwG-8GCkqnQ4xiWxU0oPZn9Pon_rq0MZVdIBuf", op_codes=[-1552920267]

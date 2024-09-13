@@ -11,7 +11,7 @@ JetTon app
 JetTon = App(
     name="JetTon",
     analytics_key="qqqq", # o_O
-    url='https://t.me/JettonFarmingBot/jetton?startapp=5175817063', 
+    url='https://t.me/jetton', 
     metrics=[
         TokenTransferFromUser(
             "Deposits in Jetton",

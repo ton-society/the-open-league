@@ -12,7 +12,7 @@ Pumpers app
 Pumpers = App(
     name="Pumpers",
     analytics_key="pumpers",
-    url="https://pumpers.tg/",
+    url="https://t.me/PumpersTGBot",
     metrics=[
         JettonMasterInteraction(
             "RequestBuy",

@@ -8,7 +8,7 @@ BountyBay app
 BountyBay = App(
     name="BountyBay",
     analytics_key="BountyBay",
-    url='https://www.bountybay.app/',
+    url='https://t.me/bountybay_bot',
     metrics=[
         SmartContractInteraction(
             "Daily Check-in", 

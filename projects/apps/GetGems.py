@@ -13,7 +13,7 @@ GetGems app
 GetGems = App(
     name="GetGems",
     analytics_key=None,
-    url='https://getgems.io/',
+    url='https://t.me/GetgemsNftBot',
     prizes=False,
     nfts=[
         "EQDhlVq6cknyPk_SCGZUoXZRbZixNODfcBMCZ3wDfDWLFze7"

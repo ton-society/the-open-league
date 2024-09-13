@@ -8,7 +8,7 @@ Sphynx app
 Sphynx = App(
     name="Sphynx",
     analytics_key="Sphynx",
-    url="https://sphynx.meme/",
+    url="https://t.me/sphynxmeme_bot",
     metrics=[
         SmartContractInteraction(
             "Daily Check-In, In-App Purchase with Affiliate Feature, Reward Pools, Daily Clan Check-In", 

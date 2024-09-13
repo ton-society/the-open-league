@@ -8,7 +8,7 @@ Blum app
 Blum = App(
     name="Blum",
     analytics_key="blum_data_prod",
-    url="https://t.me/blum/app?startapp=ref_ooWohpSVK8",
+    url="https://t.me/BlumCryptoBot",
     metrics=[
         SmartContractInteraction(
             "Interaction_1",

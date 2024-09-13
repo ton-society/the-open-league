@@ -12,7 +12,7 @@ Gram app
 Gram = App(
     name="Gram",
     analytics_key=None,
-    url='https://gramcoin.org',
+    url='https://pool.gramcoin.org/',
     nfts=["EQAic3zPce496ukFDhbco28FVsKKl2WUX_iJwaL87CBxSiLQ"],
     metrics=[
         SmartContractInteraction(
