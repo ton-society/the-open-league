@@ -74,6 +74,7 @@ from projects.apps.MakeFrens import MakeFrens
 from projects.apps.CrazyRushHeroes import CrazyRushHeroes
 from projects.apps.TimePrice import TimePrice
 from projects.apps.TorchFinance import TorchFinance
+from projects.apps.NOTBITCOIN import NOTBITCOIN
 from projects.defi.DAOLama import DAOLama
 from projects.defi.DeDust import DeDust
 from projects.defi.EVAA import EVAA
@@ -204,6 +205,7 @@ S6_apps = SeasonConfig(
         CrazyRushHeroes,
         TimePrice,
         TorchFinance,
+        NOTBITCOIN,
     ],
     score_model=AppLeaderboardModelS6(),
     enrollment_sbt="EQDZ81ZvxRfutjkALcUK0q3Cuusm1XtmhEwUiGSeviLpPARH"
