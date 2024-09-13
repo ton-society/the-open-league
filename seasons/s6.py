@@ -78,6 +78,8 @@ from projects.apps.NOTBITCOIN import NOTBITCOIN
 from projects.apps.RentTower import RentTower
 from projects.apps.RentTycoon import RentTycoon
 from projects.apps.TONSTATION import TONSTATION
+from projects.apps.Gemz import Gemz
+from projects.apps.SEED import SEED
 from projects.defi.DAOLama import DAOLama
 from projects.defi.DeDust import DeDust
 from projects.defi.EVAA import EVAA
@@ -213,6 +215,8 @@ S6_apps = SeasonConfig(
         RentTower,
         RentTycoon,
         TONSTATION,
+        Gemz,
+        SEED,
     ],
     score_model=AppLeaderboardModelS6(),
     enrollment_sbt="EQDZ81ZvxRfutjkALcUK0q3Cuusm1XtmhEwUiGSeviLpPARH"
