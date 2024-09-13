@@ -3,5 +3,5 @@ from models.project import DeFi
 DAOLama = DeFi(
     name='DAOLama',
     defillama_slug='daolama',
-    url='https://daolama.co/'
+    url='https://t.me/daolama_bot'
 )
