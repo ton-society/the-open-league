@@ -12,7 +12,7 @@ SpinnerCoin = App(
     metrics=[
         SmartContractInteraction(
             "Interaction", 
-            address="UQDb21gSN-22SGD5TYXvok81BzRsc0autQji8prcH0zoNgyz"
+            address="EQDb21gSN-22SGD5TYXvok81BzRsc0autQji8prcH0zoNlF2"
         )
     ]
 )
