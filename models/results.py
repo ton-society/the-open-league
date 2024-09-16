@@ -18,6 +18,7 @@ class ProjectStat:
     APP_ONCHAIN_UAW = 'onchain_uaw'
     APP_ONCHAIN_ENROLLED_UAW = 'onchain_enrolled_uaw'
     APP_AVERAGE_SCORE = 'average_score'
+    APP_TOTAL_POINTS = 'total_points'
     APP_ONCHAIN_MEDIAN_TX = 'onchain_median_tx'
 
     TOKEN_TVL_CATEGORY = 'token_tvl_category'
