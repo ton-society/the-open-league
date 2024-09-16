@@ -2,4 +2,6 @@
 ./*.iml
 /venv
 /.venv
+/.vscode
 __pycache__
+.DS_Store
