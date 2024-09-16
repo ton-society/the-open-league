@@ -49,7 +49,7 @@ class ToncenterCppAppsScores2Projects(CalculationBackend):
     group by address having count(1) > 1
         )
         select project, url, count(distinct address) as total_uaw, coalesce(sum(eligible), 0) as enrolled_wallets,
-        coalesce(cast(sum(points) / sum(eligible) as int), 0) as average_score
+        coalesce(cast(sum(points) / sum(eligible) as int), 0) as average_score, coalesce(sum(points), 0) as total_points
         from project_names 
         left join tol.apps_users_stats_{config.safe_season_name()} using(project)
         left join eligible using(address)
@@ -75,7 +75,8 @@ class ToncenterCppAppsScores2Projects(CalculationBackend):
                             ProjectStat.URL: row['url'],
                             ProjectStat.APP_ONCHAIN_UAW: row['total_uaw'],
                             ProjectStat.APP_ONCHAIN_ENROLLED_UAW: row['enrolled_wallets'],
-                            ProjectStat.APP_AVERAGE_SCORE: row['average_score']
+                            ProjectStat.APP_AVERAGE_SCORE: row['average_score'],
+                            ProjectStat.APP_TOTAL_POINTS: row['total_points']
                         }
                     )
 
