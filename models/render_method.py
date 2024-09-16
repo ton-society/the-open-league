@@ -53,9 +53,10 @@ class RenderMethod:
 
 class JsonRenderMethod(RenderMethod):
 
-    def __init__(self, output_name, icons_base_path=None):
+    def __init__(self, output_name, icons_base_path=None, aggregate_field=None):
         RenderMethod.__init__(self, icons_base_path)
         self.output_name = output_name
+        self.aggregate_field = aggregate_field
 
     def render(self, res: CalculationResults, config: SeasonConfig):
         items = self.get_items(res, config)
@@ -66,6 +67,8 @@ class JsonRenderMethod(RenderMethod):
             'source_link': f"https://github.com/ton-society/the-open-league/tree/{self.get_commit_hash()}",
             'items': items
         }
+        if self.aggregate_field:
+            res['total'] = sum([x[self.aggregate_field] for x in items])
         with open(self.output_name, "wt") as out:
             json.dump(res, out, indent=True)
 
