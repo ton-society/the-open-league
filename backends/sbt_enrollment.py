@@ -53,11 +53,16 @@ class SBTEnrollmentSync:
           part = requests.get(f"{API_BASE_URL}{merkle_root_hex}/items?_start={start}&_end={start + PAGE}").json()
           assert total is None or total == part['data']['total']
           total = part['data']['total']
+          if part['data']['items'] is None:
+            logger.warning("End of iteration, no more items")
+            break
           for item in part['data']['items']:
             data_cell = item['data_cell']
             cell = Cell.one_from_boc(base64.b64decode(data_cell))
             # TODO check hash and extract owner
             owner = Address(item['metadata']['owner']).to_string(0).upper()
+            if owner in owners:
+              logger.warning(f"Duplicate item: {owner}")
             owners.add(owner)
           if len(owners) == total:
             break
