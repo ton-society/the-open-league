@@ -57,4 +57,4 @@ class AppLeaderboardModelS6(ScoreModel):
         super().__init__()
 
     def calculate(self, metrics: List[ProjectStat]):
-        return sorted(metrics, key=lambda m: m.metrics[ProjectStat.APP_ONCHAIN_ENROLLED_UAW] * m.metrics[ProjectStat.APP_AVERAGE_SCORE], reverse=True)
+        return sorted(metrics, key=lambda m: m.metrics[ProjectStat.APP_TOTAL_POINTS], reverse=True)
