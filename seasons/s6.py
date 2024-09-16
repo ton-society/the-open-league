@@ -81,6 +81,7 @@ from projects.apps.TONSTATION import TONSTATION
 from projects.apps.Cowtopia import Cowtopia
 from projects.apps.Gemz import Gemz
 from projects.apps.SEED import SEED
+from projects.apps.BOOMUP import BOOMUP
 from projects.defi.DAOLama import DAOLama
 from projects.defi.DeDust import DeDust
 from projects.defi.EVAA import EVAA
