@@ -50,7 +50,10 @@ class SBTEnrollmentSync:
         total = None
         owners = set()
         while True:
-          part = requests.get(f"{API_BASE_URL}{merkle_root_hex}/items?_start={start}&_end={start + PAGE}").json()
+          part = requests.get(f"{API_BASE_URL}{merkle_root_hex}/items?_start={start}&_end={start + PAGE}")
+          if part.status_code != 200:
+              raise Exception(f"Failed to get items: {part.status_code} {part.text}")
+          part = part.json()
           assert total is None or total == part['data']['total']
           total = part['data']['total']
           if part['data']['items'] is None:
