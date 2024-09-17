@@ -250,7 +250,7 @@ S6_defi_tvl = SeasonConfig(
     start_time=S6_START,
     end_time=S6_END,
     projects=[
-        DAOLama, Tradoor, SettleTON, JVault,
+        DAOLama, SettleTON, JVault,
         TONHedge, TonStable, Parraton, TonPools
     ],
     score_model=DeFiTVLContribution(squads=[
