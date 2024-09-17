@@ -221,6 +221,7 @@ S6_apps = SeasonConfig(
         Gemz,
         SEED,
         Cowtopia,
+        BOOMUP,
         BUMP,
     ],
     score_model=AppLeaderboardModelS6(),
