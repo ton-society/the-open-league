@@ -147,14 +147,12 @@ class ToncenterCppAppBackendV2Users(CalculationBackend):
             {TOKENS}
         ), nfts as (
             {PROJECT_NFTS}
-        ),
-        --, tokens_price as (
-          -- select *,  pow(10, -1 * decimals)
-           --   * (select price_ton from chartingview.token_agg_price_history taph where taph.address = tokens.address
-           --   and taph.build_time < to_timestamp({config.end_time} ) order by build_time desc limit 1) as price_ton
-           --    from tokens
-      --  ),
-        all_projects as (
+        ), tokens_price as (
+           select project, tokens.address,
+             (select price_ton / 1e9 from prices.agg_prices ap where ap.base = tokens.address
+             and ap.price_time < {config.end_time}::int order by price_time desc limit 1) as price_ton
+              from tokens
+        ),all_projects as (
           -- TODO exclude banned users
          select f.* from all_projects_raw f
          -- left join tol.banned_users b on b.address = f.user_address -- exclude banned users
@@ -165,15 +163,19 @@ class ToncenterCppAppBackendV2Users(CalculationBackend):
         ), results as (
         select project, user_address, array_agg(distinct day) as days from events_with_days
         group by 1, 2
+        ), tokens_holders as (
+            select r.project, r.user_address, tp.price_ton * b.balance as token_value_ton from results r
+            join tokens_price tp on tp.project = r.project
+            join {balances_table} b on b.jetton = tp.address and b."owner" = r.user_address
         ), nft_holders as (
             select r.project, r.user_address, count(1) as nfts_count from results r
             join nfts on nfts.project = r.project
             join {nft_table} n on n.collection_address = nfts.address and n.owner_address = r.user_address
             group by 1, 2
         ), output as (
-          select results.*, 0 as token_value_ton, coalesce(nh.nfts_count, 0) as nfts_count, 
+          select results.*, coalesce(th.token_value_ton, 0) as token_value_ton, coalesce(nh.nfts_count, 0) as nfts_count, 
           now() as updated from results 
-          --left join tokens_holders th on results.project = th.project and results.user_address = th.user_address
+          left join tokens_holders th on results.project = th.project and results.user_address = th.user_address
           left join nft_holders nh on results.project = nh.project and results.user_address = nh.user_address
         )
         """
