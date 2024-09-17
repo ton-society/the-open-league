@@ -75,8 +75,23 @@ class GasPumpJettonsSellsAndUnwrapsRedoubtImpl(RedoubtMetricImpl):
 
 class GasPumpJettonsSellsAndUnwrapsToncenterCppImpl(ToncenterCppMetricImpl):
     def calculate(self, context: CalculationContext, metric):
+        admin_addresses_filter = " OR ".join(
+            map(lambda addr: f"jm.admin_address = '{self.to_raw(addr)}'", metric.admin_addresses)
+        )
+
         return f"""
-select '1' as id, 'x' as project, null as address, 1 as ts
+        (
+        with j_masters as (
+            select jm.address as jetton_master_address from jetton_masters jm
+            where {admin_addresses_filter}
+        )
+        select
+            jb.tx_hash as id,
+            '{context.project.name}' as project,
+            jb.user_address as user_address, ts
+        from jetton_burn_local jb
+        join j_masters jm on jb.jetton_master_address = jm.jetton_master_address
+        )
         """
 
 """
