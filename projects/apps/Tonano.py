@@ -1,6 +1,5 @@
 from models.metrics.dex_swaps import DexSwaps
 from models.metrics.jetton_burn import JettonBurn
-from models.metrics.jetton_mint import JettonMint
 from models.metrics.smc_interaction import SmartContractInteraction
 from models.project import App
 from projects.tokens.jNANO import jNANO
@@ -14,13 +13,6 @@ Tonano = App(
     analytics_key="tonano",
     url='https://t.me/TonanoBot',
     metrics=[
-        JettonMint(
-            "Tonano bridge in", jetton_masters=[
-                "EQAAV0-SGQ9biuzgd5sgrnv0z_7s46bVvhQzBuWOLnSFCkhB", # jNANO-C
-                "EQCOGp1GAVk51prVBw5DO8QN3lKIlUJKjXbZcl5aXgL5hkwy", # jNANO
-                "EQAYgRcF2epGp3qGN_Fvz0UgQYbnchOO3dQtxt0qy_5Smc9I" # jTOL
-            ]
-        ),
         JettonBurn(
             "Tonano bridge out", jetton_masters=[
                 "EQAAV0-SGQ9biuzgd5sgrnv0z_7s46bVvhQzBuWOLnSFCkhB", # jNANO-C

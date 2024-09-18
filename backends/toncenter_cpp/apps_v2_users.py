@@ -225,7 +225,8 @@ on conflict (project, address) do update SET
                             metrics={
                                 ProjectStat.APP_ONCHAIN_UAW: row['uaw'],
                                 ProjectStat.APP_ONCHAIN_ENROLLED_UAW: 0,
-                                ProjectStat.APP_AVERAGE_SCORE: 0
+                                ProjectStat.APP_AVERAGE_SCORE: 0,
+                                ProjectStat.APP_TOTAL_POINTS: 0
                             }
                         )
                 else:
