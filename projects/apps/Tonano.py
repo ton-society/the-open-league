@@ -1,5 +1,4 @@
 from models.metrics.dex_swaps import DexSwaps
-from models.metrics.inscriptions import Inscriptions
 from models.metrics.jetton_burn import JettonBurn
 from models.metrics.jetton_mint import JettonMint
 from models.metrics.smc_interaction import SmartContractInteraction
@@ -28,10 +27,6 @@ Tonano = App(
                 "EQCOGp1GAVk51prVBw5DO8QN3lKIlUJKjXbZcl5aXgL5hkwy", # jNANO
                 "EQAYgRcF2epGp3qGN_Fvz0UgQYbnchOO3dQtxt0qy_5Smc9I" # jTOL
             ]
-        ),
-        Inscriptions(
-            "Inscription",
-            project_market='ton-20","op"'
         ),
         SmartContractInteraction(
             "Donations", "EQDc4RBidUBLRYeGhSGoNzoxBkMJCCq-o6prwZW-PboQVrMK"
