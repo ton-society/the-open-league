@@ -12,7 +12,7 @@ Gemz = App(
     metrics=[
         SmartContractInteraction(
             "Interaction",
-            "EQBj4jX-6KSEY5oFd98sdIZB5YrnOWIOvskD_Mf8VuJ4EAeB",
+            "EQC_0ScHnb7bVoyInXLkZ2G4XRHg97S9XrPKCUDaO1ZRyFhZ",
             op_codes=[-1959520222],
         ),
     ],
