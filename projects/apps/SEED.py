@@ -12,7 +12,7 @@ SEED = App(
     metrics=[
         SmartContractInteraction(
             "Interaction",
-            "EQBCC49AnXkwfpVhTf45xPOdBUzZR8P_-woQiEoUnzN4VhCS",
+            "EQAO7qlEW3-KU6X64LpXKK2h2-vG-wrLNB-w9hnuFNrO0lIk",
             comment_required=True,
         ),
     ],
