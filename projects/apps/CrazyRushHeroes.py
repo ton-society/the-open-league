@@ -17,6 +17,12 @@ CrazyRushHeroes = App(
                 "EQC47YfVLWo-U_z7s6iEOkYAAEKF_C0-gBiB8KJL6s5m4JOP",  # jTOWER
             ],
         ),
+        SmartContractInteraction(
+            "Interaction 1", "EQDrOz7aEqWqEjtybUzzWrx9L5kGc5VrKSDZBWHP9Q6z7Pfi"
+        ),
+        SmartContractInteraction(
+            "Interaction 2", "UQDJb-QJ8JghmUfNkRiS2bv5y1AnvWlUu3G9GrPUysCMoIp-"
+        ),
     ],
     token=TOWER,
 )
