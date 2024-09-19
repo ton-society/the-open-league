@@ -1,6 +1,6 @@
 from models.metrics.token_transfer_from_user import TokenTransferFromUser
 from models.project import App
-from projects.tokens import BOOM
+from projects.tokens.BOOM import BOOM
 
 """
 BOOM UP app
