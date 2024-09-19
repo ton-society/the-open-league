@@ -1,4 +1,4 @@
-from models.metric import Metric, CalculationContext, RedoubtMetricImpl
+from models.metric import Metric, CalculationContext, RedoubtMetricImpl, ToncenterCppMetricImpl
 
 
 class TokenTransferFromUserRedoubtImpl(RedoubtMetricImpl):
@@ -23,13 +23,34 @@ class TokenTransferFromUserRedoubtImpl(RedoubtMetricImpl):
         """
 
 
+class TokenTransferFromUserToncenterCppImpl(ToncenterCppMetricImpl):
+    def calculate(self, context: CalculationContext, metric):
+        destinations = "\nor\n".join(map(lambda addr: f"jt.destination  = '{self.to_raw(addr)}'", metric.destinations))
+        if metric.jetton_masters and len(metric.jetton_masters) > 0:
+            jetton_masters = "\nor\n".join(map(lambda addr: f"jt.jetton_master_address  = '{self.to_raw(addr)}'", 
+                                               metric.jetton_masters))
+        else:
+            jetton_masters = "TRUE"
+
+        return f"""
+        select jt.tx_hash as id, '{context.project.name}' as project,
+        jt.source as user_address, ts
+        from jetton_transfers_local jt
+        WHERE (
+            {destinations}
+        )
+        AND (
+            {jetton_masters}
+        )
+        """
+
 """
 TEP-74 token (jetton) transfer, allows to specify the list of destinations and the list of jetton addresses.
 This metric covers jetton transfer from user to smart contract
 """
 class TokenTransferFromUser(Metric):
     def __init__(self, description, jetton_masters=[], destinations=[], is_custodial=False):
-        Metric.__init__(self, description, [TokenTransferFromUserRedoubtImpl()])
+        Metric.__init__(self, description, [TokenTransferFromUserRedoubtImpl(), TokenTransferFromUserToncenterCppImpl()])
         assert type(jetton_masters) == list
         assert type(destinations) == list
         self.jetton_masters = jetton_masters
