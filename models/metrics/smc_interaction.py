@@ -73,22 +73,6 @@ class SmartContractInteractionToncenterCppImpl(ToncenterCppMetricImpl):
         )
 
         """
-    
-
-        # return f"""
-        # select 
-        #         -t.hash as id, '{context.project.name}' as project,
-        #         source as user_address, t.now as ts from transactions_local t
-        #         join messages m on m.tx_hash = t.hash and direction = 'in'
-        #         -- TODO replace left join to inner join for comment_required case
-        #         left join parsed.message_comments mc on mc.hash = m.body_hash
-        # where ({address_filter}) {'and length("comment") > 0' if metric.comment_required else ''}
-        #  {comment_regexp_filter} {comment_not_equals_filter}
-        # AND (
-        #     {op_codes_filter}
-        # )
-
-        # """
 
 
 """
