@@ -13,7 +13,7 @@ Gemz = App(
         SmartContractInteraction(
             "Interaction",
             "EQC_0ScHnb7bVoyInXLkZ2G4XRHg97S9XrPKCUDaO1ZRyFhZ",
-            op_codes=[-1959520222],
+            comment_required=True,
         ),
     ],
 )
