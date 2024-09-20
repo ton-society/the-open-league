@@ -136,7 +136,10 @@ from seasons.defi_models import DeFiTVLContribution, DeFiVolumeContribution
 from seasons.nfts_models import NFTLeaderboardModelV1
 
 S6_START = 1726138800 # Thu Sep 12 2024 11:00:00 GMT+0000
-S6_END = 1728558000 # Thu Oct 10 2024 11:00:00 GMT+0000
+# S6_END = 1728558000 # Thu Oct 10 2024 11:00:00 GMT+0000
+# Season 6 was paused for a break - https://t.me/league/128
+S6_END = 1726822800 # Fri Sep 20 2024 09:00:00 GMT+0000
+
 
 S6_apps = SeasonConfig(
     leaderboard=SeasonConfig.APPS,
