@@ -16,11 +16,27 @@ BUMP = App(
         "EQCv9ZPdQ9LQrnlWbgQ7btD5qgyzi1uWqb9trgNmdSL1ei5l",
         "EQD1NhcBmbVgNYFRMtlSDVdWcwQTmvV4YNkFSydD3FaOPQpw",
     ],
-    metrics=[
-        SmartContractInteraction(
-            "Interaction",
-            "EQCwF7-OQiHBxKePiBFOAWwzHDTFHkJR9likOqTYFQc08OmS",
-            op_codes=[74989363, 1997904914],
-        ),
+    metrics=[ 
+        SmartContractInteraction( 
+            "Interaction 1", 
+            "EQCwF7-OQiHBxKePiBFOAWwzHDTFHkJR9likOqTYFQc08OmS", 
+            op_codes=[74989363, 1997904914], 
+        ), 
+        SmartContractInteraction( 
+            "Interaction 2", 
+            "EQCms5awEaWuApGPY3zptU4QEDW_IkMKeTFZuEHBTie9sYWF" 
+        ), 
+        SmartContractInteraction( 
+            "Interaction 3", 
+            "EQCiqaHaScaQFjX1kwTDx5KHROVPt54cms2rYHBm1Ug6E19e" 
+        ), 
+        SmartContractInteraction( 
+            "Interaction 4", 
+            "EQAJ-QU4xFrQRr1JCtQS7zAgCOvVDl5tkBvgwbAGOGiRd9MO" 
+        ), 
+        SmartContractInteraction( 
+            "Interaction 5", 
+            "EQCwo-MsbrmWaMtB3Pb-egBCo2ZfZtc8vZ-xnOs8B6O-tFOi" 
+        ),  
     ],
 )
