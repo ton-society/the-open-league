@@ -77,7 +77,7 @@ class DefillamaDeFiTVLBackend(CalculationBackend):
         end_block = None
         if int(time.time()) > config.end_time:
             end_block = config.block_before_end_ref
-            assert end_block is not None, "Season is closed, one need to specify last block ref"
+            # assert end_block is not None, "Season is closed, one need to specify last block ref"
         logger.info(f"Getting TVL for {config.block_before_start_ref} and {end_block if end_block else 'latest block'}")
 
         excluded_snapshot = { DexPool.DEX_STON: 0, DexPool.DEX_DEDUST: 0}
