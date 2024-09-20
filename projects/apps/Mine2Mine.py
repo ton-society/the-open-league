@@ -19,6 +19,11 @@ Mine2Mine = App(
             destinations=[
                 "EQBxr1xLYOL2WI3meenZgEN6ZMRUtrvo3Qn8XFz6mhpnvz7G"
             ]
+        ),
+        SmartContractInteraction(
+            "Interaction_1",
+            "UQAXKwOxy645qaE7zspw6G-zfdIIHyZr4-0-sD56Fk7DYoa9",
+            comment_required=True,
         )
     ]
 )
