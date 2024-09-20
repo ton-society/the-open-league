@@ -1,3 +1,4 @@
+from models.metrics.smc_interaction import SmartContractInteraction
 from models.metrics.jetton_burn import JettonBurn
 from models.project import App
 from projects.tokens.TOWER import TOWER
