@@ -34,5 +34,9 @@ BUMP = App(
             "Interaction 4", 
             "EQAJ-QU4xFrQRr1JCtQS7zAgCOvVDl5tkBvgwbAGOGiRd9MO" 
         ), 
+        SmartContractInteraction( 
+            "Interaction 5", 
+            "EQCwo-MsbrmWaMtB3Pb-egBCo2ZfZtc8vZ-xnOs8B6O-tFOi" 
+        ),  
     ],
 )
