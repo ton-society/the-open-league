@@ -4,3 +4,4 @@ gitpython
 requests
 tonsdk
 pillow
+pandas

@@ -7,7 +7,7 @@ TonsOfFriends app
 
 TonsOfFriends = App(
     name="TonsOfFriends",
-    analytics_key=None,
+    analytics_key="TonsOfFriends",
     url='https://t.me/toftechbot',
     metrics=[
         SmartContractInteraction(

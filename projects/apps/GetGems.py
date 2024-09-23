@@ -1,9 +1,6 @@
-from models.metrics.gg_collections_mint import GetGemsCollectionsMints
 from models.metrics.nft_activity import NFTActivity
 from models.metrics.nft_marketplace import NFTMarketplace
-from models.metrics.nft_transfers_contract import NFTTransfersContractType
 from models.metrics.smc_interaction import SmartContractInteraction
-from models.metrics.token_transfer_from_user import TokenTransferFromUser
 from models.project import App
 
 """
@@ -13,7 +10,11 @@ GetGems app
 GetGems = App(
     name="GetGems",
     analytics_key=None,
-    url='https://getgems.io/',
+    url='https://t.me/GetgemsNftBot',
+    prizes=False,
+    nfts=[
+        "EQDhlVq6cknyPk_SCGZUoXZRbZixNODfcBMCZ3wDfDWLFze7"
+    ],
     metrics=[
         NFTMarketplace("Marketplace sales", "EQBYTuYbLf8INxFtD8tQeNk5ZLy-nAX9ahQbG_yl1qQ-GEMS"),
         NFTMarketplace("Marketplace sales", "EQCjk1hh952vWaE9bRguFkAhDAL5jj3xj9p0uPWrFBq_GEMS"),
@@ -23,8 +24,6 @@ GetGems = App(
         SmartContractInteraction(
             "GetGems DNS mints", address="EQDhlVq6cknyPk_SCGZUoXZRbZixNODfcBMCZ3wDfDWLFze7", op_codes=[1178019994]
         ),
-        GetGemsCollectionsMints("Collections mints on GetGems"),
-        NFTTransfersContractType("GetGems offers", contract_code_hash='y5ih9C6+oq1JHlGAOOAbyKc5J8dizVXbf5wpxhHQQUA='),
         SmartContractInteraction(
             "Absurd check-in", address="EQAQOz1tsZuWx7TfLTWeugm6ZAJQbTmSb5Xxr-2PA73js5EV"
         ),

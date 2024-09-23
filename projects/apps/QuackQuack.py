@@ -14,13 +14,16 @@ QuackQuack = App(
             "Deposits", "EQDDo8EnHzcMf_c-WKBEuoJjYqK__APFlq8fe53BoI4cpPJF"
         ),
         SmartContractInteraction(
-            "Contract calls", "EQBDnRbwoxKsjrenrNQxHtMRnwu7mu7cNxtJN2-VDD16FoDW"
+            "Claim Referral Reward", "EQBDnRbwoxKsjrenrNQxHtMRnwu7mu7cNxtJN2-VDD16FoDW"
         ),
         SmartContractInteraction(
-            "Claim quackster", "EQCnBscEi-KGfqJ5Wk6R83yrqtmUum94SXnSDz3AOQfHGjDw"
+            "Claim quackster", "EQDCR0XQ0qNQJNjITRpo59mFsP0pjx81ImtXx92mJBnIc7m4"
         ),
         SmartContractInteraction(
-            "Daily check-in", "EQA9xJgsYbsTjWxEcaxv8DLW3iRJtHzjwFzFAEWVxup0WH0R"
+            "Daily check-in", "EQA32il_GNZGw-T4LrI_6rGMDbTvC_BAIJRnp1sJMxFoReG9"
+        ),
+        SmartContractInteraction(
+            "Claim Weekly Leaderboad Reward", "EQAB5kQnWHG6cVNfVUeBYsaDPyXxeF7-rHDDku7VU16a0qI3"
         )
     ]
 )

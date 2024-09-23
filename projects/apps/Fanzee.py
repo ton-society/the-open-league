@@ -1,6 +1,7 @@
 from models.metrics.smc_interaction import SmartContractInteraction
 from models.metrics.token_transfer_from_user import TokenTransferFromUser
 from models.project import App
+from projects.tokens.FNZ import FNZ
 
 """
 Fanzee app
@@ -26,5 +27,6 @@ Fanzee = App(
                 "EQDMN701aHQG9TvbnIqI5oEmvPN6HaTk_DBqkwTGQJWSXC_x"  # battles
             ]
         )
-    ]
+    ],
+    token=FNZ
 )

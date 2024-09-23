@@ -1,9 +1,11 @@
+import time
 from typing import Dict
 
 from models.backend import CalculationBackend
 from models.backends import BACKEND_REDOUBT
 from models.metric import MetricImpl, CalculationContext
 from models.results import ProjectStat, CalculationResults
+from models.scores import ScoreModel
 from models.season_config import SeasonConfig
 import psycopg2
 import psycopg2.extras
@@ -30,6 +32,66 @@ class RedoubtAppBackend(CalculationBackend):
             return cursor.fetchone()['last_time']
 
     def _do_calculate(self, config: SeasonConfig, dry_run: bool = False):
+        logger.info("Requesting token new holders stats for the apps with tokens")
+        PROJECTS = []
+
+        for project in config.projects:
+            if project.token is not None:
+                PROJECTS.append(f"""
+                    select '{project.name}' as symbol, '{project.token.address}' as address, 
+                    {project.token.decimals} as decimals
+                    """)
+        PROJECTS = "\nunion all\n".join(PROJECTS)
+
+        balances_table = "mview_jetton_balances"
+        if (time.time()) > config.end_time:
+            balances_table = f"tol.token_balances_snapshot_{config.safe_season_name()}"
+
+        NEW_HOLDERS_SQL = f"""
+            with tol_tokens as (
+                {PROJECTS}                
+            ),
+            latest_balances as (
+                select * from {balances_table}
+            ), target_wallets as (
+              -- target jetton wallets
+              select distinct tol_tokens.symbol, tol_tokens.address, jw.address as wallet_address, jw.owner as owner_address from jetton_wallets jw
+              join tol_tokens on jw.jetton_master = tol_tokens.address where not jw.is_scam
+            ), wallet_activity as (
+              -- all transfers by target wallets
+              select symbol, tw.address, destination_owner as owner_address, utime as event_time
+              from jetton_transfers jt
+              join target_wallets tw on tw.wallet_address = jt.source_wallet and jt.successful
+            ), first_activity as (
+              -- timestamp of the first event
+              select symbol, address, owner_address, min(event_time) as first_interaction
+              from wallet_activity group by 1, 2, 3
+            )  
+            , new_holders as (
+              -- new holder has a first incoming transfer during the season
+              -- and currenly has 1+TON worth value of ton
+              select  fa.symbol, count(distinct owner_address) as new_holders
+              from first_activity fa
+              join jetton_wallets jw on jw.jetton_master = fa.address and jw.owner = fa.owner_address
+              join latest_balances mjb on mjb.wallet_address = jw.address
+              where first_interaction >= {config.start_time} and first_interaction <  {config.end_time} and 
+              mjb.balance / pow(10, (select decimals from tol_tokens tt where tt.symbol = fa.symbol))
+              * (select price_ton from chartingview.token_agg_price_history taph where taph.address = fa.address
+              and taph.build_time < to_timestamp({config.end_time} ) order by build_time desc limit 1)
+              >= {config.score_model.param(ScoreModel.PARAM_TOKEN_MIN_VALUE_FOR_NEW_HOLDER)}
+              -- new holder should have deployed wallet. at least at the past.
+              and exists (select from account_state as2 where as2.address = owner_address and code_hash is not null)
+              and not exists (select from tol.banned_users b where b.address = owner_address)
+              group by 1
+            )
+            select tol_tokens.symbol,
+            tol_tokens.address,
+            coalesce(new_holders, 0) as new_holders
+            from tol_tokens
+            left join new_holders on new_holders.symbol = tol_tokens.symbol
+        """
+        logger.info(f"Generated SQL: {NEW_HOLDERS_SQL}")
+
         logger.info("Running re:doubt backend for App leaderboard SQL generation")
         PROJECTS = []
         PROJECTS_ALIASES = []
@@ -52,7 +114,8 @@ class RedoubtAppBackend(CalculationBackend):
                 select * from project_{project.name_safe()}
                 """)
             PROJECTS_NAMES.append(f"""
-            select '{project.name}' as project, '{project.url if project.url else ""}' as url
+            select '{project.name}' as project, {project.prizes} as prizes, {project.possible_reward} as possible_reward,
+            '{project.url if project.url else ""}' as url
             """)
         PROJECTS = ",\n".join(PROJECTS)
         PROJECTS_ALIASES = "\nUNION ALL\n".join(PROJECTS_ALIASES)
@@ -61,25 +124,26 @@ class RedoubtAppBackend(CalculationBackend):
             messages = f"""
             -- full messages table, filter by last 30 days
             select m.*
-            from  messages m
+            from  transactions t
+            join messages m on m.in_tx_id  = t.tx_id
+    
             where
-            (
-            select
+            t.utime >= {config.start_time}::int and t.utime < {config.end_time}::int
+            and (
                         (t.action_result_code  = 0 and t.compute_exit_code  = 0)
                         or
                         (t.action_result_code is null and t.compute_exit_code  is null and t.compute_skip_reason = 'cskip_no_gas')
-            from transactions t where t.tx_id = in_tx_id and t.utime > {config.start_time} and 
-            t.utime < {config.end_time} 
             )
             """
-            final_part = """
-            select count(1) as mau from users_stats where tx_count > 1
+            final_part = f"""
+            insert into tol.daily_app_users(project, user_address, tx_count, period_start, period_end)
+            select project, user_address, tx_count, {config.start_time}::int as period_start, {config.end_time}::int as period_end from users_stats
             """
         else:
             messages = f"""
             -- we will use subset of messages table for better performance
             -- also this table contains only messages with successful destination tx
-            select * from tol.messages_{config.safe_season_name()}
+            select *, 0 as ts from tol.messages_{config.safe_season_name()}
             """
             final_part = """
             , good_users as (
@@ -94,7 +158,7 @@ class RedoubtAppBackend(CalculationBackend):
             group by 1
             )
             select project, coalesce(tx_count, 0) as tx_count,  coalesce(total_users,0 )as total_users, 
-            coalesce(median_tx, 0) as median_tx, url 
+            coalesce(median_tx, 0) as median_tx, url, prizes, possible_reward
             from project_names
             left join tx_stat using(project)
                      left join good_users using(project)
@@ -103,44 +167,44 @@ class RedoubtAppBackend(CalculationBackend):
         with messages_local as (
             {messages}            
         ), jetton_transfers_local as (
-            select jt.*, jw.jetton_master from jetton_transfers jt
+            select jt.*, jw.jetton_master, 0 as ts from jetton_transfers jt
             JOIN jetton_wallets jw ON jw.address = jt.source_wallet and not jw.is_scam
             where
                 jt.successful and
-                jt.utime >= {config.start_time} and
-                jt.utime <  {config.end_time}
+                jt.utime >= {config.start_time}::int and
+                jt.utime <  {config.end_time}::int
         ), nft_activity_local as (
-          select msg_id as id, nt.current_owner as user_address, ni.collection  from nft_transfers nt
+          select msg_id as id, nt.current_owner as user_address, ni.collection, 0 as ts  from nft_transfers nt
                                                                                join nft_item ni on nt.nft_item = ni.address
-            where nt.utime >= {config.start_time}  and nt.utime <  {config.end_time}
+            where nt.utime >= {config.start_time}::int  and nt.utime <  {config.end_time}::int
               and collection is not null
             union
             select msg_id as id, new_owner as user_address, collection_address as collection
             from nft_history nh where event_type ='sale'
-                                  and utime >= {config.start_time}  and utime <  {config.end_time}
+                                  and utime >= {config.start_time}::int  and utime <  {config.end_time}::int
         ), nft_history_local as (
-            select  * from nft_history
-            where utime  >= {config.start_time} and utime  < {config.end_time}
+            select  *, 0 as ts from nft_history
+            where utime  >= {config.start_time}::int and utime  < {config.end_time}::int
         ), nft_transfers_local as (
-            select  * from nft_transfers
-            where utime  >= {config.start_time} and utime  < {config.end_time}
+            select  *, 0 as ts from nft_transfers
+            where utime  >= {config.start_time}::int and utime  < {config.end_time}::int
         ), ton20_sale_local as (
-            select * from ton20_sale ts
-            where utime >= {config.start_time}  and utime <  {config.end_time}
+            select *, 0 as ts from ton20_sale ts
+            where utime >= {config.start_time}::int  and utime <  {config.end_time}::int
         ), jetton_burn_local as (
-            select jb.*, jw."owner" as user_address, jw.jetton_master from jetton_burn jb
+            select jb.*, jw."owner" as user_address, jw.jetton_master, 0 as ts from jetton_burn jb
             join jetton_wallets jw on jw.address  = jb.wallet and jb.successful and not jw.is_scam
-            where utime >= {config.start_time}  and utime <  {config.end_time}
+            where utime >= {config.start_time}::int  and utime <  {config.end_time}::int
         ), jetton_mint_local as (
-            select jm.*, jw."owner" as user_address, jw.jetton_master from jetton_mint jm
+            select jm.*, jw."owner" as user_address, jw.jetton_master, 0 as ts from jetton_mint jm
             join jetton_wallets jw on jw.address  = jm.wallet and jm.successful and not jw.is_scam
-            where utime >= {config.start_time}  and utime <  {config.end_time}
+            where utime >= {config.start_time}::int  and utime <  {config.end_time}::int
         ), dex_swaps_local as (
-            select * from dex_swap_parsed
-            where swap_utime >= {config.start_time}  and swap_utime <  {config.end_time}
+            select *, 0 as ts from dex_swap_parsed
+            where swap_utime >= {config.start_time}::int  and swap_utime <  {config.end_time}::int
         ),      
         nft_sales as (
-            select msg_id as id, nh.current_owner  as user_address, marketplace from nft_history_local nh where
+            select msg_id as id, nh.current_owner  as user_address, marketplace, 0 as ts from nft_history_local nh where
             (event_type = 'init_sale' or event_type = 'cancel_sale')
             
             union all
@@ -197,10 +261,10 @@ class RedoubtAppBackend(CalculationBackend):
 
         if self.mau_stats:
             with self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+                logger.info("Executing insert")
                 cursor.execute(SQL)
-                mau = cursor.fetchone()['mau']
-                logger.info(f"Mau calculated: {mau}")
-                return mau
+                logger.info("Query finished")
+                return
         if dry_run:
             logger.info("Running SQL query in dry_run mode")
             with self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
@@ -217,9 +281,13 @@ class RedoubtAppBackend(CalculationBackend):
                         metrics={}
                     )
                     results[row['project']].metrics[ProjectStat.URL] = row['url']
+                    results[row['project']].metrics[ProjectStat.PRIZES] = row['prizes']
+                    results[row['project']].metrics[ProjectStat.REWARD] = 0
+                    results[row['project']].metrics[ProjectStat.POSSIBLE_REWARD] = row['possible_reward']
                     results[row['project']].metrics[ProjectStat.APP_ONCHAIN_TOTAL_TX] = int(row['tx_count'])
                     results[row['project']].metrics[ProjectStat.APP_ONCHAIN_UAW] = int(row['total_users'])
                     results[row['project']].metrics[ProjectStat.APP_ONCHAIN_MEDIAN_TX] = int(row['median_tx'])
+                    results[row['project']].metrics[ProjectStat.TOKEN_NEW_USERS_WITH_MIN_AMOUNT] = 0
             logger.info("Main query finished")
         if not dry_run:
             logger.info("Requesting off-chain tganalytics.xyz metrics")
@@ -265,6 +333,14 @@ class RedoubtAppBackend(CalculationBackend):
 
             logger.info("Off-chain processing is finished")
 
+
+            logger.info("Requesting token new holders")
+            with self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+                cursor.execute(NEW_HOLDERS_SQL)
+                for row in cursor.fetchall():
+                    results[row['symbol']].metrics[ProjectStat.TOKEN_NEW_USERS_WITH_MIN_AMOUNT] = int(row['new_holders'])
+                    results[row['symbol']].metrics[ProjectStat.TOKEN_ADDRESS] = row['address']
+            
         return CalculationResults(ranking=results.values(), build_time=1)  # TODO build time
 
 

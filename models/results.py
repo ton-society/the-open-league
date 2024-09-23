@@ -4,6 +4,10 @@ from typing import Dict, List
 
 @dataclass
 class ProjectStat:
+    PRIZES = 'prizes'
+    REWARD = 'reward'
+    POSSIBLE_REWARD = 'possible_reward'
+
     APP_OFFCHAIN_NON_PREMIUM_USERS = 'offchain_non_premium_users'
     APP_OFFCHAIN_PREMIUM_USERS = 'offchain_premium_users'
     APP_OFFCHAIN_AVG_DAU = 'offchain_avg_dau'
@@ -12,10 +16,16 @@ class ProjectStat:
 
     APP_ONCHAIN_TOTAL_TX = 'onchain_total_tx'
     APP_ONCHAIN_UAW = 'onchain_uaw'
+    APP_ONCHAIN_ENROLLED_UAW = 'onchain_enrolled_uaw'
+    APP_AVERAGE_SCORE = 'average_score'
+    APP_TOTAL_POINTS = 'total_points'
     APP_ONCHAIN_MEDIAN_TX = 'onchain_median_tx'
 
+    TOKEN_TVL_CATEGORY = 'token_tvl_category'
     TOKEN_TVL_CHANGE = 'token_tvl_change'
     TOKEN_START_TVL = 'token_start_tvl'
+    TOKEN_TVL_CATEGORY_VALUE = 'token_tvl_category_value'
+    TOKEN_START_TVL_USD = 'token_start_tvl_usd'
     TOKEN_LAST_TVL = 'token_last_tvl'
     TOKEN_PRICE_BEFORE = 'token_price_before'
     TOKEN_PRICE_AFTER = 'token_price_after'
@@ -35,6 +45,8 @@ class ProjectStat:
     DEFI_TVL_AFTER_COUNTED = 'defi_tvl_after_counted'
     DEFI_TVL_DELTA = 'defi_tvl_delta_full'
     DEFI_TVL_DELTA_COUNTED = 'defi_tvl_delta'
+    DEFI_SQUAD = 'squad'
+    DEFI_VOLUME_USD = 'volume_usd'
 
     TITLE = 'title'
     URL = 'url'
