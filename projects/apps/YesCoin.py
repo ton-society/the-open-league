@@ -18,7 +18,7 @@ YesCoin = App(
         ),
         SmartContractInteraction(
             "TransferInteraction",
-            "UQApOvFsiB4DUPMZS2q1o3pmz9TdEAsxhQZ2Tboi5vChg7XM",
+            "EQApOvFsiB4DUPMZS2q1o3pmz9TdEAsxhQZ2Tboi5vChg-gJ",
             comment_required=True,
         ),
     ]
