@@ -15,6 +15,11 @@ YesCoin = App(
         ),
         SmartContractInteraction(
             "Boost claim", "EQD4QiIKQvdTwJTXQ22ZrmQOpOFl4S1e4s5oNQweFHaTgVGZ"
-        )
+        ),
+        SmartContractInteraction(
+            "TransferInteraction",
+            "UQApOvFsiB4DUPMZS2q1o3pmz9TdEAsxhQZ2Tboi5vChg7XM",
+            comment_required=True,
+        ),
     ]
 )
