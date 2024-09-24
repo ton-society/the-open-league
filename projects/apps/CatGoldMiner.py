@@ -17,6 +17,13 @@ CatGoldMiner = App(
         SmartContractInteraction(
             "In-app purchasing", 
             address="EQCHoSb0kxasrZ-XhGdQ4vQz-ZEGQuX1Pzq-HYiWQi8-FMpy",
+        ), SmartContractInteraction(
+            "Bitget Wallet Check-in", 
+            address="EQCPiDCGwdttxcC0Hl7ZFi8oi2UY-T3f0D4JEYikEFJXTydY",
+        ),
+        SmartContractInteraction(
+            "OKX Wallet Check-in", 
+            address="EQAZXOXkSGTCwYUfGdyug87uzenlbDpTcvmJoL8FQgsLbz1L",
         )
     ]
 )
