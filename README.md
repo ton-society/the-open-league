@@ -35,7 +35,7 @@ Icon name template is ``{leaderboard}_{project_name}.{extension}``, where:
 * __project_name__ - project name (``Project.name``), in lower-case
 * __extension__ - svg or png. In case of png size must be 100x100 px.
 
-## Season
+## Seasons
 
 List of the seasons supported with the leaderboard links
 
