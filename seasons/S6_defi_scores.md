@@ -79,6 +79,10 @@ considered as LPs. Total amount of TVL for each pool is a sum of all tokens and 
 All pools are jettons with the same code_hash - ``BfWQzLvuCKusWfxaQs48Xp+Nf+jUIBN8BVrU0li7qXI=``. These
 pools are holding DEX LP tokens which are producing TVL. 
 
+###   
+
+TVL is amount of TON on [main contract address](https://tonviewer.com/EQCkeTvOSTBwBtP06X2BX7THj_dlX67PhgYRGuKfjWtB9FVb).
+
 
 Query to get full list of participants and their impact to TVL:
 ```sql
@@ -150,10 +154,36 @@ with jvault_pools as (
  join settleton_total_supply using(pool_address)
  join settleton_pool_tvls using(pool_address)
  group by 1
+), daolama_tvl as (
+select balance * (select price from prices.ton_price where price_ts < 1726822800 order by price_ts desc limit 1) / 1e9 as tvl_usd 
+from account_states as2 where hash = (
+select account_state_hash_after from transactions where account = upper('0:a4793bce49307006d3f4e97d815fb4c78ff7655faecf8606111ae29f8d6b41f4')
+and now < 1726822800
+order by now desc limit 1)
+), daolama_balances_before as (
+ select ed.address, balance from tol.jetton_wallets_s6_start b
+ join tol.enrollment_degen ed on ed.address = b."owner"
+ where b.jetton_master = upper('0:a4793bce49307006d3f4e97d815fb4c78ff7655faecf8606111ae29f8d6b41f4')
+), daolama_balances_after as (
+ select ed.address, balance from tol.jetton_wallets_s6_end b
+ join tol.enrollment_degen ed on ed.address = b."owner"
+ where b.jetton_master = upper('0:a4793bce49307006d3f4e97d815fb4c78ff7655faecf8606111ae29f8d6b41f4')
+), daolama_balances_delta as (
+ select address, coalesce(daolama_balances_after.balance, 0) - coalesce(daolama_balances_before.balance, 0) as balance_delta
+ from daolama_balances_after left join daolama_balances_before using(address)
+), daolama_total_supply as (
+   select sum(balance) as total_supply
+   from tol.jetton_wallets_s6_end b
+   where b.jetton_master = upper('0:a4793bce49307006d3f4e97d815fb4c78ff7655faecf8606111ae29f8d6b41f4')
+), daolama_impact as (
+ select address, sum((select tvl_usd from daolama_tvl) * balance_delta / (select total_supply from daolama_total_supply)) as tvl_impact from daolama_balances_delta
+ group by 1
 ), all_projects_impact as (
  select * from jvault_impact
    union all
  select * from settleton_impact
+   union all
+ select * from daolama_impact
 )
 select address, sum(tvl_impact) as tvl_impact from all_projects_impact
 group by 1
