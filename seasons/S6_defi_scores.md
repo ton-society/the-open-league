@@ -74,6 +74,11 @@ All pools are SBTs from [this collection](https://tonviewer.com/EQAYS3AO2NaFr5-w
 Each SBT owns one or more jetton masters and all holders of these jettons are 
 considered as LPs. Total amount of TVL for each pool is a sum of all tokens and DEX LP tokens owned by this pool.
 
+### SettleTon
+
+All pools are jettons with the same code_hash - ``BfWQzLvuCKusWfxaQs48Xp+Nf+jUIBN8BVrU0li7qXI=``. These
+pools are holding DEX LP tokens which are producing TVL. 
+
 
 Query to get full list of participants and their impact to TVL:
 ```sql
@@ -114,8 +119,41 @@ with jvault_pools as (
  join jvault_lp_tokens using(lp_master)
  join jvault_pool_tvls using(pool_address)
  group by 1
+), settleton_pools as (
+  select address as pool_address from jetton_masters jm where 
+  code_hash ='BfWQzLvuCKusWfxaQs48Xp+Nf+jUIBN8BVrU0li7qXI='
+), settleton_pool_tvls as (
+ select pool_address, 
+  coalesce (sum( (select tvl_usd / total_supply from prices.dex_pool_history dph where pool = jetton_master and timestamp < 1726822800 order by timestamp desc limit 1) * balance), 0)
+   as value_usd
+   from tol.jetton_wallets_S6_end b
+   join settleton_pools p on p.pool_address = b."owner"
+   group by 1
+), settleton_balances_before as (
+ select ed.address, pool_address, balance from tol.jetton_wallets_s6_start b
+ join tol.enrollment_degen ed on ed.address = b."owner"
+ join settleton_pools on pool_address = b.jetton_master
+), settleton_balances_after as (
+ select ed.address, pool_address, balance from tol.jetton_wallets_s6_end b
+ join tol.enrollment_degen ed on ed.address = b."owner"
+ join settleton_pools on pool_address = b.jetton_master
+), settleton_balances_delta as (
+ select address, pool_address, coalesce(settleton_balances_after.balance, 0) - coalesce(settleton_balances_before.balance, 0) as balance_delta
+ from settleton_balances_after left join settleton_balances_before using(address, pool_address) 
+), settleton_total_supply as (
+   select pool_address, sum(balance) as total_supply
+   from tol.jetton_wallets_s6_end b
+   join settleton_pools on pool_address = b.jetton_master
+   group by 1
+), settleton_impact as (
+ select address, sum(value_usd * balance_delta / total_supply) as tvl_impact from settleton_balances_delta
+ join settleton_total_supply using(pool_address)
+ join settleton_pool_tvls using(pool_address)
+ group by 1
 ), all_projects_impact as (
  select * from jvault_impact
+   union all
+ select * from settleton_impact
 )
 select address, sum(tvl_impact) as tvl_impact from all_projects_impact
 group by 1
