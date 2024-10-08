@@ -68,7 +68,7 @@ User score is calculated as a total increase of its position locked in all proto
 is calulcated in tokens and converted to USD based on the price of the token at the time of the season end.
 
 
-### JVaul
+### JVault
 
 All pools are SBTs from [this collection](https://tonviewer.com/EQAYS3AO2NaFr5-wl1CU8QMiCxrP0OEXYn82iqnuST9FKo9I). 
 Each SBT owns one or more jetton masters and all holders of these jettons are 
@@ -79,9 +79,13 @@ considered as LPs. Total amount of TVL for each pool is a sum of all tokens and 
 All pools are jettons with the same code_hash - ``BfWQzLvuCKusWfxaQs48Xp+Nf+jUIBN8BVrU0li7qXI=``. These
 pools are holding DEX LP tokens which are producing TVL. 
 
-###   
+###  DAOLama
 
 TVL is amount of TON on [main contract address](https://tonviewer.com/EQCkeTvOSTBwBtP06X2BX7THj_dlX67PhgYRGuKfjWtB9FVb).
+
+### TON Hedge
+
+TVL is amount of TON on [main contract address](https://tonviewer.com/EQBXZo11H4wUq3azWDphoUhlV710a-7rvUsqZUGLP9tUcf37).
 
 
 Query to get full list of participants and their impact to TVL:
@@ -178,12 +182,37 @@ order by now desc limit 1)
 ), daolama_impact as (
  select address, sum((select tvl_usd from daolama_tvl) * balance_delta / (select total_supply from daolama_total_supply)) as tvl_impact from daolama_balances_delta
  group by 1
+), tonhedge_tvl as (
+ select balance / 1e6 as tvl_usd from tol.jetton_wallets_s6_end
+ where owner = upper('0:57668d751f8c14ab76b3583a61a1486557bd746beeebbd4b2a65418b3fdb5471')
+ and jetton_master = '0:B113A994B5024A16719F69139328EB759596C38A25F59028B146FECDC3621DFE'
+), tonhedge_balances_before as (
+ select ed.address, balance from tol.jetton_wallets_s6_start b
+ join tol.enrollment_degen ed on ed.address = b."owner"
+ where b.jetton_master = upper('0:57668d751f8c14ab76b3583a61a1486557bd746beeebbd4b2a65418b3fdb5471')
+), tonhedge_balances_after as (
+ select ed.address, balance from tol.jetton_wallets_s6_end b
+ join tol.enrollment_degen ed on ed.address = b."owner"
+ where b.jetton_master = upper('0:57668d751f8c14ab76b3583a61a1486557bd746beeebbd4b2a65418b3fdb5471')
+), tonhedge_balances_delta as (
+ select address, coalesce(tonhedge_balances_after.balance, 0) - coalesce(tonhedge_balances_before.balance, 0) as balance_delta
+ from tonhedge_balances_after left join tonhedge_balances_before using(address)
+), tonhedge_total_supply as (
+   select sum(balance) as total_supply
+   from tol.jetton_wallets_s6_end b
+   where b.jetton_master = upper('0:57668d751f8c14ab76b3583a61a1486557bd746beeebbd4b2a65418b3fdb5471')
+), tonhedge_impact as (
+ select address, sum((select tvl_usd from tonhedge_tvl) * balance_delta / (select total_supply from tonhedge_total_supply)) as tvl_impact 
+ from tonhedge_balances_delta
+ group by 1
 ), all_projects_impact as (
  select * from jvault_impact
    union all
  select * from settleton_impact
    union all
  select * from daolama_impact
+   union all
+ select * from tonhedge_impact
 )
 select address, sum(tvl_impact) as tvl_impact from all_projects_impact
 group by 1
