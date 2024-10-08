@@ -79,6 +79,11 @@ considered as LPs. Total amount of TVL for each pool is a sum of all tokens and 
 All pools are jettons with the same code_hash - ``BfWQzLvuCKusWfxaQs48Xp+Nf+jUIBN8BVrU0li7qXI=``. These
 pools are holding DEX LP tokens which are producing TVL. 
 
+### Parraton
+
+All pools are jettons with the same admin address - [EQBwWldOF2pHx4XM6CHlwdxVG6ZfcOgokT767236ZIGE5hKI](https://tonviewer.com/EQBwWldOF2pHx4XM6CHlwdxVG6ZfcOgokT767236ZIGE5hKI). These
+pools are holding DEX LP tokens which are producing TVL. 
+
 ###  DAOLama
 
 TVL is amount of TON on [main contract address](https://tonviewer.com/EQCkeTvOSTBwBtP06X2BX7THj_dlX67PhgYRGuKfjWtB9FVb).
@@ -228,6 +233,37 @@ order by now desc limit 1)
 ), tonpools_impact as (
  select address, sum(value_usd) as tvl_impact
  from tonpools_operations group by 1
+), parraton_pools as (
+  select address as pool_address from jetton_masters jm where 
+  admin_address = '0:705A574E176A47C785CCE821E5C1DC551BA65F70E828913EFAEF6DFA648184E6'
+), parraton_pool_tvls as (
+ select pool_address, 
+  coalesce (sum( (select tvl_usd / total_supply from prices.dex_pool_history dph where pool = jetton_master and timestamp < 1726822800 order by timestamp desc limit 1) * balance), 0)
+   as value_usd
+   from tol.jetton_wallets_S6_end b
+   join parraton_pools p on p.pool_address = b."owner"
+   group by 1
+), parraton_balances_before as (
+ select ed.address, pool_address, balance from tol.jetton_wallets_s6_start b
+ join tol.enrollment_degen ed on ed.address = b."owner"
+ join parraton_pools on pool_address = b.jetton_master
+), parraton_balances_after as (
+ select ed.address, pool_address, balance from tol.jetton_wallets_s6_end b
+ join tol.enrollment_degen ed on ed.address = b."owner"
+ join parraton_pools on pool_address = b.jetton_master
+), parraton_balances_delta as (
+ select address, pool_address, coalesce(parraton_balances_after.balance, 0) - coalesce(parraton_balances_before.balance, 0) as balance_delta
+ from parraton_balances_after left join parraton_balances_before using(address, pool_address) 
+), parraton_total_supply as (
+   select pool_address, sum(balance) as total_supply
+   from tol.jetton_wallets_s6_end b
+   join parraton_pools on pool_address = b.jetton_master
+   group by 1
+), parraton_impact as (
+ select address, sum(value_usd * balance_delta / total_supply) as tvl_impact from parraton_balances_delta
+ join parraton_total_supply using(pool_address)
+ join parraton_pool_tvls using(pool_address)
+ group by 1
 ), all_projects_impact as (
  select 'jVault' as project, * from jvault_impact
    union all
@@ -238,6 +274,8 @@ order by now desc limit 1)
  select 'TONHedge' as project, * from tonhedge_impact
    union all
  select 'TONPools' as project, * from tonpools_impact
+   union all
+ select 'Parraton' as project, * from tonpools_impact
 )
 select address, sum(tvl_impact) as tvl_impact from all_projects_impact
 group by 1
