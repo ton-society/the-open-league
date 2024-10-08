@@ -87,6 +87,10 @@ TVL is amount of TON on [main contract address](https://tonviewer.com/EQCkeTvOST
 
 TVL is amount of TON on [main contract address](https://tonviewer.com/EQBXZo11H4wUq3azWDphoUhlV710a-7rvUsqZUGLP9tUcf37).
 
+### TON Pools
+
+TVL originated from deposits and decreased by withdrawals. Deposits are messages with opcode 0x21eeb607 to [tonpools.ton](https://tonviewer.com/EQA7y9QkiP4xtX_BhOpY4xgVlLM7LPcYUA4QhBHhFZeL4fTa), withdrawals are messages with opcode 0x0ba69751 to [tonpools.ton](https://tonviewer.com/EQA7y9QkiP4xtX_BhOpY4xgVlLM7LPcYUA4QhBHhFZeL4fTa) followed by "Withdraw completed" response message which carries amount of TON to withdraw.
+
 
 Query to get full list of participants and their impact to TVL:
 ```sql
@@ -205,14 +209,35 @@ order by now desc limit 1)
  select address, sum((select tvl_usd from tonhedge_tvl) * balance_delta / (select total_supply from tonhedge_total_supply)) as tvl_impact 
  from tonhedge_balances_delta
  group by 1
+), tonpools_operations as (
+  select source as address, value / 1e9 * 
+  (select price from prices.ton_price where price_ts < m.created_at order by price_ts desc limit 1) as value_usd
+  from messages m where direction ='in' and destination =upper('0:3bcbd42488fe31b57fc184ea58e3181594b33b2cf718500e108411e115978be1')
+  and created_at  >= 1726138800 and created_at < 1726822800 and opcode = 569292295
+
+   union all
+
+  select m_in.source as address, -1 * m_out.value  / 1e9 *
+  (select price from prices.ton_price where price_ts < m_out.created_at order by price_ts desc limit 1) as value_usd
+  from messages m_in
+  join messages m_out on m_out.tx_hash  = m_in.tx_hash and m_out.direction  = 'out'
+  join parsed.message_comments mc on mc.hash  = m_out.body_hash 
+  where m_in.direction ='in' and m_in.destination =upper('0:3bcbd42488fe31b57fc184ea58e3181594b33b2cf718500e108411e115978be1')
+  and m_in.created_at  >= 1726138800 and m_in.created_at < 1726822800 and m_in.opcode = 195467089
+  and mc."comment" = 'Withdraw completed'
+), tonpools_impact as (
+ select address, sum(value_usd) as tvl_impact
+ from tonpools_operations group by 1
 ), all_projects_impact as (
- select * from jvault_impact
+ select 'jVault' as project, * from jvault_impact
    union all
- select * from settleton_impact
+ select 'SettleTon' as project, * from settleton_impact
    union all
- select * from daolama_impact
+ select 'DAOLama' as project, * from daolama_impact
    union all
- select * from tonhedge_impact
+ select 'TONHedge' as project, * from tonhedge_impact
+   union all
+ select 'TONPools' as project, * from tonpools_impact
 )
 select address, sum(tvl_impact) as tvl_impact from all_projects_impact
 group by 1
