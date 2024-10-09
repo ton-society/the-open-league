@@ -96,6 +96,11 @@ TVL is amount of TON on [main contract address](https://tonviewer.com/EQBXZo11H4
 
 TVL originated from deposits and decreased by withdrawals. Deposits are messages with opcode 0x21eeb607 to [tonpools.ton](https://tonviewer.com/EQA7y9QkiP4xtX_BhOpY4xgVlLM7LPcYUA4QhBHhFZeL4fTa), withdrawals are messages with opcode 0x0ba69751 to [tonpools.ton](https://tonviewer.com/EQA7y9QkiP4xtX_BhOpY4xgVlLM7LPcYUA4QhBHhFZeL4fTa) followed by "Withdraw completed" response message which carries amount of TON to withdraw.
 
+### TON Stable
+
+TVL originated after tsTON/stTON deposits, so it is a sum of all tsTON/stTON transfers by the users to 
+[the project smart-contract](https://tonviewer.com/EQC2Bt4vwcSgCwABlOfgl75GbGuC0GpRU2GsZKqqMHu-T0gk)
+
 
 Query to get full list of participants and their impact to TVL:
 ```sql
@@ -264,6 +269,25 @@ order by now desc limit 1)
  join parraton_total_supply using(pool_address)
  join parraton_pool_tvls using(pool_address)
  group by 1
+), tonstable_flow as (
+  select 
+  case when destination = upper('0:b606de2fc1c4a00b000194e7e097be466c6b82d06a515361ac64aaaa307bbe4f') then source
+  else destination end as address,
+  case when source = upper('0:b606de2fc1c4a00b000194e7e097be466c6b82d06a515361ac64aaaa307bbe4f') then -1 else 1 end * amount / 1e9 * 
+  coalesce((select price from prices.core where asset = jetton_master_address and price_ts < tx_now order by price_ts desc limit 1), 1) *
+  (select price from prices.ton_price where price_ts < tx_now order by price_ts desc limit 1) as tvl_usd
+  from jetton_transfers
+  where (jetton_master_address = upper('0:cd872fa7c5816052acdf5332260443faec9aacc8c21cca4d92e7f47034d11892') 
+  or jetton_master_address = upper('0:bdf3fa8098d129b54b4f73b5bac5d1e1fd91eb054169c3916dfc8ccd536d1000'))
+  and tx_now  >= 1726138800 and tx_now < 1726822800 
+  and (
+    destination = upper('0:b606de2fc1c4a00b000194e7e097be466c6b82d06a515361ac64aaaa307bbe4f')
+  or
+    source = upper('0:b606de2fc1c4a00b000194e7e097be466c6b82d06a515361ac64aaaa307bbe4f')
+  ) and not tx_aborted
+), tonstable_impact as (
+  select address, sum(tvl_usd) as tvl_impact from tonstable_flow
+  group by 1
 ), all_projects_impact as (
  select 'jVault' as project, * from jvault_impact
    union all
@@ -275,7 +299,9 @@ order by now desc limit 1)
    union all
  select 'TONPools' as project, * from tonpools_impact
    union all
- select 'Parraton' as project, * from tonpools_impact
+ select 'Parraton' as project, * from parraton_impact
+    union all
+ select 'TONStable' as project, * from tonstable_impact
 )
 select address, sum(tvl_impact) as tvl_impact from all_projects_impact
 group by 1
