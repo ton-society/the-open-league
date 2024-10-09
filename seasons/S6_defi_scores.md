@@ -302,7 +302,10 @@ order by now desc limit 1)
  select 'Parraton' as project, * from parraton_impact
     union all
  select 'TONStable' as project, * from tonstable_impact
+), all_projects_degen_only as (
+select p.* from all_projects_impact p
+join tol.enrollment_degen ed on ed.address = p.address
 )
-select address, sum(tvl_impact) as tvl_impact from all_projects_impact
+select address, sum(tvl_impact) as tvl_impact from all_projects_degen_only
 group by 1
 ```
