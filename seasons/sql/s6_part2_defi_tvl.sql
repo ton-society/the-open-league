@@ -1,5 +1,5 @@
 with wallets_end as (
-select * from jetton_wallets
+  select address, last_transaction_lt as tx_lt, jetton as  jetton_master, "owner", balance from jetton_wallets
 ),
 jvault_pools as (
  select address as pool_address from nft_items ni where collection_address =upper('0:184b700ed8d685af9fb0975094f103220b1acfd0e117627f368aa9ee493f452a')
