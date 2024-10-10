@@ -92,6 +92,7 @@ from projects.defi.GasPump import GasPumpDeFi
 from projects.defi.RainbowSwap import RainbowSwap
 from projects.defi.StonFi import StonFi
 from projects.defi.StormTrade import StormTrade
+from projects.defi.TONDiamonds import TONDiamonds
 from projects.defi.Tradoor import Tradoor
 from projects.defi.Wonton import Wonton
 from projects.defi.SettleTON import SettleTON
@@ -276,7 +277,9 @@ S6_defi_volume = SeasonConfig(
     start_time=S6_START,
     end_time=S6_PART2_END,
     projects=[
-        Tradoor, GasPumpDeFi, RainbowSwap
+        Tradoor, GasPumpDeFi, RainbowSwap,
+        # Added after the break
+        TONDiamonds
     ],
     score_model=DeFiVolumeContribution(squads=[
         (lambda tvl: tvl >= 50 * 1e6, "50M$+"),
