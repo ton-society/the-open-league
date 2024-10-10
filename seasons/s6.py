@@ -140,6 +140,8 @@ S6_START = 1726138800 # Thu Sep 12 2024 11:00:00 GMT+0000
 # Season 6 was paused for a break - https://t.me/league/128
 S6_END = 1726822800 # Fri Sep 20 2024 09:00:00 GMT+0000
 
+S6_PART2_END = 1730286000 # Wed Oct 30 2024 11:00:00 GMT+0000
+
 
 S6_apps = SeasonConfig(
     leaderboard=SeasonConfig.APPS,
@@ -239,7 +241,7 @@ S6_nfts = SeasonConfig(
     leaderboard=SeasonConfig.NFTS,
     name="S6",
     start_time=S6_START,
-    end_time=S6_END,
+    end_time=S6_PART2_END,
     projects=[
         TheMinersClubNFTsNFT, YNGEXPLRZNFT, GattoNFT, AnimalsRedListNFT, SmesharikiNFT,
         TONDiamondsNFT, NOTPunksNFT, TONFISHBOXNFT, PovelDurevNFTNFT, TONPunksNFT,
@@ -255,7 +257,7 @@ S6_defi_tvl = SeasonConfig(
     leaderboard=SeasonConfig.DEFI,
     name="S6",
     start_time=S6_START,
-    end_time=S6_END,
+    end_time=S6_PART2_END,
     projects=[
         DAOLama, SettleTON, JVault,
         TONHedge, TonStable, Parraton, TonPools
@@ -272,7 +274,7 @@ S6_defi_volume = SeasonConfig(
     leaderboard=SeasonConfig.DEFI,
     name="S6",
     start_time=S6_START,
-    end_time=S6_END,
+    end_time=S6_PART2_END,
     projects=[
         Tradoor, GasPumpDeFi, RainbowSwap
     ],
