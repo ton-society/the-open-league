@@ -28,4 +28,6 @@ with swaps as (
   union all
   select * from tondiamonds_swaps
 )
-select * from volumes
+select address, sum(volume_usd) as volume_usd from volumes
+join degens using(address)
+group by 1
