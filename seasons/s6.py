@@ -271,7 +271,7 @@ S6_defi_tvl = SeasonConfig(
         AquaProtocol, Hipo, TonStakersTokenStaking
     ],
     score_model=DeFiTVLContribution(squads=[
-        (lambda tvl: tvl >= 5e6, "5M$+"),
+        (lambda tvl: tvl >= 5e6, "Over 5M$"),
         (lambda tvl: tvl >= 1e6, "Under 5M$"),
         (lambda tvl: True, "Under 1M$"),
     ]),
@@ -289,7 +289,7 @@ S6_defi_volume = SeasonConfig(
         TONDiamonds
     ],
     score_model=DeFiVolumeContribution(squads=[
-        (lambda tvl: tvl >= 50 * 1e6, "50M$+"),
+        (lambda tvl: tvl >= 50 * 1e6, "Over 50M$"),
         (lambda tvl: tvl >= 10 * 1e6, "Under 50M$"),
         (lambda tvl: True, "Under 10M$"),
     ])
