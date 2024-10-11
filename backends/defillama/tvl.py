@@ -95,7 +95,7 @@ class DefillamaDeFiTVLBackend(CalculationBackend):
         def get_tvl_before(history, timestamp):
             items = list(filter(lambda x: x['date'] < timestamp, history))
             if len(items) == 0:
-                return 0
+                return sorted(history, key=lambda x: x['date'], reverse=True)[-1]['totalLiquidityUSD']
             return items[-1]['totalLiquidityUSD']
 
         logger.info("Running DeFiLlama backend for DeFi leaderboard")
