@@ -80,6 +80,11 @@ TVL originated after tsTON/stTON deposits, so it is a sum of all tsTON/stTON tra
 TVL originated after tsTON/stTON/hTON deposits, so it is a sum of all tsTON/stTON/hTON transfers by the users to 
 [the project smart-contract](https://tonviewer.com/EQAWDyxARSl3ol2G1RMLMwepr3v6Ter5ls3jiAlheKshgg0K)
 
+### TonStakers
+
+TVL impact is calculated as an increase of token position by transfers to specific staking NFT collections.
+The list of tokens and collections is present in [here](https://github.com/DefiLlama/DefiLlama-Adapters/blob/5f2f78df1b47fd064ac72ec384564860c63f63c4/projects/tonstakers-token-staking/index.js#L41).
+
 
 Queries to get full list of participants and their impact to TVL are available in [sql](sql/) folder:
 * [Before the break](sql/s6_part1_defi_tvl.sql)
