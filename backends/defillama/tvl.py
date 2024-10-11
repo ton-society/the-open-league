@@ -93,8 +93,10 @@ class DefillamaDeFiTVLBackend(CalculationBackend):
         logger.info(f"Total excluded current: {excluded_current}, snapshot: {excluded_snapshot}")
 
         def get_tvl_before(history, timestamp):
-            *_, last_item = filter(lambda x: x['date'] < timestamp, history)
-            return last_item['totalLiquidityUSD']
+            items = list(filter(lambda x: x['date'] < timestamp, history))
+            if len(items) == 0:
+                return 0
+            return items[-1]['totalLiquidityUSD']
 
         logger.info("Running DeFiLlama backend for DeFi leaderboard")
         results: List[ProjectStat] = []
