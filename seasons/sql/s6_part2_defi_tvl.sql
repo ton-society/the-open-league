@@ -207,6 +207,48 @@ order by now desc limit 1)
 ), aqua_impact as (
   select address, sum(tvl_usd) as tvl_impact from aqua_flow
   group by 1
+), tonstakers_pools as (
+  -- GEMSTON
+  select upper('0:61d80b20e0ea679609a4c36e60a59ec8726c8d3c971e2e1ff9d68d25386c068e') as address,
+   upper('0:57e8af5a5d59779d720d0b23cf2fce82e0e355990f2f2b7eb4bba772905297a4') as token
+  union all
+  -- PUNK
+  select upper('0:e340e1aafdbc7da5d8d02614112bd2eec7e60e5300eed5434cf127afbdb1b6e5') as address,
+   upper('0:9da73e90849b43b66dacf7e92b576ca0978e4fc25f8a249095d7e5eb3fe5eebb') as token
+  union all
+  -- XROCK
+  select upper('0:34477d7b3f5d1ba298396069c8e01f7f7097348cf6d5c272d9bb726e31677236') as address,
+   upper('0:157c463688a4a91245218052c5580807792cf6347d9757e32f0ee88a179a6549') as token
+union all
+  -- JetTon
+  select upper('0:390609d615842e2a30cc826aac6114c0d52dea8eb17532f9a31be043100d7d8f') as address,
+   upper('0:105e5589bc66db15f13c177a12f2cf3b94881da2f4b8e7922c58569176625eb5') as token
+union all
+  -- durev
+  select upper('0:f0eeee82c246c87f385f771213032d3dcaabc0939f61c827716dd40247aee297') as address,
+   upper('0:74d8327471d503e2240345b06fe1a606de1b5e3c70512b5b46791b429dab5eb1') as token
+union all
+  -- WEB3
+  select upper('0:cc31242c986a1c21150cc572f831a98419ab2200d9d5e86a4ab2d0292b8e6554') as address,
+   upper('0:6d70be0903e3dd3e252407cbad1dca9d69fb665124ea74bf19d4479778f2ed8b') as token
+),
+tonstakers_flow as (
+  select 
+  case when destination = tp.address then source
+  else destination end as address,
+  case when source = tp.address then -1 else 1 end * amount as amount,
+  tp.token
+  from jetton_transfers jt
+  join tonstakers_pools tp on tp.token = jt.jetton_master_address
+  and (jt.destination = tp.address or jt.source = tp.address)
+  where tx_now  >= 1728558000 and tx_now < 1730286000 
+  and not tx_aborted
+), tonstakers_delta as (
+select address, token, sum(amount) as amount from tonstakers_flow
+group by 1, 2
+), tonstakers_impact as (
+  select address, sum(amount * (select price_usd from prices.agg_prices ap where ap.base = token and price_time < 1730286000 order by price_time desc limit 1)) /1e6 as tvl_impact from tonstakers_delta
+  group by 1
 ), all_projects_impact as (
  select 'jVault' as project, * from jvault_impact
    union all
@@ -223,6 +265,8 @@ order by now desc limit 1)
  select 'TONStable' as project, * from tonstable_impact
     union all
  select 'Aqua' as project, * from aqua_impact
+    union all
+ select 'Tonstakers Token Staking' as project, * from tonstakers_impact
 ), all_projects_degen_only as (
 select p.* from all_projects_impact p
 join tol.enrollment_degen ed on ed.address = p.address
