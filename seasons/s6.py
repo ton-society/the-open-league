@@ -90,6 +90,7 @@ from projects.defi.DAOLama import DAOLama
 from projects.defi.DeDust import DeDust
 from projects.defi.EVAA import EVAA
 from projects.defi.GasPump import GasPumpDeFi
+from projects.defi.Hipo import Hipo
 from projects.defi.RainbowSwap import RainbowSwap
 from projects.defi.StonFi import StonFi
 from projects.defi.StormTrade import StormTrade
@@ -266,7 +267,7 @@ S6_defi_tvl = SeasonConfig(
         DAOLama, SettleTON, JVault,
         TONHedge, TonStable, Parraton, TonPools,
         # Added after the break
-        AquaProtocol
+        AquaProtocol, Hipo
     ],
     score_model=DeFiTVLContribution(squads=[
         (lambda tvl: tvl >= 5e6, "5M$+"),
