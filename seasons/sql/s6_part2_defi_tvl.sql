@@ -30,6 +30,7 @@ jvault_pools as (
    from wallets_end b
    join jvault_lp_tokens on lp_master = b.jetton_master
    group by 1
+   having sum(balance) > 0
 ), jvault_impact as (
  select address, sum(value_usd * balance_delta / total_supply) as tvl_impact from jvault_balances_delta
  join jvault_total_supply using(lp_master)
@@ -62,6 +63,7 @@ jvault_pools as (
    from wallets_end b
    join settleton_pools on pool_address = b.jetton_master
    group by 1
+   having sum(balance) > 0
 ), settleton_impact as (
  select address, sum(value_usd * balance_delta / total_supply) as tvl_impact from settleton_balances_delta
  join settleton_total_supply using(pool_address)
@@ -159,6 +161,7 @@ order by now desc limit 1)
    from wallets_end b
    join parraton_pools on pool_address = b.jetton_master
    group by 1
+  having sum(balance) > 0
 ), parraton_impact as (
  select address, sum(value_usd * balance_delta / total_supply) as tvl_impact from parraton_balances_delta
  join parraton_total_supply using(pool_address)
