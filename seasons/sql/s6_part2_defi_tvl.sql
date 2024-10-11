@@ -186,6 +186,27 @@ order by now desc limit 1)
 ), tonstable_impact as (
   select address, sum(tvl_usd) as tvl_impact from tonstable_flow
   group by 1
+), aqua_flow as (
+  select 
+  case when destination = upper('0:160f2c40452977a25d86d5130b3307a9af7bfa4deaf996cde388096178ab2182') then source
+  else destination end as address,
+  case when source = upper('0:160f2c40452977a25d86d5130b3307a9af7bfa4deaf996cde388096178ab2182') then -1 else 1 end * amount / 1e9 * 
+  coalesce((select price from prices.core where asset = jetton_master_address and price_ts < tx_now order by price_ts desc limit 1), 1) *
+  (select price from prices.ton_price where price_ts < tx_now order by price_ts desc limit 1) as tvl_usd
+  from jetton_transfers
+  where (jetton_master_address = upper('0:cd872fa7c5816052acdf5332260443faec9aacc8c21cca4d92e7f47034d11892') 
+  or jetton_master_address = upper('0:bdf3fa8098d129b54b4f73b5bac5d1e1fd91eb054169c3916dfc8ccd536d1000')
+  or jetton_master_address = upper('0:cf76af318c0872b58a9f1925fc29c156211782b9fb01f56760d292e56123bf87')
+  )
+  and tx_now  >= 1728558000 and tx_now < 1730286000 
+  and (
+    destination = upper('0:160f2c40452977a25d86d5130b3307a9af7bfa4deaf996cde388096178ab2182')
+  or
+    source = upper('0:160f2c40452977a25d86d5130b3307a9af7bfa4deaf996cde388096178ab2182')
+  ) and not tx_aborted
+), aqua_impact as (
+  select address, sum(tvl_usd) as tvl_impact from aqua_flow
+  group by 1
 ), all_projects_impact as (
  select 'jVault' as project, * from jvault_impact
    union all
@@ -200,6 +221,8 @@ order by now desc limit 1)
  select 'Parraton' as project, * from parraton_impact
     union all
  select 'TONStable' as project, * from tonstable_impact
+    union all
+ select 'Aqua' as project, * from aqua_impact
 ), all_projects_degen_only as (
 select p.* from all_projects_impact p
 join tol.enrollment_degen ed on ed.address = p.address

@@ -85,6 +85,7 @@ from projects.apps.BOOMUP import BOOMUP
 from projects.apps.BUMP import BUMP
 from projects.apps.RockyRabbit import RockyRabbit
 from projects.apps.NobbyGame import NobbyGame
+from projects.defi.AquaProtocol import AquaProtocol
 from projects.defi.DAOLama import DAOLama
 from projects.defi.DeDust import DeDust
 from projects.defi.EVAA import EVAA
@@ -263,7 +264,9 @@ S6_defi_tvl = SeasonConfig(
     end_time=S6_PART2_END,
     projects=[
         DAOLama, SettleTON, JVault,
-        TONHedge, TonStable, Parraton, TonPools
+        TONHedge, TonStable, Parraton, TonPools,
+        # Added after the break
+        AquaProtocol
     ],
     score_model=DeFiTVLContribution(squads=[
         (lambda tvl: tvl >= 5e6, "5M$+"),

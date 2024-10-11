@@ -75,6 +75,11 @@ TVL originated from deposits and decreased by withdrawals. Deposits are messages
 TVL originated after tsTON/stTON deposits, so it is a sum of all tsTON/stTON transfers by the users to 
 [the project smart-contract](https://tonviewer.com/EQC2Bt4vwcSgCwABlOfgl75GbGuC0GpRU2GsZKqqMHu-T0gk)
 
+### Aqua Protocol
+
+TVL originated after tsTON/stTON/hTON deposits, so it is a sum of all tsTON/stTON/hTON transfers by the users to 
+[the project smart-contract](https://tonviewer.com/EQAWDyxARSl3ol2G1RMLMwepr3v6Ter5ls3jiAlheKshgg0K)
+
 
 Queries to get full list of participants and their impact to TVL are available in [sql](sql/) folder:
 * [Before the break](sql/s6_part1_defi_tvl.sql)
