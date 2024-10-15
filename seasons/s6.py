@@ -178,9 +178,21 @@ S6_apps_part2 = SeasonConfig(
     name="S6_part2",
     start_time=S6_APPS_PART2_START,
     end_time=S6_APPS_PART2_END,
-    projects=S6_apps.projects,
-    score_model=S6_apps.score_model,
-    enrollment_sbt=S6_apps.enrollment_sbt
+    projects=[
+        QuackQuack, Fanzee, Catizen, JetTon, SquidTG, XPLUS, xRare, PlayWallet, YesCoin,
+        GetGems, Fanton, Tonano, TonPunks, SwapCoffee, Gram, Gatto, TonsOfFriends, ChickCoop,
+        TonUP, Tongochi, Shardify, TonMap, Gamee, MoneyGardenAI, BountyBay, CatGoldMiner,
+        Vertus, Uniton, EdChess, GramillaWorld, MomoAI, Gleam, CatXWar, WheelOfFate,
+        TypoCurator, Sphynx, SpinnerCoin, GasPump, TonGifts, Pumpers, WowFish, AKEDOG,
+        AKEFish, Blum, Doggers, GHArena, Hamsterdam, HipoGang, MergePals, Mine2Mine, 
+        Molemine, MoonApp, Nomis, PiggyPiggy, Randomtg, SnakeLite, StarAI, Tonalytics,
+        WONTON, ZenCoin, DEPINSIM, HOTWallet, MemeTv, BeeHarvest, GemGame, TeleverseOdyssey,
+        Agent301, GrandCombat, MakeFrens, CrazyRushHeroes, TimePrice, TorchFinance, 
+        NOTBITCOIN, RentTower, RentTycoon, TONSTATION, Gemz, SEED, Cowtopia, BOOMUP, BUMP,
+        RockyRabbit, NobbyGame
+    ],
+    score_model=AppLeaderboardModelS6(),
+    enrollment_sbt="EQDZ81ZvxRfutjkALcUK0q3Cuusm1XtmhEwUiGSeviLpPARH"
 )
 
 S6_apps_combined = SeasonConfig(
@@ -188,9 +200,9 @@ S6_apps_combined = SeasonConfig(
     name="S6_combined",
     start_time=S6_START,
     end_time=S6_APPS_PART2_END,
-    projects=S6_apps.projects,
-    score_model=S6_apps.score_model,
-    enrollment_sbt=S6_apps.enrollment_sbt
+    projects=S6_apps_part2.projects,
+    score_model=S6_apps_part2.score_model,
+    enrollment_sbt=S6_apps_part2.enrollment_sbt
 )
 
 S6_nfts = SeasonConfig(
