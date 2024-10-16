@@ -22,8 +22,8 @@ class ToncenterCppNFTsBackend(CalculationBackend):
     def get_update_time(self, config: SeasonConfig):
         with self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
             cursor.execute("""
-            select gen_utime as last_time from blocks 
-            where workchain = -1 order by gen_utime desc limit 1
+            select gen_utime as last_time from blocks
+            where workchain = -1 and shard = -9223372036854775808 order by seqno desc limit 1
             """)
             return cursor.fetchone()['last_time']
 

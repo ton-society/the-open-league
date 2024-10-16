@@ -26,7 +26,12 @@ class ToncenterCppAppsScores2Projects(CalculationBackend):
     Update time for auxiliary table with messages
     """
     def get_update_time(self, config: SeasonConfig):
-        return 1726138800
+        with self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+            cursor.execute("""
+            select gen_utime as last_time from blocks
+            where workchain = -1 and shard = -9223372036854775808 order by seqno desc limit 1
+            """)
+            return cursor.fetchone()['last_time']
 
     def _do_calculate(self, config: SeasonConfig, dry_run: bool = False):
 
