@@ -1,8 +1,8 @@
 from models.project import DeFi
 
-TONDiamonds = DeFi(
-    name='TON Diamonds',
+DexDiamonds = DeFi(
+    name='DEX Diamonds',
     defillama_slug='ton-diamonds',
-    url='https://ton.diamonds/',
+    url='https://t.me/DEXDiamondsBot',
     category='aggregators'
 )
