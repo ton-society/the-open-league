@@ -7,7 +7,7 @@ Televerse Odyssey app
 
 TeleverseOdyssey = App(
     name="Televerse Odyssey",
-    analytics_key="Televerse_Odyssey",
+    analytics_key="Televerse_Odyssey_Bot",
     url="https://t.me/TorchOdyssey_bot",
     metrics=[
         SmartContractInteraction(
