@@ -8,8 +8,8 @@ Torch Finance app
 
 TorchFinance = App(
     name="Torch Finance",
-    analytics_key="TorchFinance",
-    url="https://t.me/torch_finance_bot/torlympics",
+    analytics_key="TorchFinanceDEX",
+    url="https://t.me/torch_finance_bot",
     metrics=[
         SmartContractInteraction(
             "Deposit TON",
