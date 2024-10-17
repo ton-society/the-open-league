@@ -13,6 +13,10 @@ Nomis = App(
     metrics=[
         SmartContractInteraction(
             "Interaction", "EQBykWvdmoyFD2kB4BJbdrxRqyWKzSLDn-SgwNvznRfbsaKv"
+        ), 
+        SmartContractInteraction( 
+            "Nomis Boost", 
+            "UQBPIFKq_HLbqoksBqPGIMjFjTco2NH7o0ckV5Iocj_A22J2" 
         ),
     ],
 )
