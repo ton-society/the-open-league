@@ -48,15 +48,17 @@ class ToncenterCppAppsScores2Projects(CalculationBackend):
         SQL = f"""
         with project_names as (
         {PROJECTS_NAMES}
+        ), apps_users_stats as (
+          select * from tol.apps_users_stats_{config.safe_season_name()}
         ), eligible as (
-          select address, 1 as eligible from tol.apps_users_stats_{config.safe_season_name()} auss
+          select address, 1 as eligible from apps_users_stats auss
           join tol.enrollment_{config.safe_season_name()} es using(address)
-    group by address having count(1) > 1
+          group by address having count(1) > 1
         )
         select project, url, count(distinct address) as total_uaw, coalesce(sum(eligible), 0) as enrolled_wallets,
         coalesce(cast(sum(points) / sum(eligible) as int), 0) as average_score, coalesce(sum(points), 0) as total_points
         from project_names 
-        left join tol.apps_users_stats_{config.safe_season_name()} using(project)
+        left join apps_users_stats using(project)
         left join eligible using(address)
         left join tol.apps_points_{config.safe_season_name()} using(address)
         group by 1, 2
