@@ -50,13 +50,14 @@ class JettonMasterInteractionToncenterCppImpl(ToncenterCppMetricImpl):
                 select jm.address as jetton_master_address from jetton_masters jm
                 where {admin_addresses_filter}
             )
-            select t.hash as id, '{context.project.name}' as project, m.source as user_address, t.now as ts 
-            from transactions t
-            join j_masters jm on t.account = jm.jetton_master_address
-            join messages m on m.tx_hash = t.hash and m.direction = 'in'
-            where compute_exit_code = 0 and action_result_code = 0
-            and t.now >= {context.season.start_time}::integer
-            and t.now < {context.season.end_time}::integer
+            select m.tx_hash as id, '{context.project.name}' as project, m.source as user_address, m.created_at as ts 
+            from messages m
+            join j_masters jm on m.destination = jm.jetton_master_address
+            join transactions t on m.tx_hash = t.hash
+            where t.compute_exit_code = 0 and t.action_result_code = 0
+            and m.direction = 'in'
+            and m.created_at >= {context.season.start_time}::integer
+            and m.created_at < {context.season.end_time}::integer
             and {op_codes_filter}
         )
         """
