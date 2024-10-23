@@ -16,7 +16,7 @@ Nomis = App(
         ), 
         SmartContractInteraction( 
             "Nomis Boost", 
-            "UQBPIFKq_HLbqoksBqPGIMjFjTco2NH7o0ckV5Iocj_A22J2" 
+            "EQBPIFKq_HLbqoksBqPGIMjFjTco2NH7o0ckV5Iocj_A2z-z" 
         ),
     ],
 )
