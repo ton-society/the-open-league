@@ -22,7 +22,7 @@ class ProxyContractInteractionRedoubtImpl(RedoubtMetricImpl):
 class ProxyContractInteractionToncenterCppImpl(ToncenterCppMetricImpl):
     def calculate(self, context: CalculationContext, metric):
         if len(metric.op_codes) > 0:
-            op_codes_filter = " OR ".join(map(lambda op: f"m.opcode = {op}", metric.op_codes))
+            op_codes_filter = " or ".join(map(lambda op: f"m.opcode = {op}", metric.op_codes))
         else:
             op_codes_filter = "TRUE"
         return f"""
@@ -31,13 +31,14 @@ class ProxyContractInteractionToncenterCppImpl(ToncenterCppMetricImpl):
                 select distinct(account) from latest_account_states 
                 where code_hash = '{metric.code_hash}' and timestamp > {context.season.start_time}
             )
-            select t.hash as id, '{context.project.name}' as project, m.source as user_address, t.now as ts 
-            from transactions t
-            join proxy_contracts pc on pc.account = t.account
-            join messages m on m.tx_hash = t.hash and m.direction = 'in'
-            where compute_exit_code = 0 and action_result_code = 0
-            and now >= {context.season.start_time}::integer
-            and now < {context.season.end_time}::integer
+            select m.tx_hash as id, '{context.project.name}' as project, m.source as user_address, m.created_at as ts 
+            from messages m
+            join proxy_contracts pc on pc.account = m.destination
+            join transactions t on m.tx_hash = t.hash
+            where t.compute_exit_code = 0 and t.action_result_code = 0
+            and m.direction = 'in'
+            and m.created_at >= {context.season.start_time}::integer
+            and m.created_at < {context.season.end_time}::integer
             and {op_codes_filter}
         )
         """
