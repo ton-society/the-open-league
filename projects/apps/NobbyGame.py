@@ -27,7 +27,7 @@ NobbyGame = App(
         ),
         SmartContractInteraction(
             "Check-in",
-            "EQDHZ6jIiX3EpFSpMUs7GF9uJP2Vh9FrHaDVxPI5frZvxH0p",
+            "EQDHZ6jIiX3EpFSpMUs7GF9uJP2Vh9FrHaDVxPI5frZvxCDs",
             comment_required=True,
         ),
         NFTActivity(
