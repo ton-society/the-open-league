@@ -1,5 +1,6 @@
 from models.metrics.contracts_by_code_hash import ProxyContractInteraction
 from models.metrics.nft_activity import NFTActivity
+from models.metrics.smc_interaction import SmartContractInteraction
 from models.project import App
 from projects.tokens.SOX import SOX
 
@@ -23,6 +24,11 @@ NobbyGame = App(
             "Referral payments",
             "DPYZSGR6pd6TSbTWb2A4RKXPnJB0i8g/SnXZuqu97s4=",
             op_codes=[1137169865],
+        ),
+        SmartContractInteraction(
+            "Check-in",
+            "EQDHZ6jIiX3EpFSpMUs7GF9uJP2Vh9FrHaDVxPI5frZvxH0p",
+            comment_required=True,
         ),
         NFTActivity(
             "NFT activity",
