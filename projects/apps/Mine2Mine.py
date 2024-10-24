@@ -22,7 +22,7 @@ Mine2Mine = App(
         ),
         SmartContractInteraction(
             "Interaction_1",
-            "UQAXKwOxy645qaE7zspw6G-zfdIIHyZr4-0-sD56Fk7DYoa9",
+            "EQAXKwOxy645qaE7zspw6G-zfdIIHyZr4-0-sD56Fk7DYtt4",
             comment_required=True,
         )
     ]

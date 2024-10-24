@@ -20,6 +20,7 @@ from projects.apps.GramillaWorld import GramillaWorld
 from projects.apps.JetTon import JetTon
 from projects.apps.MomoAI import MomoAI
 from projects.apps.MoneyGardenAI import MoneyGardenAI
+from projects.apps.NotPixel import NotPixel
 from projects.apps.PlayWallet import PlayWallet
 from projects.apps.Pumpers import Pumpers
 from projects.apps.QuackQuack import QuackQuack
@@ -189,7 +190,7 @@ S6_apps_part2 = SeasonConfig(
         WONTON, ZenCoin, DEPINSIM, HOTWallet, MemeTv, BeeHarvest, GemGame, TeleverseOdyssey,
         Agent301, GrandCombat, MakeFrens, CrazyRushHeroes, TimePrice, TorchFinance, 
         NOTBITCOIN, RentTower, RentTycoon, TONSTATION, Gemz, SEED, Cowtopia, BOOMUP, BUMP,
-        RockyRabbit, NobbyGame
+        RockyRabbit, NobbyGame, NotPixel,
     ],
     score_model=AppLeaderboardModelS6(),
     enrollment_sbt="EQDZ81ZvxRfutjkALcUK0q3Cuusm1XtmhEwUiGSeviLpPARH"
