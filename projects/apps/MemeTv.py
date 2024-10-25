@@ -11,9 +11,18 @@ MemeTv = App(
     url="https://t.me/TheMemeTvBot",
     metrics=[
         SmartContractInteraction(
-            "Interaction",
-            "EQCHiGNkhPqwgDkYp-ZqAKMKqAf4k9-_Z1_IbNb-L7OBFOpr",
-            op_codes=[-564733746],
+            "Memewars",
+            "EQAitPEyRsbqngxWUaP8_XZJh1Ro-Ez2f54Lp4o97oHUY78G",
+            op_codes=[133295436],
+        ),
+        SmartContractInteraction(
+            "OpenLeague",
+            "EQCSuEcF5GA6Dh4cu_6YdUOYiRDKSBsyDrJRY0Gt4Ics55to",
+            op_codes=[-1960889654],
+        ),
+        SmartContractInteraction(
+            "OpenLeague",
+            "EQCfn2sUM5jcrQvmdGAILYs-vulCi_jvQyIURDU0zZSYFAV3",
         ),
     ],
 )
