@@ -21,7 +21,7 @@ MemeTv = App(
             op_codes=[-1960889654],
         ),
         SmartContractInteraction(
-            "OpenLeague",
+            "Tickets",
             "EQCfn2sUM5jcrQvmdGAILYs-vulCi_jvQyIURDU0zZSYFAV3",
         ),
     ],
