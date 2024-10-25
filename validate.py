@@ -48,7 +48,7 @@ if __name__ == '__main__':
                             if attribute in ("address", "referral_address", "marketplace") and value:
                                 check_address(value)
                                 addresses.add(value)
-                            if attribute in ("addresses", "admin_addresses", "collections") and value:
+                            if attribute in ("addresses", "admin_addresses", "collections", "destinations") and value:
                                 for address in value:
                                     check_address(address)
                                     addresses.add(address)
