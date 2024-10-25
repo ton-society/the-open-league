@@ -189,7 +189,7 @@ S6_apps_part2 = SeasonConfig(
         Molemine, MoonApp, Nomis, PiggyPiggy, Randomtg, SnakeLite, StarAI, Tonalytics,
         WONTON, ZenCoin, DEPINSIM, HOTWallet, MemeTv, BeeHarvest, GemGame, TeleverseOdyssey,
         Agent301, GrandCombat, MakeFrens, CrazyRushHeroes, TimePrice, TorchFinance, 
-        NOTBITCOIN, RentTower, RentTycoon, TONSTATION, Gemz, SEED, Cowtopia, BOOMUP, BUMP,
+        NOTBITCOIN, RentTower, TONSTATION, Gemz, SEED, Cowtopia, BOOMUP, BUMP,
         RockyRabbit, NobbyGame, NotPixel,
     ],
     score_model=AppLeaderboardModelS6(),
