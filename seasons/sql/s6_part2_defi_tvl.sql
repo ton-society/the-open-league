@@ -249,6 +249,27 @@ group by 1, 2
 ), tonstakers_impact as (
   select address, sum(amount * (select price_usd from prices.agg_prices ap where ap.base = token and price_time < 1730286000 order by price_time desc limit 1)) /1e6 as tvl_impact from tonstakers_delta
   group by 1
+), hipo_flow as (
+  select 
+  jm."owner" as address, 
+  amount / 1e9 * coalesce((select price from prices.core where asset = jm.minter and price_ts < jm.utime order by price_ts desc limit 1), 1) *
+    (select price from prices.ton_price where price_ts < jm.utime order by price_ts desc limit 1) as tvl_usd
+  from parsed.jetton_mint jm 
+  where jm.minter = '0:CF76AF318C0872B58A9F1925FC29C156211782B9FB01F56760D292E56123BF87'
+  and jm.utime >= 1728558000 and jm.utime < 1730286000
+  and jm.successful
+  union all
+  select 
+  jb."owner" as address,
+  -amount / 1e9 * coalesce((select price from prices.core where asset = jb.jetton_master_address and price_ts < jb.tx_now order by price_ts desc limit 1), 1) *
+    (select price from prices.ton_price where price_ts < jb.tx_now order by price_ts desc limit 1) as tvl_usd
+  from jetton_burns jb 
+  where jb.jetton_master_address = '0:CF76AF318C0872B58A9F1925FC29C156211782B9FB01F56760D292E56123BF87'
+  and jb.tx_now >= 1728558000 and jb.tx_now < 1730286000
+  and not jb.tx_aborted 
+), hipo_impact as (
+  select address, sum(tvl_usd) as tvl_impact from hipo_flow
+  group by 1
 ), all_projects_impact as (
  select 'jVault' as project, * from jvault_impact
    union all
@@ -267,6 +288,8 @@ group by 1, 2
  select 'Aqua' as project, * from aqua_impact
     union all
  select 'Tonstakers Token Staking' as project, * from tonstakers_impact
+    union ALL
+ select 'Hipo' as project, * from hipo_impact
 ), all_projects_degen_only as (
 select p.* from all_projects_impact p
 join tol.enrollment_degen ed on ed.address = p.address
