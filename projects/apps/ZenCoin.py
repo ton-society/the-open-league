@@ -17,7 +17,7 @@ ZenCoin = App(
             "Daily Check-in", "EQAr17Jj72_h8Wier6zl7n8hB5l2RP7R00VdvmWoTCWv-gf6", op_codes=[-926769531, -1351283404]
         ),
         SmartContractInteraction(
-        "In-app purchasing", "UQDZMUeSS-OSWCSCsesv8gZwVe_8lpfcq_lIl-B4MzGHLRg9"
+        "In-app purchasing", "EQDZMUeSS-OSWCSCsesv8gZwVe_8lpfcq_lIl-B4MzGHLUX4"
         ),
     ],
 )
