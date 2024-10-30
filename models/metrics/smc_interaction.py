@@ -38,7 +38,7 @@ class SmartContractInteractionToncenterCppImpl(ToncenterCppMetricImpl):
 
     def calculate(self, context: CalculationContext, metric):
         if len(metric.op_codes) > 0:
-            op_codes_filter = " OR ".join(map(lambda op: f"opcode = {op}", metric.op_codes))
+            op_codes_filter = " or ".join(map(lambda op: f"opcode = {op}", metric.op_codes))
         else:
             op_codes_filter = "TRUE"
         if metric.comment_regexp:
@@ -46,11 +46,11 @@ class SmartContractInteractionToncenterCppImpl(ToncenterCppMetricImpl):
         else:
             comment_regexp_filter = ""
         if metric.address:
-            address_filter = f"t.account ='{self.to_raw(metric.address)}'"
+            address_filter = f"destination ='{self.to_raw(metric.address)}'"
         else:
             assert len(metric.addresses) > 0, f"You should provide either address or addresses non empty list " \
                                               f"({context.project.name}: {metric.description})"
-            address_filter = " OR ".join(map(lambda a: f"t.account ='{self.to_raw(a)}'", metric.addresses))
+            address_filter = " OR ".join(map(lambda a: f"destination ='{self.to_raw(a)}'", metric.addresses))
         if len(metric.comment_not_equals) > 0:
             comment_not_equals_filter = "and " + " and ".join(map(lambda v: f"comment != '{v}'", metric.comment_not_equals))
         else:
@@ -58,20 +58,20 @@ class SmartContractInteractionToncenterCppImpl(ToncenterCppMetricImpl):
 
         return f"""
         select 
-                t.hash as id, '{context.project.name}' as project,
-                source as user_address, t.now as ts from transactions t
-                join messages m on m.tx_hash = t.hash and direction = 'in'
-                -- TODO replace left join to inner join for comment_required case
-                left join parsed.message_comments mc on mc.hash = m.body_hash
-        where compute_exit_code = 0 and action_result_code = 0 and 
-            now >= {context.season.start_time}::integer and
-                now < {context.season.end_time}::integer and
-        ({address_filter}) {'and length("comment") > 0' if metric.comment_required else ''}
-         {comment_regexp_filter} {comment_not_equals_filter}
-        AND (
+            m.tx_hash as id, '{context.project.name}' as project,
+            source as user_address, m.created_at as ts from messages m
+            join transactions t on m.tx_hash = t.hash 
+            -- TODO replace left join to inner join for comment_required case
+            left join parsed.message_comments mc on mc.hash = m.body_hash
+            where compute_exit_code = 0 and action_result_code = 0 and 
+            direction = 'in' and 
+            created_at >= {context.season.start_time}::integer and
+            created_at < {context.season.end_time}::integer and
+            ({address_filter}) {'and length("comment") > 0' if metric.comment_required else ''}
+            {comment_regexp_filter} {comment_not_equals_filter}
+            and (
             {op_codes_filter}
-        )
-
+            )
         """
 
 

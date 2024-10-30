@@ -14,5 +14,9 @@ TONSTATION = App(
             "Check-in",
             "EQC7m1us8wg8AED2J_L8qq_mtiSSbXZuXu90q0jYqVqRiHK6",
         ),
+        SmartContractInteraction(
+            "One-time interaction",
+            "EQCMK0ZsnOTO5d6afpYkAf7c5OeijrwV3Nb6JuVK5p1yW4Co",
+        ), 
     ],
 )
