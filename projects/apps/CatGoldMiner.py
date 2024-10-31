@@ -28,7 +28,7 @@ CatGoldMiner = App(
         ),
         SmartContractInteraction(
             "In-app purchasing 2", 
-            address="UQDJKT8SSV-hSylEtdse0YM5YxPyOtEDDu7SBvpf5tUJEFqw",
+            address="EQDJKT8SSV-hSylEtdse0YM5YxPyOtEDDu7SBvpf5tUJEAd1",
         )
     ]
 )
