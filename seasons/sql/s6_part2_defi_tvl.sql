@@ -40,8 +40,21 @@ jvault_pools as (
  join jvault_pool_tvls using(pool_address)
  group by 1
 ), settleton_pools as (
-  select address as pool_address from jetton_masters jm where 
-  code_hash ='BfWQzLvuCKusWfxaQs48Xp+Nf+jUIBN8BVrU0li7qXI='
+  select upper('0:64216a0ead5819dca7d1719fc912cfa6673665a1c5fcf7338ca5b2ce65f12f80') as pool_address
+  union all
+  select upper('0:9be109c3d18d14d6f271f1c311831aef109c2f02062f504726af26ba707f0292') as pool_address
+  union all
+  select upper('0:f26a93829fdf8448a4ed3cce22a7c92433be18fb668e63cf048a96c5b27fffaa') as pool_address
+  union all
+  select upper('0:ab9d7bda5f91c06fc3cf737acfed24b63080a65db1b5e95400d503a24c047ed5') as pool_address
+  union all
+  select upper('0:3848b9a49c1d1a8e9c7101e5a3a80a5638ba968d52882bf34ef4c8eb4090cc60') as pool_address
+  union all
+  select upper('0:56f5e805e4e407d61a20ad94c83e3aaefa0854be28c633f658aca4c679f8c5e7') as pool_address
+  union all
+  select upper('0:dacaea937930943b921d18c34da7ed31d95c5ec17948b2246554b2c6422b2747') as pool_address
+  union all
+  select upper('0:5b46607213a02eec4061be961e41f69a6bfdb4ccb56b2a7ae5d38d25b42eff1d') as pool_address
 ), settleton_pool_tvls as (
  select pool_address, 
   coalesce (sum( (select tvl_usd / total_supply from prices.dex_pool_history dph where pool = jetton_master and timestamp < 1730286000 order by timestamp desc limit 1) * balance), 0)
@@ -66,10 +79,25 @@ jvault_pools as (
    join settleton_pools on pool_address = b.jetton_master
    group by 1
    having sum(balance) > 0
+), settleton_index_pools as (
+ select p.pool_address, balance * tvls.value_usd / supply.total_supply
+   as value_usd
+   from wallets_end b
+   join settleton_pools p on p.pool_address = b."owner"
+   join settleton_pool_tvls tvls on tvls.pool_address = b.jetton_master
+   join settleton_total_supply supply on supply.pool_address = tvls.pool_address
+--   group by 1
+), settleton_pools_tvl_2_flat as (
+ select pool_address, value_usd from settleton_pool_tvls
+union all
+select pool_address, value_usd from settleton_index_pools
+), settleton_pools_tvl_2 as (
+ select pool_address, sum(value_usd) as value_usd from settleton_pools_tvl_2_flat
+ group by 1
 ), settleton_impact as (
  select address, sum(value_usd * balance_delta / total_supply) as tvl_impact from settleton_balances_delta
  join settleton_total_supply using(pool_address)
- join settleton_pool_tvls using(pool_address)
+ join settleton_pools_tvl_2 using(pool_address)
  group by 1
 ), daolama_tvl as (
 select balance * (select price from prices.ton_price where price_ts < 1730286000 order by price_ts desc limit 1) / 1e9 as tvl_usd 

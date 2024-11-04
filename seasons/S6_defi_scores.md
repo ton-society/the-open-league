@@ -50,8 +50,10 @@ considered as LPs. Total amount of TVL for each pool is a sum of all tokens and 
 
 ### SettleTon
 
-All pools are jettons with the same code_hash - ``BfWQzLvuCKusWfxaQs48Xp+Nf+jUIBN8BVrU0li7qXI=``. These
-pools are holding DEX LP tokens which are producing TVL. 
+All pools are jettons but it is impossible to get the list of pools by code_hash because
+there were updates during the season. So we are using explicit list of pools hard-coded in the query.
+Also some pools are aggregating TVL from other pools and we aggregating its TVL into single pool.
+The pools are holding DEX LP tokens which are producing TVL. 
 
 ### Parraton
 
