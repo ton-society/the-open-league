@@ -1,3 +1,4 @@
+from models.metrics.nft_activity import NFTActivity
 from models.metrics.smc_interaction import SmartContractInteraction
 from models.project import App
 
