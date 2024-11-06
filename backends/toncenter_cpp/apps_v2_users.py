@@ -68,8 +68,8 @@ class ToncenterCppAppBackendV2Users(CalculationBackend):
         TOKENS = "\nunion all\n".join(TOKENS)
         PROJECT_NFTS = "\nunion all\n".join(PROJECT_NFTS)
 
-        balances_table = "public.jetton_wallets"        
-        nft_table = "public.nft_items"
+        balances_table = "tol.jetton_wallets_S6_end_normie"        
+        nft_table = "tol.nft_items_s6_end"
 
 
         logger.info("Running backend for App leaderboard SQL generation")
