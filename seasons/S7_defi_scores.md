@@ -1,7 +1,8 @@
 # S7 DeFi Users scores
 
-S7 DeFi consists of two squads: the Volume Squad and the TVL Squad. Each squad has a different scoring system.
-Both squads requires explicit enrollement with Degen SBT. SBT Collection address is [TODO](TODO),
+S7 DeFi consists of two squads: the Volume Squad and the TVL Squad. Overall user score is a sum of points from both squads.
+Minimum amount of volume/TVL and points per each action could be found in the [Points system](#points-system) section.
+To be eligible for the competition user has to pass explicit enrollement with Degen SBT. SBT Collection address is [TODO](TODO),
 full list of participants could be obtained with the help of [SBTEnrollmentSync](../backends/sbt_enrollment.py).
 
 All queries provided below works with postgres DB produced by [TON-ETL](https://github.com/re-doubt/ton-etl).
@@ -10,12 +11,13 @@ All queries provided below works with postgres DB produced by [TON-ETL](https://
 ## Volume Squad
 
 User score is calculated as a trading volume in any of target projects nominated in USD. Trading volume is calculated
-during the period of the season. Methodology details for each projects:
+during the period of the season. Minimum amount of volume to be eligible for receiving points is 20 USD.
+Methodology details for each projects:
 
 ### RainbowSwap
 
 Includes all trades on any dex in case of transaction chain includes a swap with referrall address [UQBBPVrn4Y6F0Fci4j0mXuSAXmRDeE-nZCRIInQsNC9__8vG](https://tonviewer.com/EQBBPVrn4Y6F0Fci4j0mXuSAXmRDeE-nZCRIInQsNC9__5YD).
-Volume is estimated for all swaps with TON, staked TON  or USDT according to the methodology from [TON-ETL](https://github.com/re-doubt/ton-etl/blob/main/parser/parsers/message/swap_volume.py).
+Volume is estimated for all swaps with TON, staked TON or USDT according to the methodology from [TON-ETL](https://github.com/re-doubt/ton-etl/blob/main/parser/parsers/message/swap_volume.py).
 
 ### GasPump
 
@@ -27,8 +29,9 @@ Full list of volume generating transaction and eligible users could be obtained 
 
 ## TVL Squad
 
-User score is calculated as a total increase of its position locked in all protocols. Initially position
+User score is calculated as a total increase of its position locked in each protocols. Initially position
 is calulcated in tokens and converted to USD based on the price of the token at the time of the season end.
+Minimum amount of TVL increase to be eligible for receiving points is 20 USD.
 
 ### JVault
 
@@ -38,8 +41,7 @@ considered as LPs. Total amount of TVL for each pool is a sum of all tokens and 
 
 ### SettleTon
 
-All pools are jettons but it is impossible to get the list of pools by code_hash because
-there were updates during the season. So we are using explicit list of pools hard-coded in the query.
+All pools are jettons, full list of pools provided in the [query](sql/s7_defi_tvl.sql) (see `settleton_pools` CTE).
 Also some pools are aggregating TVL from other pools and we aggregating its TVL into single pool.
 The pools are holding DEX LP tokens which are producing TVL. 
 
@@ -50,11 +52,13 @@ pools are holding DEX LP tokens which are producing TVL.
 
 ###  DAOLama
 
-TVL is amount of TON on [main contract address](https://tonviewer.com/EQCkeTvOSTBwBtP06X2BX7THj_dlX67PhgYRGuKfjWtB9FVb).
+Total TVL is amount of TON on [main contract address](https://tonviewer.com/EQCkeTvOSTBwBtP06X2BX7THj_dlX67PhgYRGuKfjWtB9FVb).
+Main contract also serves as a LP token.
 
 ### TON Hedge
 
-TVL is amount of TON on [main contract address](https://tonviewer.com/EQBXZo11H4wUq3azWDphoUhlV710a-7rvUsqZUGLP9tUcf37).
+TVL is amount of USDT on [main contract address](https://tonviewer.com/EQBXZo11H4wUq3azWDphoUhlV710a-7rvUsqZUGLP9tUcf37).
+Main contract also serves as a LP token.
 
 ### TON Pools
 
@@ -74,7 +78,7 @@ TVL originated after tsTON/stTON/hTON deposits, so it is a sum of all tsTON/stTO
 Full list of participants and their impact on TVL could be obtained by [this query](sql/s7_defi_tvl.sql).
 
 
-### Points system
+## Points system
 
 |DeFi Protocol name | Squad | Points per each 20 USD|
 |:-|:-|-:|
