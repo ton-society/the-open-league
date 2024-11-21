@@ -72,3 +72,20 @@ TVL originated after tsTON/stTON/hTON deposits, so it is a sum of all tsTON/stTO
 
 
 Full list of participants and their impact on TVL could be obtained by [this query](sql/s7_defi_tvl.sql).
+
+
+### Points system
+
+|DeFi Protocol name | Squad | Points per each 20 USD|
+|:-|:-|-:|
+|Rainbow Swap|Volume|1|
+|DEX Diamonds|Volume|1|
+|GasPump|Volume|5|
+|Aqua protocol|TVL|15|
+|JVault|TVL|10|
+|DAOLama|TVL|15|
+|Parraton|TVL|10|
+|SettleTON|TVL|10|
+|TonPools|TVL|10|
+|TonStable|TVL|15|
+|TON Hedge|TVL|10|
