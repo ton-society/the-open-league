@@ -56,6 +56,28 @@ with wallets_start as (
   select upper('0:dacaea937930943b921d18c34da7ed31d95c5ec17948b2246554b2c6422b2747') as pool_address
   union all
   select upper('0:5b46607213a02eec4061be961e41f69a6bfdb4ccb56b2a7ae5d38d25b42eff1d') as pool_address
+  union all
+  select upper('0:df2807a89cb6f0f7244847e632a8c4dee6cee7262006a7c3699d696b092040d4') as pool_address
+  union all
+  select upper('0:46f82bf7286a7fd8b98e902d6b9eab96133480d342531dd7702c33eb500e3fe0') as pool_address
+  union all
+  select upper('0:7098c2ce780f9e6e9fcb2d360acf3c7f26b2a8011d1728f1228409161f994789') as pool_address
+  union all
+  select upper('0:5c064c8c55cec93d4e11ec88d3e77eeec447bd42b447f546622a97b0cd2fb66b') as pool_address
+  union all
+  select upper('0:6fb0bc1362a2657e4414de30b85c13b0979ae0dd6107ed969f07500f3906b18d') as pool_address
+  union all
+  select upper('0:383f2398283cb4bc150e2fd5ff07a8d02473d24c2f270874fb5f8c5b32c3c4e2') as pool_address
+  union all
+  select upper('0:5aad6a9987a2873a27a2a56119b5830e0566e290987eda152ac3f9e54e018c1c') as pool_address
+  union all
+  select upper('0:ab1daca81fd47d1011d4d0f97c1249f3c52ccf12e4f7123cd093c5efa133827e') as pool_address
+  union all
+  select upper('0:9a194987dbcdcbd4d6002cdbbfa122acce374ccf6df980c7bc4dd0fe89641bf2') as pool_address
+  union all
+  select upper('0:ba1ea6fa87180612b099cc45941845d7350f79584587b946cdf112896af80bc0') as pool_address
+  union all
+  select upper('0:8f489b18da9924d32f04d3edd1266896afe834ec4dcd7e60d109ab8cc381add0') as pool_address
 ), settleton_pool_tvls as (
  select pool_address, 
   coalesce (sum( (select tvl_usd / total_supply from prices.dex_pool_history dph where pool = jetton_master and timestamp < 1734433200 order by timestamp desc limit 1) * balance), 0)
