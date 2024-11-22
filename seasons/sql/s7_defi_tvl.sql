@@ -240,6 +240,12 @@ order by now desc limit 1)
   where (jetton_master_address = upper('0:cd872fa7c5816052acdf5332260443faec9aacc8c21cca4d92e7f47034d11892') 
   or jetton_master_address = upper('0:bdf3fa8098d129b54b4f73b5bac5d1e1fd91eb054169c3916dfc8ccd536d1000')
   or jetton_master_address = upper('0:cf76af318c0872b58a9f1925fc29c156211782b9fb01f56760d292e56123bf87')
+  or jetton_master_address = upper('0:aa0ba121449feda569e02b12fa755d24e834a7454aecf4649590b6df742aac8f')
+  or jetton_master_address = upper('0:8d636010dd90d8c0902ac7f9f397d8bd5e177f131ee2cca24ce894f15d19ceea')
+  or jetton_master_address = upper('0:aea78c710ae94270dc263a870cf47b4360f53cc5ed38e3db502e9e9afb904b11')
+  or jetton_master_address = upper('0:3e5ffca8ddfcf36c36c9ff46f31562aab51b9914845ad6c26cbde649d58a5588')
+  or jetton_master_address = upper('0:6487b31ce35d564d8174a34f3932dc09a58a6f1a164e301a61848173129ce554')
+  or jetton_master_address = upper('0:a6f76cc50642defea7050e9ed606f23a245483b26e166c33ef67bc4d77b9cf2f')
   )
   and tx_now  >= 1732705200 and tx_now < 1734433200 
   and (
