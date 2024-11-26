@@ -19,13 +19,32 @@ Methodology details for each projects:
 Includes all trades on any dex in case of transaction chain includes a swap with referrall address [UQBBPVrn4Y6F0Fci4j0mXuSAXmRDeE-nZCRIInQsNC9__8vG](https://tonviewer.com/EQBBPVrn4Y6F0Fci4j0mXuSAXmRDeE-nZCRIInQsNC9__5YD).
 Volume is estimated for all swaps with TON, staked TON or USDT according to the methodology from [TON-ETL](https://github.com/re-doubt/ton-etl/blob/main/parser/parsers/message/swap_volume.py).
 
-### RainbowSwap
+### DEX Diamonds
 
 The same methodology as for RainbowSwap, but with referral address [EQDZlJorSoB4cRJ5b8gt0qR4bkLfzVDVXe5SmMPcEl0TBNYv](https://tonviewer.com/EQDZlJorSoB4cRJ5b8gt0qR4bkLfzVDVXe5SmMPcEl0TBNYv).
 
 ### GasPump
 
 Volume includes trades extracted from [Gaspump events](https://github.com/re-doubt/ton-etl/blob/main/parser/parsers/message/gaspump.py). USD value is calculated as a product of trade amount and price of TON at the time of trade.
+
+### swap.coffee
+
+The same methodology as for RainbowSwap, but with list of referral addresses:
+* UQCZ_pV6EJNSr6XpvPaa-IVkT6ImqkiPftRMOICJP1B_78Hc
+* UQA8OiygwLotKehQvp285LjTvVsTj6OuHZxEDxxTo6PlJWYA
+* UQCoFIQulMX1WciLYp7PUrxFqzIfsaUNo_FLDy1nDD0akyqT
+* UQCo2ftIP6_GV9D1BPEctJmrSpyWE0i7Duv9VUKrUgKb-ycW
+* UQAZoipwVLWfqgIklSmsKRbmRn-SOHlddH7L6MStlrP1hqTY
+* UQD_uBfQr0Rr2_gbBVlDEgCb6CJ-dkoTKs7RCKeZytffxVY6
+* UQCyW2VKRoUcVUXl9pc9AV5prdrQa97MMUr5tNNvDtEh6tEy
+* UQBVdtzxVLDvdK4MO5goiNeGXJ4m0fsD38u2bo_99_yKN4zK
+* UQCboL33t5GC9A8QDbxP7wqR0hIVOhDmAQwD0nJWC2e6T17t
+* UQDpBMtznS0tXtOsh-dHbCkdp49Reh96JHxitxDSLPUAUHLx
+* UQAG_gX-oEBVLOAJDPqak6U_7Pdjm3H460q-2-g5jJqYt8TA
+* UQC2fgcn74hlpvCxbVdtZ5gTVSOWHXYHVGXbqC9uB5JBQW_f
+* UQCXCdHQu9HQN-fEITMUPVA8IcEB5z0UMkXlNi2mL6hlNBOr
+* UQCTd7dmlSgjcjVbWPOcldoeXBgP6NmZcRnpQIWliobe3xk5
+* UQAIXBvCyFYdTTXdjgNec5vy-9Tjnqsw_lJ-RFJyA25Mr9M8
 
 
 Full list of volume generating transaction and eligible users could be obtained using [the following query](sql/s7_defi_volume.sql).
@@ -89,6 +108,7 @@ Full list of participants and their impact on TVL could be obtained by [this que
 |Rainbow Swap|Volume|1|
 |DEX Diamonds|Volume|1|
 |GasPump|Volume|5|
+|swap.coffee|Volume|1|
 |Aqua protocol|TVL|15|
 |JVault|TVL|10|
 |DAOLama|TVL|15|
