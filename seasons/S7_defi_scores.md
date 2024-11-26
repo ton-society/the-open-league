@@ -46,6 +46,10 @@ The same methodology as for RainbowSwap, but with list of referral addresses:
 * UQCTd7dmlSgjcjVbWPOcldoeXBgP6NmZcRnpQIWliobe3xk5
 * UQAIXBvCyFYdTTXdjgNec5vy-9Tjnqsw_lJ-RFJyA25Mr9M8
 
+### Memepads
+
+Volume includes trades extracted from [TONFun events](https://github.com/re-doubt/ton-etl/blob/main/parser/parsers/message/tonfun.py) for projects: TONPump by HOT Wallet, Blum, BigPump by PocketFi, Wagmi. USD value is calculated as a product of trade amount and price of TON at the time of trade.
+
 
 Full list of volume generating transaction and eligible users could be obtained using [the following query](sql/s7_defi_volume.sql).
 
@@ -114,6 +118,10 @@ Full list of participants and their impact on TVL could be obtained by [this que
 |DEX Diamonds|Volume|1|
 |GasPump|Volume|5|
 |swap.coffee|Volume|1|
+|TONPump by HOT Wallet|Volume|5|
+|Blum|Volume|5|
+|BigPump by PocketFi|Volume|5|
+|Wagmi|Volume|5|
 |Aqua protocol|TVL|15|
 |JVault|TVL|10|
 |DAOLama|TVL|15|
