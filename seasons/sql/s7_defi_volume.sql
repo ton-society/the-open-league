@@ -60,6 +60,26 @@ with swaps as (
 ), swapcoffee_points as (
   select address, floor(sum(volume_usd) / 20.) * 1 as points from swapcoffee_swaps
   group by 1
+), memepads_projects as (
+  select 'TONPump by HOT Wallet' as project, upper('0:71ae4a9bf6c55518156a349cc95bd94370ac2186079a9a404936dd678e0a3fb5') as partner_address
+  union all
+  select 'Blum' as project, upper('0:c2705ca692beefa522895cc0522c3ca88c95d32298e427583e66319c211090ea') as partner_address
+  union all
+  select 'BigPump by PocketFi' as project, upper('0:3ddbd4759309d89ca5e5d3b5cff3071c70c2f49cd27ea96d01b5f0094264ae95') as partner_address
+  union all
+  select 'Wagmi' as project, upper('0:4ad7249b18ed2bcd96efe6f8e3d0dedcdf3d17678f8faaee2e5c305ef3618564') as partner_address
+), memepads_trades as (
+  select project, tx_hash, trader_address as address, 
+  ton_amount / 1e9 * (select price from prices.ton_price where price_ts < event_time order by price_ts desc limit 1) as volume_usd
+  from parsed.tonfun_bcl_trade
+  join memepads_projects using (partner_address)
+  where event_time >= 1732705200 and event_time < 1734433200
+), memepads_project_points as (
+  select project, address, floor(sum(volume_usd) / 20.) * 5 as points from memepads_trades
+  group by 1, 2
+), memepads_points as (
+  select address, sum(points) as points from memepads_project_points
+  group by 1
 ), degens as (
   select distinct address, 1 as degen from tol.enrollment_degen ed 
 ), volume_points as (
@@ -70,6 +90,8 @@ with swaps as (
   select * from gaspump_points
   union all
   select * from swapcoffee_points
+  union all
+  select * from memepads_points
 )
 select address, sum(points) as points from volume_points
 join degens using(address)
