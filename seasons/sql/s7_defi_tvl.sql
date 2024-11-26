@@ -236,6 +236,28 @@ order by now desc limit 1)
 ), aqua_impact as (
   select address, floor(sum(tvl_usd) / 20.) * 15 as tvl_impact from aqua_flow
   group by 1
+), swapcoffee_jettons as (
+  select upper('0:a5d12e31be87867851a28d3ce271203c8fa1a28ae826256e73c506d94d49edad') as jetton_master_address
+  union all
+  select upper('0:123e245683bd5e93ae787764ebf22291306f4a3fcbb2dcfcf9e337186af92c83') as jetton_master_address
+  union all
+  select upper('0:6a839f7a9d6e5303d71f51e3c41469f2c35574179eb4bfb420dca624bb989753') as jetton_master_address
+), swapcoffee_flow as (
+  select "source" as address,
+  case
+    when jetton_master_address = upper('0:a5d12e31be87867851a28d3ce271203c8fa1a28ae826256e73c506d94d49edad') then
+      coalesce((select price_usd from prices.agg_prices ap where ap.base = jetton_master_address and price_time < 1734433200 order by price_time desc limit 1) * jt.amount / 1e6, 0)
+    else
+      coalesce((select jt.amount * tvl_usd / total_supply from prices.dex_pool_history dph where pool = jetton_master_address and "timestamp" < 1734433200 order by "timestamp" desc limit 1), 0)
+  end as tvl_usd
+  from jetton_transfers jt 
+  join swapcoffee_jettons using(jetton_master_address)
+  where destination = upper('0:29f90533937d696105883b981e9427d1ae411eef5b08eab83f4af89c495d27df')
+  and not tx_aborted
+  and tx_now >= 1732705200 and tx_now < 1734433200
+), swapcoffee_impact as (
+  select address, floor(sum(tvl_usd) / 20.) * 10 as tvl_impact from swapcoffee_flow
+  group by 1
 ), all_projects_impact as (
  select 'jVault' as project, * from jvault_impact
    union all
@@ -248,10 +270,12 @@ order by now desc limit 1)
  select 'TONPools' as project, * from tonpools_impact
    union all
  select 'Parraton' as project, * from parraton_impact
-    union all
+   union all
  select 'TONStable' as project, * from tonstable_impact
-    union all
+   union all
  select 'Aqua' as project, * from aqua_impact
+   union all
+ select 'swap.coffee' as project, * from swapcoffee_impact
 ), all_projects_degen_only as (
 select p.* from all_projects_impact p
 join tol.enrollment_degen ed on ed.address = p.address

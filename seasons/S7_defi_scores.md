@@ -97,6 +97,11 @@ TVL originated after tsTON/stTON deposits, so it is a sum of all tsTON/stTON tra
 TVL originated after tsTON/stTON/hTON deposits, so it is a sum of all tsTON/stTON/hTON transfers by the users to 
 [the project smart-contract](https://tonviewer.com/EQAWDyxARSl3ol2G1RMLMwepr3v6Ter5ls3jiAlheKshgg0K)
 
+### swap.coffee
+
+TVL originated after CES/Ston.fi CES-TON LP/DeDust CES-TON LP deposits, so it is a sum of all transfers CES/Ston.fi CES-TON LP/DeDust CES-TON LP by the users to 
+[the project smart-contract](https://tonviewer.com/EQAp-QUzk31pYQWIO5gelCfRrkEe71sI6rg_SvicSV0n31rf)
+
 
 Full list of participants and their impact on TVL could be obtained by [this query](sql/s7_defi_tvl.sql).
 
@@ -117,3 +122,4 @@ Full list of participants and their impact on TVL could be obtained by [this que
 |TonPools|TVL|10|
 |TonStable|TVL|15|
 |TON Hedge|TVL|10|
+|swap.coffee|TVL|10|
