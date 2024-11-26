@@ -258,6 +258,56 @@ order by now desc limit 1)
 ), swapcoffee_impact as (
   select address, floor(sum(tvl_usd) / 20.) * 10 as tvl_impact from swapcoffee_flow
   group by 1
+), coffin_assets as (
+  select 'TON' as symbol,
+  '0:1A4219FE5E60D63AF2A3CC7DCE6FEC69B45C6B5718497A6148E7C232AC87BD8A' as asset_id,
+  '0:0000000000000000000000000000000000000000000000000000000000000000' as jetton_address
+  union all
+  select 'USDT' as symbol,
+  '0:CA9006BD3FB03D355DAEEFF93B24BE90AFAA6E3CA0073FF5720F8A852C933278' as asset_id,
+  '0:B113A994B5024A16719F69139328EB759596C38A25F59028B146FECDC3621DFE' as jetton_address
+  union all
+  select 'HYDRA' as symbol,
+  '0:EC96F4CFD28C381277B7A2A796F0FF91DC8D93ECDDF9C8E8D570473B5900BCDD' as asset_id,
+  '0:F83F7D94D74B2736821ABE8ABA7183D3411F367B00233B6D1EA6282B59102EA7' as jetton_address
+  union all
+  select 'GRAM' as symbol,
+  '0:EA9873AB493D0C43D24D89EE1F96080B91521D3C6AE0E0199A673FFEF92E2021' as asset_id,
+  '0:B8EF4F77A17E5785BD31BA4DA50ABD91852F2B8FEBEE97AD6EE16D941F939198' as jetton_address
+  union all
+  select 'ANON' as symbol,
+  '0:6E0DB23E574A1AB873107C341EFBC5FA22616D3EECB1CECFAC12B9D22589C203' as asset_id,
+  '0:EFFB2AF8D7F099DAEAE0DA07DE8157DAE383C33E320AF45F8C8A510328350886' as jetton_address
+  union all
+  select 'durev' as symbol,
+  '0:5FF06029CA6BABEDB1633E6081A63944086058E3DD3681FDE6F292729B14B096' as asset_id,
+  '0:74D8327471D503E2240345B06FE1A606DE1B5E3C70512B5B46791B429DAB5EB1' as jetton_address
+), coffin_prices as (
+  select asset_id, 
+  case 
+  	when symbol = 'TON' then (select price from prices.ton_price p where p.price_ts < 1734433200 order by price_ts desc limit 1) / 1e3
+  	when symbol = 'USDT' then 1
+  	else (select price_usd from prices.agg_prices ap 
+  	  where ap.base = jetton_address and price_time < 1734433200 order by price_time desc limit 1)
+  end as price
+  from coffin_assets
+), coffin_events as (
+  select tx_hash, owner_address as address, asset_id, amount from parsed.evaa_supply es
+  where pool_address = '0:68CF02950F26BD20BDCAC38991E40429878CA8D7912E31DC97F272E58DE694C6'
+  and utime >= 1732705200 and utime < 1734433200
+  union all 
+  select tx_hash, owner_address, asset_id, -amount from parsed.evaa_withdraw ew
+  where pool_address = '0:68CF02950F26BD20BDCAC38991E40429878CA8D7912E31DC97F272E58DE694C6'
+  and utime >= 1732705200 and utime < 1734433200
+), coffin_totals as (
+  select address, asset_id, sum(amount * price / 1e6) as volume_usd
+  from coffin_events
+  join coffin_prices using (asset_id)
+  group by 1, 2
+), coffin_impact as (
+  select address, floor(sum(volume_usd) / 20.) * 20 as tvl_impact
+  from coffin_totals
+  group by 1
 ), all_projects_impact as (
  select 'jVault' as project, * from jvault_impact
    union all
@@ -276,6 +326,8 @@ order by now desc limit 1)
  select 'Aqua' as project, * from aqua_impact
    union all
  select 'swap.coffee' as project, * from swapcoffee_impact
+   union all
+ select 'Coffin' as project, * from coffin_impact
 ), all_projects_degen_only as (
 select p.* from all_projects_impact p
 join tol.enrollment_degen ed on ed.address = p.address

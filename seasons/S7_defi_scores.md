@@ -131,3 +131,4 @@ Full list of participants and their impact on TVL could be obtained by [this que
 |TonStable|TVL|15|
 |TON Hedge|TVL|10|
 |swap.coffee|TVL|10|
+|Coffin|TVL|20|
