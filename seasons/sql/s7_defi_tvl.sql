@@ -35,7 +35,7 @@ with wallets_start as (
    group by 1
    having sum(balance) > 0
 ), jvault_impact as (
- select address, floor(sum(value_usd * balance_delta / total_supply) / 20.) * 10 as tvl_impact from jvault_balances_delta
+ select address, floor(sum(value_usd * balance_delta / total_supply) / 20.) * 5 as tvl_impact from jvault_balances_delta
  join jvault_total_supply using(lp_master)
  join jvault_lp_tokens using(lp_master)
  join jvault_pool_tvls using(pool_address)
@@ -122,7 +122,7 @@ order by now desc limit 1)
    from wallets_end b
    where b.jetton_master = upper('0:a4793bce49307006d3f4e97d815fb4c78ff7655faecf8606111ae29f8d6b41f4')
 ), daolama_impact as (
- select address, floor(sum((select tvl_usd from daolama_tvl) * balance_delta / (select total_supply from daolama_total_supply)) / 20.) * 15 as tvl_impact from daolama_balances_delta
+ select address, floor(sum((select tvl_usd from daolama_tvl) * balance_delta / (select total_supply from daolama_total_supply)) / 20.) * 10 as tvl_impact from daolama_balances_delta
  group by 1
 ), tonhedge_tvl as (
  select balance / 1e6 as tvl_usd from wallets_end
@@ -256,7 +256,7 @@ order by now desc limit 1)
   and not tx_aborted
   and tx_now >= 1732705200 and tx_now < 1734433200
 ), swapcoffee_impact as (
-  select address, floor(sum(tvl_usd) / 20.) * 10 as tvl_impact from swapcoffee_flow
+  select address, floor(sum(tvl_usd) / 20.) * 5 as tvl_impact from swapcoffee_flow
   group by 1
 ), coffin_assets as (
   select 'TON' as symbol,
@@ -305,7 +305,7 @@ order by now desc limit 1)
   join coffin_prices using (asset_id)
   group by 1, 2
 ), coffin_impact as (
-  select address, floor(sum(volume_usd) / 20.) * 20 as tvl_impact
+  select address, floor(sum(volume_usd) / 20.) * 10 as tvl_impact
   from coffin_totals
   group by 1
 ),
@@ -373,7 +373,7 @@ pton_transfers as (
   select owner_address, amount_usd from jetton_liquidity_transfers where amount_usd is not null
 ), tonco_impact as (
   -- final calculation of impact
-  select owner_address as address, floor(sum(amount_usd) / 20.) * 11 as tvl_impact
+  select owner_address as address, floor(sum(amount_usd) / 20.) * 10 as tvl_impact
   from liquidity_transfers group by 1
 ), all_projects_impact as (
  select 'jVault' as project, * from jvault_impact
