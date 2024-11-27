@@ -361,7 +361,7 @@ tonco_collections as (
       tp.price_ts < m.created_at order by tp.price_ts desc limit 1) 
     as amount_usd  from trace_edges te -- using trace_adges to get all messages
     join messages m  on m.tx_hash  =te.left_tx and direction = 'in'
-    where te.trace_id = unique_traces.trace_id 
+    where te.trace_id = tonco_unique_traces.trace_id 
   and opcode = 32736093 -- 0x01f3835d
   ) as amount_usd
   from tonco_unique_traces
