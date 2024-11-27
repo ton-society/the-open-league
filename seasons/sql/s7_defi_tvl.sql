@@ -1,8 +1,4 @@
-with wallets_start as (
-  select distinct on(address) address, tx_lt, jetton_master, "owner", balance from parsed.jetton_wallet_balances 
-  where tx_lt < 51063176000000 -- TODO change to start of season 
-  order by address, tx_lt desc
-), wallets_end as (
+with wallets_end as (
   select address, last_transaction_lt as tx_lt, jetton as jetton_master, "owner", balance from jetton_wallets
 ), jvault_pools as (
  select address as pool_address from nft_items ni where collection_address =upper('0:184b700ed8d685af9fb0975094f103220b1acfd0e117627f368aa9ee493f452a')
@@ -18,7 +14,7 @@ with wallets_start as (
 ), jvault_lp_tokens as (
    select jm.address as lp_master, pool_address from jetton_masters jm join jvault_pools p on p.pool_address =admin_address
 ), jvault_balances_before as (
- select ed.address, lp_master, balance from wallets_start b
+ select ed.address, lp_master, balance from tol.s7_defi_wallets_start b
  join tol.enrollment_degen ed on ed.address = b."owner"
  join jvault_lp_tokens on lp_master = b.jetton_master
 ), jvault_balances_after as (
@@ -64,7 +60,7 @@ with wallets_start as (
    join settleton_pools p on p.pool_address = b."owner"
    group by 1
 ), settleton_balances_before as (
- select ed.address, pool_address, balance from wallets_start b
+ select ed.address, pool_address, balance from tol.s7_defi_wallets_start b
  join tol.enrollment_degen ed on ed.address = b."owner"
  join settleton_pools on pool_address = b.jetton_master
 ), settleton_balances_after as (
@@ -107,7 +103,7 @@ select account_state_hash_after from transactions where account = upper('0:a4793
 and now < 1734433200
 order by now desc limit 1)
 ), daolama_balances_before as (
- select ed.address, balance from wallets_start b
+ select ed.address, balance from tol.s7_defi_wallets_start b
  join tol.enrollment_degen ed on ed.address = b."owner"
  where b.jetton_master = upper('0:a4793bce49307006d3f4e97d815fb4c78ff7655faecf8606111ae29f8d6b41f4')
 ), daolama_balances_after as (
@@ -129,7 +125,7 @@ order by now desc limit 1)
  where owner = upper('0:57668d751f8c14ab76b3583a61a1486557bd746beeebbd4b2a65418b3fdb5471')
  and jetton_master = '0:B113A994B5024A16719F69139328EB759596C38A25F59028B146FECDC3621DFE'
 ), tonhedge_balances_before as (
- select ed.address, balance from wallets_start b
+ select ed.address, balance from tol.s7_defi_wallets_start b
  join tol.enrollment_degen ed on ed.address = b."owner"
  where b.jetton_master = upper('0:57668d751f8c14ab76b3583a61a1486557bd746beeebbd4b2a65418b3fdb5471')
 ), tonhedge_balances_after as (
@@ -175,7 +171,7 @@ order by now desc limit 1)
    join parraton_pools p on p.pool_address = b."owner"
    group by 1
 ), parraton_balances_before as (
- select ed.address, pool_address, balance from wallets_start b
+ select ed.address, pool_address, balance from tol.s7_defi_wallets_start b
  join tol.enrollment_degen ed on ed.address = b."owner"
  join parraton_pools on pool_address = b.jetton_master
 ), parraton_balances_after as (
