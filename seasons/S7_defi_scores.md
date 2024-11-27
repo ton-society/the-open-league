@@ -19,10 +19,6 @@ Methodology details for each projects:
 Includes all trades on any dex in case of transaction chain includes a swap with referrall address [UQBBPVrn4Y6F0Fci4j0mXuSAXmRDeE-nZCRIInQsNC9__8vG](https://tonviewer.com/EQBBPVrn4Y6F0Fci4j0mXuSAXmRDeE-nZCRIInQsNC9__5YD).
 Volume is estimated for all swaps with TON, staked TON or USDT according to the methodology from [TON-ETL](https://github.com/re-doubt/ton-etl/blob/main/parser/parsers/message/swap_volume.py).
 
-### DEX Diamonds
-
-The same methodology as for RainbowSwap, but with referral address [EQDZlJorSoB4cRJ5b8gt0qR4bkLfzVDVXe5SmMPcEl0TBNYv](https://tonviewer.com/EQDZlJorSoB4cRJ5b8gt0qR4bkLfzVDVXe5SmMPcEl0TBNYv).
-
 ### GasPump
 
 Volume includes trades extracted from [Gaspump events](https://github.com/re-doubt/ton-etl/blob/main/parser/parsers/message/gaspump.py). USD value is calculated as a product of trade amount and price of TON at the time of trade.
@@ -128,7 +124,6 @@ Full list of participants and their impact on TVL could be obtained by [this que
 |DeFi Protocol name | Squad | Points per each 20 USD|
 |:-|:-|-:|
 |Rainbow Swap|Volume|1|
-|DEX Diamonds|Volume|1|
 |GasPump|Volume|5|
 |swap.coffee|Volume|1|
 |TONPump by HOT Wallet|Volume|5|
