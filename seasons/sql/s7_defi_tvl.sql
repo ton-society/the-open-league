@@ -35,7 +35,7 @@ with wallets_start as (
    group by 1
    having sum(balance) > 0
 ), jvault_impact as (
- select address, floor(sum(value_usd * balance_delta / total_supply) / 20.) * 10 as tvl_impact from jvault_balances_delta
+ select address, floor(sum(value_usd * balance_delta / total_supply) / 20.) * 5 as tvl_impact from jvault_balances_delta
  join jvault_total_supply using(lp_master)
  join jvault_lp_tokens using(lp_master)
  join jvault_pool_tvls using(pool_address)
@@ -122,7 +122,7 @@ order by now desc limit 1)
    from wallets_end b
    where b.jetton_master = upper('0:a4793bce49307006d3f4e97d815fb4c78ff7655faecf8606111ae29f8d6b41f4')
 ), daolama_impact as (
- select address, floor(sum((select tvl_usd from daolama_tvl) * balance_delta / (select total_supply from daolama_total_supply)) / 20.) * 15 as tvl_impact from daolama_balances_delta
+ select address, floor(sum((select tvl_usd from daolama_tvl) * balance_delta / (select total_supply from daolama_total_supply)) / 20.) * 10 as tvl_impact from daolama_balances_delta
  group by 1
 ), tonhedge_tvl as (
  select balance / 1e6 as tvl_usd from wallets_end
@@ -256,7 +256,7 @@ order by now desc limit 1)
   and not tx_aborted
   and tx_now >= 1732705200 and tx_now < 1734433200
 ), swapcoffee_impact as (
-  select address, floor(sum(tvl_usd) / 20.) * 10 as tvl_impact from swapcoffee_flow
+  select address, floor(sum(tvl_usd) / 20.) * 5 as tvl_impact from swapcoffee_flow
   group by 1
 ), coffin_assets as (
   select 'TON' as symbol,
@@ -305,7 +305,7 @@ order by now desc limit 1)
   join coffin_prices using (asset_id)
   group by 1, 2
 ), coffin_impact as (
-  select address, floor(sum(volume_usd) / 20.) * 20 as tvl_impact
+  select address, floor(sum(volume_usd) / 20.) * 10 as tvl_impact
   from coffin_totals
   group by 1
 ),
@@ -373,8 +373,39 @@ pton_transfers as (
   select owner_address, amount_usd from jetton_liquidity_transfers where amount_usd is not null
 ), tonco_impact as (
   -- final calculation of impact
-  select owner_address as address, floor(sum(amount_usd) / 20.) * 11 as tvl_impact
+  select owner_address as address, floor(sum(amount_usd) / 20.) * 10 as tvl_impact
   from liquidity_transfers group by 1
+), farmix_pools as (
+  select upper('0:be8e55fcdc36198125915b9abf5ee1cb5961503e9db11a673c042a1e59c90aa5') as pool, -- pTON pool
+    upper('0:1bb30d579441ffdbc4f3ab248a460cd748e2a9f044dc0d59ba7871da31648268') as jetton,
+    (select price from prices.ton_price p where p.price_ts < 1734433200 order by price_ts desc limit 1) / 1e3 as price
+  union all
+  select upper('0:fa81049609ac8787416f5274d79697e2cc85a2abb51e138818bd7198b4484860') as pool, -- USDT pool
+    upper('0:b113a994b5024a16719f69139328eb759596c38a25f59028b146fecdc3621dfe') as jetton,
+    1 as price
+  union all
+  select upper('0:84ffa4debca1298fc393cf7ad9b750f96d1e9f10d41b48dd9b6d6d23cf16d618') as pool, -- NOT pool
+    upper('0:2f956143c461769579baef2e32cc2d7bc18283f40d20bb03e432cd603ac33ffc') as jetton,
+    (select price_usd from prices.agg_prices ap 
+    where ap.base = upper('0:2f956143c461769579baef2e32cc2d7bc18283f40d20bb03e432cd603ac33ffc') and price_time < 1734433200 
+    order by price_time desc limit 1) as price
+), farmix_agg_mints as (
+  select fp.pool, jt."source" as address, sum(jt.amount) as total_transfer_amount, sum(jm.amount) as total_mint_amount, fp.price
+  from parsed.jetton_mint jm
+  join farmix_pools fp on jetton_master_address = pool
+  join jetton_transfers jt on jm.trace_id = jt.trace_id and jt.destination = fp.pool and jt.jetton_master_address = fp.jetton and not jt.tx_aborted
+  where jm.utime >= 1732705200 and jm.utime < 1734433200 and jm.successful
+  group by fp.pool, jt."source", fp.price
+), farmix_agg_burns as (
+  select pool, "owner" as address, sum(amount) as total_burn_amount from jetton_burns jb 
+  join farmix_pools fp on jetton_master_address = pool
+  where tx_now >= 1732705200 and tx_now < 1734433200 and not tx_aborted
+  group by pool, "owner"
+), farmix_impact as (
+  select address, floor(sum((total_mint_amount - coalesce(total_burn_amount, 0)) / total_mint_amount * total_transfer_amount * price / 1e6) / 20.) * 10 as tvl_impact 
+  from farmix_agg_mints
+  left join farmix_agg_burns using (pool, address)
+  group by 1
 ), all_projects_impact as (
  select 'jVault' as project, * from jvault_impact
    union all
@@ -397,6 +428,8 @@ pton_transfers as (
  select 'Coffin' as project, * from coffin_impact
    union all
  select 'TONCO' as project, * from tonco_impact
+   union all
+ select 'Farmix' as project, * from farmix_impact
 ), all_projects_degen_only as (
 select p.* from all_projects_impact p
 join tol.enrollment_degen ed on ed.address = p.address

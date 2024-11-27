@@ -115,6 +115,24 @@ from collections owner by [router contract](https://tonviewer.com/EQC_-t0nCnOFMd
 and init=true. Next we are extracting initial liquidity transfers during the NFT mint transaction chain
 and estimating that liquidity in USD based on the price of the assets at the time of the transaction.
 
+### Farmix
+
+To count TVL impact for each wallet we are using the following algorightm:
+
+- Getting all JettonPools mints during the season
+- Since each mint has preceding deposit transfer, for each jetton mint we are getting jetton transfers within the same trace_id
+- Aggregating by wallet address and JettonPool to get two numbers:
+    - Total deposit (nominated in the underlying jetton)
+    - Total amount minted
+- Also getting all burns (i.e. withdrawals) for the JettonPools and adding to the previous table as Total amount burned
+- Calculating TVL impact for each wallet using the following formula:
+    - (`Total amount minted` - `Total amount burned`) / `Total amount minted`  * `Total deposit` * `Latest price of the asset`
+
+List of Farmix pools:
+- [TON](https://tonviewer.com/EQC-jlX83DYZgSWRW5q_XuHLWWFQPp2xGmc8BCoeWckKpeHs)
+- [USDT](https://tonviewer.com/EQD6gQSWCayHh0FvUnTXlpfizIWiq7UeE4gYvXGYtEhIYJ8q)
+- [NOT](https://tonviewer.com/EQCE_6TevKEpj8OTz3rZt1D5bR6fENQbSN2bbW0jzxbWGGIo)
+
 
 Full list of participants and their impact on TVL could be obtained by [this query](sql/s7_defi_tvl.sql).
 
@@ -131,13 +149,14 @@ Full list of participants and their impact on TVL could be obtained by [this que
 |BigPump by PocketFi|Volume|5|
 |Wagmi|Volume|5|
 |Aqua protocol|TVL|15|
-|JVault|TVL|10|
-|DAOLama|TVL|15|
+|JVault|TVL|5|
+|DAOLama|TVL|10|
 |Parraton|TVL|10|
 |SettleTON|TVL|10|
 |TonPools|TVL|10|
 |TonStable|TVL|15|
 |TON Hedge|TVL|10|
-|swap.coffee|TVL|10|
-|Coffin|TVL|20|
-|TONCO|TVL|11|
+|swap.coffee staking|TVL|5|
+|Coffin|TVL|10|
+|TONCO|TVL|10|
+|Farmix|TVL|10|
