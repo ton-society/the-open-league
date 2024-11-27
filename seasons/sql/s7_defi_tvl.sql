@@ -308,6 +308,73 @@ order by now desc limit 1)
   select address, floor(sum(volume_usd) / 20.) * 20 as tvl_impact
   from coffin_totals
   group by 1
+),
+-- TONCO
+tonco_collections as (
+  -- get all NFT pools owner by the router
+  select  address from public.nft_collections nc where 
+  owner_address ='0:BFFADD270A738531DA7B13BA8FC403826C2586173F9EDE9C316FAB53BC59AC86'
+), tonco_positions as (
+  -- get all NFT positions which is active now (init=true)
+  select address, owner_address from public.nft_items ni 
+  where collection_address in (select * from tonco_collections) and init
+), tonco_positions_first_tx as (
+  -- get first transaction for every NFT position. This tx will be a part of mint tx chain
+  -- to get the first transaction we will filter by end_status and orig_status and also filter 
+  -- on the season period, so mints out of the season time range will be nulls
+  select *, (select trace_id from transactions t where t.account = p.address and orig_status != 'active' 
+  and end_status = 'active' 
+  and now > 1732705200 and
+  and now < 1734433200
+  order by lt asc limit 1) from tonco_positions p
+), jetton_transfers as (
+  -- now we need to get all liquidity transfers from the LP owner in the same tx chain (trace_id)
+  -- so let's take all successful jetton transfers with the same trace_id
+  select p.owner_address, p.trace_id, jt.amount, jt.jetton_master_address, tx_now from public.jetton_transfers jt 
+  join tonco_positions_first_tx p on p.trace_id = jt.trace_id and p.owner_address = jt.source
+  where p.trace_id is not null -- filter out mints outside of the season time range
+  and not jt.tx_aborted
+), jetton_liquidity_transfers as (
+  -- estimate liquidity amount in USD
+  select owner_address, trace_id, (
+  case
+  -- special case - USDT, always 1$
+  when jetton_master_address = '0:B113A994B5024A16719F69139328EB759596C38A25F59028B146FECDC3621DFE' 
+      then 1
+    -- for all other jettons let's get latest agg price just before the event
+    else (select price_usd from prices.agg_prices ap where 
+        ap.base = jetton_master_address and
+        price_time < tx_now
+        order by price_time desc limit 1)
+  end
+  ) * amount / 1e6 as amount_usd from jetton_transfers
+), unique_traces as (
+  -- prepare all unique traces
+  select distinct owner_address, trace_id from jetton_liquidity_transfers
+),
+pton_transfers as (
+  -- unfortunately, wrapped TON by TONCO doesn't comply with TEP-74 and it is missing from the previous filter.
+  -- so to get it we will extract all 0x01f3835d messages (pTON) from the same tx chain (the same trace_id)
+  -- each messages carries some gas amount (~0.5TON) so we will substract it from the message value
+  select owner_address, trace_id, 
+  (
+    select (greatest(0, value - 5e8)) / 1e9 * (select price from prices.ton_price tp where 
+      tp.price_ts < m.created_at order by tp.price_ts desc limit 1) 
+    as amount_usd  from trace_edges te -- using trace_adges to get all messages
+    join messages m  on m.tx_hash  =te.left_tx and direction = 'in'
+    where te.trace_id = unique_traces.trace_id 
+  and opcode = 32736093 -- 0x01f3835d
+  ) as amount_usd
+  from unique_traces
+), liquidity_transfers as (
+  -- combine jettons and TON transfers
+  select owner_address, amount_usd from pton_transfers where amount_usd is not null
+  union all
+  select owner_address, amount_usd from jetton_liquidity_transfers where amount_usd is not null
+), tonco_impact as (
+  -- final calculation of impact
+  select owner_address as address, floor(sum(amount_usd) / 20.) * 11 as tvl_impact
+  from liquidity_transfers group by 1
 ), all_projects_impact as (
  select 'jVault' as project, * from jvault_impact
    union all
@@ -328,6 +395,8 @@ order by now desc limit 1)
  select 'swap.coffee' as project, * from swapcoffee_impact
    union all
  select 'Coffin' as project, * from coffin_impact
+   union all
+ select 'TONCO' as project, * from tonco_impact
 ), all_projects_degen_only as (
 select p.* from all_projects_impact p
 join tol.enrollment_degen ed on ed.address = p.address

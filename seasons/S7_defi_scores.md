@@ -19,10 +19,6 @@ Methodology details for each projects:
 Includes all trades on any dex in case of transaction chain includes a swap with referrall address [UQBBPVrn4Y6F0Fci4j0mXuSAXmRDeE-nZCRIInQsNC9__8vG](https://tonviewer.com/EQBBPVrn4Y6F0Fci4j0mXuSAXmRDeE-nZCRIInQsNC9__5YD).
 Volume is estimated for all swaps with TON, staked TON or USDT according to the methodology from [TON-ETL](https://github.com/re-doubt/ton-etl/blob/main/parser/parsers/message/swap_volume.py).
 
-### DEX Diamonds
-
-The same methodology as for RainbowSwap, but with referral address [EQDZlJorSoB4cRJ5b8gt0qR4bkLfzVDVXe5SmMPcEl0TBNYv](https://tonviewer.com/EQDZlJorSoB4cRJ5b8gt0qR4bkLfzVDVXe5SmMPcEl0TBNYv).
-
 ### GasPump
 
 Volume includes trades extracted from [Gaspump events](https://github.com/re-doubt/ton-etl/blob/main/parser/parsers/message/gaspump.py). USD value is calculated as a product of trade amount and price of TON at the time of trade.
@@ -108,6 +104,18 @@ TVL originated after CES/Ston.fi CES-TON LP/DeDust CES-TON LP deposits, so it is
 
 Total TVL is amount of TON, USDT on [the project vault smart-contract](https://tonviewer.com/UQDFlyZ5zsWyowbZvZjZwIW_Vzm-1uvf8z_PUfvQtHrV14dp), [TON-cTON Pool Contract](https://tonviewer.com/EQAze1aSZHY1yUGz1BFndH62k-VYpXYeDiYofCXTRZClF8Qr), [USDT-ctUSD Pool Contract](https://tonviewer.com/EQBy7pjr6IBzqW8vuVCZ780evtnkiIF3jZSRRDxeqScfZoU9)
 
+### Coffin
+
+Coffin protocol is based on EVAA protocol and uses dedicated router contract EQBozwKVDya9IL3Kw4mR5AQph4yo15EuMdyX8nLljeaUxrpM. Each user can provide liquidity using supply method (and also withdraw it later using withdraw). For each wallet TVL impact is calculated based on amount supplied - amount withdrawn.
+
+### TONCO
+
+TONCO is a CLMM DEX and every time user provides liquidity to the pool, new NFT is minted. 
+User can withdraw entire amount of liquidity at any time, when it is done, liquidity goes back to the user
+and NFT marked as init=false. So to get all active liqudity positions by the user we are getting all NFTs
+from collections owner by [router contract](https://tonviewer.com/EQC_-t0nCnOFMdp7E7qPxAOCbCWGFz-e3pwxb6tTvFmshjt5)
+and init=true. Next we are extracting initial liquidity transfers during the NFT mint transaction chain
+and estimating that liquidity in USD based on the price of the assets at the time of the transaction.
 
 Full list of participants and their impact on TVL could be obtained by [this query](sql/s7_defi_tvl.sql).
 
@@ -117,7 +125,6 @@ Full list of participants and their impact on TVL could be obtained by [this que
 |DeFi Protocol name | Squad | Points per each 20 USD|
 |:-|:-|-:|
 |Rainbow Swap|Volume|1|
-|DEX Diamonds|Volume|1|
 |GasPump|Volume|5|
 |swap.coffee|Volume|1|
 |TONPump by HOT Wallet|Volume|5|
@@ -134,3 +141,4 @@ Full list of participants and their impact on TVL could be obtained by [this que
 |TON Hedge|TVL|10|
 |swap.coffee|TVL|10|
 |Coffin|TVL|20|
+|TONCO|TVL|11|
