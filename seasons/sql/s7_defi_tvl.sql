@@ -324,17 +324,17 @@ tonco_collections as (
   -- on the season period, so mints out of the season time range will be nulls
   select *, (select trace_id from transactions t where t.account = p.address and orig_status != 'active' 
   and end_status = 'active' 
-  and now > 1732705200 and
+  and now > 1732705200
   and now < 1734433200
   order by lt asc limit 1) from tonco_positions p
-), jetton_transfers as (
+), tonco_jetton_transfers as (
   -- now we need to get all liquidity transfers from the LP owner in the same tx chain (trace_id)
   -- so let's take all successful jetton transfers with the same trace_id
   select p.owner_address, p.trace_id, jt.amount, jt.jetton_master_address, tx_now from public.jetton_transfers jt 
   join tonco_positions_first_tx p on p.trace_id = jt.trace_id and p.owner_address = jt.source
   where p.trace_id is not null -- filter out mints outside of the season time range
   and not jt.tx_aborted
-), jetton_liquidity_transfers as (
+), tonco_jetton_liquidity_transfers as (
   -- estimate liquidity amount in USD
   select owner_address, trace_id, (
   case
@@ -347,12 +347,11 @@ tonco_collections as (
         price_time < tx_now
         order by price_time desc limit 1)
   end
-  ) * amount / 1e6 as amount_usd from jetton_transfers
-), unique_traces as (
+  ) * amount / 1e6 as amount_usd from tonco_jetton_transfers
+), tonco_unique_traces as (
   -- prepare all unique traces
-  select distinct owner_address, trace_id from jetton_liquidity_transfers
-),
-pton_transfers as (
+  select distinct owner_address, trace_id from tonco_jetton_liquidity_transfers
+), tonco_pton_transfers as (
   -- unfortunately, wrapped TON by TONCO doesn't comply with TEP-74 and it is missing from the previous filter.
   -- so to get it we will extract all 0x01f3835d messages (pTON) from the same tx chain (the same trace_id)
   -- each messages carries some gas amount (~0.5TON) so we will substract it from the message value
@@ -362,19 +361,19 @@ pton_transfers as (
       tp.price_ts < m.created_at order by tp.price_ts desc limit 1) 
     as amount_usd  from trace_edges te -- using trace_adges to get all messages
     join messages m  on m.tx_hash  =te.left_tx and direction = 'in'
-    where te.trace_id = unique_traces.trace_id 
+    where te.trace_id = tonco_unique_traces.trace_id 
   and opcode = 32736093 -- 0x01f3835d
   ) as amount_usd
-  from unique_traces
-), liquidity_transfers as (
+  from tonco_unique_traces
+), tonco_liquidity_transfers as (
   -- combine jettons and TON transfers
-  select owner_address, amount_usd from pton_transfers where amount_usd is not null
+  select owner_address, amount_usd from tonco_pton_transfers where amount_usd is not null
   union all
-  select owner_address, amount_usd from jetton_liquidity_transfers where amount_usd is not null
+  select owner_address, amount_usd from tonco_jetton_liquidity_transfers where amount_usd is not null
 ), tonco_impact as (
   -- final calculation of impact
   select owner_address as address, floor(sum(amount_usd) / 20.) * 10 as tvl_impact
-  from liquidity_transfers group by 1
+  from tonco_liquidity_transfers group by 1
 ), farmix_pools as (
   select upper('0:be8e55fcdc36198125915b9abf5ee1cb5961503e9db11a673c042a1e59c90aa5') as pool, -- pTON pool
     upper('0:1bb30d579441ffdbc4f3ab248a460cd748e2a9f044dc0d59ba7871da31648268') as jetton,
