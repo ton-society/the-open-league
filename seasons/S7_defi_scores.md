@@ -97,12 +97,10 @@ TVL originated after tsTON/stTON deposits, so it is a sum of all tsTON/stTON tra
 TVL originated after tsTON/stTON/hTON deposits, so it is a sum of all tsTON/stTON/hTON transfers by the users to 
 [the project smart-contract](https://tonviewer.com/EQAWDyxARSl3ol2G1RMLMwepr3v6Ter5ls3jiAlheKshgg0K)
 
+### swap.coffee
+
 TVL originated after CES/Ston.fi CES-TON LP/DeDust CES-TON LP deposits, so it is a sum of all transfers CES/Ston.fi CES-TON LP/DeDust CES-TON LP by the users to 
 [the project smart-contract](https://tonviewer.com/EQAp-QUzk31pYQWIO5gelCfRrkEe71sI6rg_SvicSV0n31rf)
-
-### Catton Defi
-
-Total TVL is amount of TON, USDT on [the project vault smart-contract](https://tonviewer.com/UQDFlyZ5zsWyowbZvZjZwIW_Vzm-1uvf8z_PUfvQtHrV14dp), [TON-cTON Pool Contract](https://tonviewer.com/EQAze1aSZHY1yUGz1BFndH62k-VYpXYeDiYofCXTRZClF8Qr), [USDT-ctUSD Pool Contract](https://tonviewer.com/EQBy7pjr6IBzqW8vuVCZ780evtnkiIF3jZSRRDxeqScfZoU9)
 
 ### Coffin
 
@@ -116,6 +114,7 @@ and NFT marked as init=false. So to get all active liqudity positions by the use
 from collections owner by [router contract](https://tonviewer.com/EQC_-t0nCnOFMdp7E7qPxAOCbCWGFz-e3pwxb6tTvFmshjt5)
 and init=true. Next we are extracting initial liquidity transfers during the NFT mint transaction chain
 and estimating that liquidity in USD based on the price of the assets at the time of the transaction.
+
 
 Full list of participants and their impact on TVL could be obtained by [this query](sql/s7_defi_tvl.sql).
 
