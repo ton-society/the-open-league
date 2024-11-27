@@ -2,6 +2,7 @@
 S6 season config
 """
 from models.season_config import SeasonConfig, DexPool
+from projects.defi.Farmix import Farmix
 from projects.defi.Coffin import Coffin
 from projects.defi.SwapCoffee import SwapCoffeeVolume, SwapCoffeeTVL
 from projects.defi.AquaProtocol import AquaProtocol
@@ -32,7 +33,7 @@ S7_defi_tvl = SeasonConfig(
     projects=[
         DAOLama, SettleTON, JVault,
         TONHedge, TonStable, Parraton, TonPools,
-        AquaProtocol, SwapCoffeeTVL, Coffin, TONCO
+        AquaProtocol, SwapCoffeeTVL, Coffin, TONCO, Farmix
     ],
     score_model=DeFiTVLContribution(squads=[
         (lambda tvl: tvl >= 5e6, "Over 5M$"),
