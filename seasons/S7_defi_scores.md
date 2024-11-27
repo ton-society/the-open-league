@@ -141,3 +141,4 @@ Full list of participants and their impact on TVL could be obtained by [this que
 |swap.coffee staking|TVL|5|
 |Coffin|TVL|10|
 |TONCO|TVL|10|
+|Farmix|TVL|10|
