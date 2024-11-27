@@ -324,7 +324,7 @@ tonco_collections as (
   -- on the season period, so mints out of the season time range will be nulls
   select *, (select trace_id from transactions t where t.account = p.address and orig_status != 'active' 
   and end_status = 'active' 
-  and now > 1732705200 and
+  and now > 1732705200
   and now < 1734433200
   order by lt asc limit 1) from tonco_positions p
 ), jetton_transfers as (
