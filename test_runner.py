@@ -25,10 +25,9 @@ from seasons.s6 import S6_apps, S6_nfts, S6_defi_tvl, S6_defi_volume
 if __name__ == "__main__":
     with psycopg2.connect() as conn:
         if sys.argv[1] == 'apps_v2':
-            backend = ToncenterCppAppBackendV2Users(conn)
+            backend = ToncenterCppAppBackendV2Users(conn, produce_output=True)
             season = S6_apps
             backend.calculate(season, dry_run=len(sys.argv) > 2 and sys.argv[2] == '--dryrun')
-            sys.exit(0)
         elif sys.argv[1] == 'apps_v2_projects':
             backend = ToncenterCppAppsScores2Projects(conn)
             season = S6_apps

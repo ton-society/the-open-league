@@ -20,6 +20,7 @@ from projects.apps.GramillaWorld import GramillaWorld
 from projects.apps.JetTon import JetTon
 from projects.apps.MomoAI import MomoAI
 from projects.apps.MoneyGardenAI import MoneyGardenAI
+from projects.apps.NotPixel import NotPixel
 from projects.apps.PlayWallet import PlayWallet
 from projects.apps.Pumpers import Pumpers
 from projects.apps.QuackQuack import QuackQuack
@@ -83,13 +84,19 @@ from projects.apps.Gemz import Gemz
 from projects.apps.SEED import SEED
 from projects.apps.BOOMUP import BOOMUP
 from projects.apps.BUMP import BUMP
+from projects.apps.RockyRabbit import RockyRabbit
+from projects.apps.NobbyGame import NobbyGame
+from projects.defi.AquaProtocol import AquaProtocol
 from projects.defi.DAOLama import DAOLama
 from projects.defi.DeDust import DeDust
 from projects.defi.EVAA import EVAA
 from projects.defi.GasPump import GasPumpDeFi
+from projects.defi.Hipo import Hipo
 from projects.defi.RainbowSwap import RainbowSwap
 from projects.defi.StonFi import StonFi
 from projects.defi.StormTrade import StormTrade
+from projects.defi.DexDiamonds import DexDiamonds
+from projects.defi.TonStakersTokenStaking import TonStakersTokenStaking
 from projects.defi.Tradoor import Tradoor
 from projects.defi.Wonton import Wonton
 from projects.defi.SettleTON import SettleTON
@@ -134,7 +141,16 @@ from seasons.defi_models import DeFiTVLContribution, DeFiVolumeContribution
 from seasons.nfts_models import NFTLeaderboardModelV1
 
 S6_START = 1726138800 # Thu Sep 12 2024 11:00:00 GMT+0000
-S6_END = 1728558000 # Thu Oct 10 2024 11:00:00 GMT+0000
+# S6_END = 1728558000 # Thu Oct 10 2024 11:00:00 GMT+0000
+# Season 6 was paused for a break - https://t.me/league/128
+S6_END = 1726822800 # Fri Sep 20 2024 09:00:00 GMT+0000
+
+S6_PART2_START = 1728558000 # Thu Oct 10 2024 11:00:00 GMT+0000
+
+S6_PART2_END = 1730286000 # Wed Oct 30 2024 11:00:00 GMT+0000
+
+S6_APPS_PART2_START = 1729076400 # Wed Oct 16 2024 11:00:00 GMT+0000
+S6_APPS_PART2_END = 1730890800 # Wed Nov 6 2024 11:00:00 GMT+0000
 
 S6_apps = SeasonConfig(
     leaderboard=SeasonConfig.APPS,
@@ -142,97 +158,59 @@ S6_apps = SeasonConfig(
     start_time=S6_START,
     end_time=S6_END,
     projects=[
-        QuackQuack,
-        Fanzee,
-        Catizen,
-        JetTon,
-        SquidTG,
-        XPLUS,
-        xRare,
-        PlayWallet,
-        YesCoin,
-        GetGems,
-        Fanton,
-        Tonano,
-        TonPunks,
-        SwapCoffee,
-        Gram,
-        Gatto,
-        TonsOfFriends,
-        ChickCoop,
-        TonUP,
-        Tongochi,
-        Shardify,
-        TonMap,
-        Gamee,
-        MoneyGardenAI,
-        BountyBay,
-        CatGoldMiner,
-        Vertus,
-        Uniton,
-        EdChess,
-        GramillaWorld,
-        MomoAI,
-        Gleam,
-        CatXWar,
-        WheelOfFate,
-        TypoCurator,
-        Sphynx,
-        SpinnerCoin,
-        GasPump,
-        TonGifts,
-        Pumpers,
-        WowFish,
-        AKEDOG,
-        AKEFish,
-        Blum,
-        Doggers,
-        GHArena,
-        Hamsterdam,
-        HipoGang,
-        MergePals,
-        Mine2Mine,
-        Molemine,
-        MoonApp,
-        Nomis,
-        PiggyPiggy,
-        Randomtg,
-        SnakeLite,
-        StarAI,
-        Tonalytics,
-        WONTON,
-        ZenCoin,
-        DEPINSIM,
-        HOTWallet,
-        MemeTv,
-        BeeHarvest,
-        GemGame,
-        TeleverseOdyssey,
-        Agent301,
-        GrandCombat,
-        MakeFrens,
-        CrazyRushHeroes,
-        TimePrice,
-        TorchFinance,
-        NOTBITCOIN,
-        RentTower,
-        RentTycoon,
-        TONSTATION,
-        Gemz,
-        SEED,
-        Cowtopia,
-        BOOMUP,
-        BUMP,
+        QuackQuack, Fanzee, Catizen, JetTon, SquidTG, XPLUS, xRare, PlayWallet, YesCoin,
+        GetGems, Fanton, Tonano, TonPunks, SwapCoffee, Gram, Gatto, TonsOfFriends, ChickCoop,
+        TonUP, Tongochi, Shardify, TonMap, Gamee, MoneyGardenAI, BountyBay, CatGoldMiner,
+        Vertus, Uniton, EdChess, GramillaWorld, MomoAI, Gleam, CatXWar, WheelOfFate,
+        TypoCurator, Sphynx, SpinnerCoin, GasPump, TonGifts, Pumpers, WowFish, AKEDOG,
+        AKEFish, Blum, Doggers, GHArena, Hamsterdam, HipoGang, MergePals, Mine2Mine, 
+        Molemine, MoonApp, Nomis, PiggyPiggy, Randomtg, SnakeLite, StarAI, Tonalytics,
+        WONTON, ZenCoin, DEPINSIM, HOTWallet, MemeTv, BeeHarvest, GemGame, TeleverseOdyssey,
+        Agent301, GrandCombat, MakeFrens, CrazyRushHeroes, TimePrice, TorchFinance, 
+        NOTBITCOIN, RentTower, RentTycoon, TONSTATION, Gemz, SEED, Cowtopia, BOOMUP, BUMP,
+        RockyRabbit, NobbyGame
     ],
     score_model=AppLeaderboardModelS6(),
     enrollment_sbt="EQDZ81ZvxRfutjkALcUK0q3Cuusm1XtmhEwUiGSeviLpPARH"
+)
+
+S6_apps_part2 = SeasonConfig(
+    leaderboard=SeasonConfig.APPS,
+    name="S6_part2",
+    start_time=S6_APPS_PART2_START,
+    end_time=S6_APPS_PART2_END,
+    projects=[
+        QuackQuack, Fanzee, Catizen, JetTon, SquidTG, XPLUS, xRare, PlayWallet, YesCoin,
+        GetGems, Fanton, Tonano, TonPunks, SwapCoffee, Gram, Gatto, TonsOfFriends, ChickCoop,
+        TonUP, Tongochi, Shardify, TonMap, Gamee, MoneyGardenAI, BountyBay, CatGoldMiner,
+        Vertus, Uniton, EdChess, GramillaWorld, MomoAI, Gleam, CatXWar, WheelOfFate,
+        TypoCurator, Sphynx, SpinnerCoin, GasPump, TonGifts, Pumpers, WowFish, AKEDOG,
+        AKEFish, Blum, Doggers, GHArena, Hamsterdam, HipoGang, MergePals, Mine2Mine, 
+        Molemine, MoonApp, Nomis, PiggyPiggy, Randomtg, SnakeLite, StarAI, Tonalytics,
+        WONTON, ZenCoin, DEPINSIM, HOTWallet, MemeTv, BeeHarvest, GemGame, TeleverseOdyssey,
+        Agent301, GrandCombat, MakeFrens, CrazyRushHeroes, TimePrice, TorchFinance, 
+        NOTBITCOIN, RentTower, TONSTATION, Gemz, SEED, Cowtopia, BOOMUP, BUMP,
+        RockyRabbit, NobbyGame, NotPixel,
+    ],
+    score_model=AppLeaderboardModelS6(),
+    enrollment_sbt="EQDZ81ZvxRfutjkALcUK0q3Cuusm1XtmhEwUiGSeviLpPARH"
+)
+
+S6_apps_combined = SeasonConfig(
+    leaderboard=SeasonConfig.APPS,
+    name="S6_combined",
+    start_time=S6_START,
+    end_time=S6_APPS_PART2_END,
+    projects=S6_apps_part2.projects,
+    score_model=S6_apps_part2.score_model,
+    enrollment_sbt=S6_apps_part2.enrollment_sbt
 )
 
 S6_nfts = SeasonConfig(
     leaderboard=SeasonConfig.NFTS,
     name="S6",
     start_time=S6_START,
-    end_time=S6_END,
+    end_time=S6_PART2_END,
     projects=[
         TheMinersClubNFTsNFT, YNGEXPLRZNFT, GattoNFT, AnimalsRedListNFT, SmesharikiNFT,
         TONDiamondsNFT, NOTPunksNFT, TONFISHBOXNFT, PovelDurevNFTNFT, TONPunksNFT,
@@ -248,13 +226,15 @@ S6_defi_tvl = SeasonConfig(
     leaderboard=SeasonConfig.DEFI,
     name="S6",
     start_time=S6_START,
-    end_time=S6_END,
+    end_time=S6_PART2_END,
     projects=[
         DAOLama, SettleTON, JVault,
-        TONHedge, TonStable, Parraton, TonPools
+        TONHedge, TonStable, Parraton, TonPools,
+        # Added after the break
+        AquaProtocol, Hipo, TonStakersTokenStaking
     ],
     score_model=DeFiTVLContribution(squads=[
-        (lambda tvl: tvl >= 5e6, "5M$+"),
+        (lambda tvl: tvl >= 5e6, "Over 5M$"),
         (lambda tvl: tvl >= 1e6, "Under 5M$"),
         (lambda tvl: True, "Under 1M$"),
     ]),
@@ -265,12 +245,14 @@ S6_defi_volume = SeasonConfig(
     leaderboard=SeasonConfig.DEFI,
     name="S6",
     start_time=S6_START,
-    end_time=S6_END,
+    end_time=S6_PART2_END,
     projects=[
-        Tradoor, GasPumpDeFi, RainbowSwap
+        Tradoor, GasPumpDeFi, RainbowSwap,
+        # Added after the break
+        DexDiamonds
     ],
     score_model=DeFiVolumeContribution(squads=[
-        (lambda tvl: tvl >= 50 * 1e6, "50M$+"),
+        (lambda tvl: tvl >= 50 * 1e6, "Over 50M$"),
         (lambda tvl: tvl >= 10 * 1e6, "Under 50M$"),
         (lambda tvl: True, "Under 10M$"),
     ])

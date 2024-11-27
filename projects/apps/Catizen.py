@@ -1,6 +1,7 @@
 from models.metrics.smc_interaction import SmartContractInteraction
 from models.metrics.token_transfer_from_user import TokenTransferFromUser
 from models.project import App
+from projects.tokens.CATI import CATI
 
 """
 Catizen app - https://catizen.ai/
@@ -28,7 +29,7 @@ Catizen = App(
                 "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs", # USDT
             ],
             destinations=["EQD7UQWKOHYQt5mqVo9JJO-hh0WxrSsNtMTMkg3nVYNafmRO"]
-        )
-
-    ]
+        ),
+    ],
+    token=CATI,
 )

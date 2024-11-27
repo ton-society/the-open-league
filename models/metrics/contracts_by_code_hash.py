@@ -1,4 +1,4 @@
-from models.metric import Metric, CalculationContext, RedoubtMetricImpl
+from models.metric import Metric, CalculationContext, RedoubtMetricImpl, ToncenterCppMetricImpl
 
 
 class ProxyContractInteractionRedoubtImpl(RedoubtMetricImpl):
@@ -19,6 +19,29 @@ class ProxyContractInteractionRedoubtImpl(RedoubtMetricImpl):
         )
         """
 
+class ProxyContractInteractionToncenterCppImpl(ToncenterCppMetricImpl):
+    def calculate(self, context: CalculationContext, metric):
+        if len(metric.op_codes) > 0:
+            op_codes_filter = " or ".join(map(lambda op: f"m.opcode = {op}", metric.op_codes))
+        else:
+            op_codes_filter = "TRUE"
+        return f"""
+        (
+            with proxy_contracts as (
+                select distinct(account) from latest_account_states 
+                where code_hash = '{metric.code_hash}' and timestamp > {context.season.start_time}
+            )
+            select m.tx_hash as id, '{context.project.name}' as project, m.source as user_address, m.created_at as ts 
+            from messages m
+            join proxy_contracts pc on pc.account = m.destination
+            join transactions t on m.tx_hash = t.hash
+            where t.compute_exit_code = 0 and t.action_result_code = 0
+            and m.direction = 'in'
+            and m.created_at >= {context.season.start_time}::integer
+            and m.created_at < {context.season.end_time}::integer
+            and {op_codes_filter}
+        )
+        """
 
 """
 Interaction with a smart contract with a specific code hash
@@ -28,6 +51,6 @@ Options:
 """
 class ProxyContractInteraction(Metric):
     def __init__(self, description, code_hash=None, op_codes=[]):
-        Metric.__init__(self, description, [ProxyContractInteractionRedoubtImpl()])
+        Metric.__init__(self, description, [ProxyContractInteractionRedoubtImpl(), ProxyContractInteractionToncenterCppImpl()])
         self.code_hash = code_hash
         self.op_codes = op_codes
