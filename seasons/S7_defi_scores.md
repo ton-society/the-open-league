@@ -106,6 +106,15 @@ TVL originated after CES/Ston.fi CES-TON LP/DeDust CES-TON LP deposits, so it is
 
 Coffin protocol is based on EVAA protocol and uses dedicated router contract EQBozwKVDya9IL3Kw4mR5AQph4yo15EuMdyX8nLljeaUxrpM. Each user can provide liquidity using supply method (and also withdraw it later using withdraw). For each wallet TVL impact is calculated based on amount supplied - amount withdrawn.
 
+### TONCO
+
+TONCO is a CLMM DEX and every time user provides liquidity to the pool, new NFT is minted. 
+User can withdraw entire amount of liquidity at any time, when it is done, liquidity goes back to the user
+and NFT marked as init=false. So to get all active liqudity positions by the user we are getting all NFTs
+from collections owner by [router contract](https://tonviewer.com/EQC_-t0nCnOFMdp7E7qPxAOCbCWGFz-e3pwxb6tTvFmshjt5)
+and init=true. Next we are extracting initial liquidity transfers during the NFT mint transaction chain
+and estimating that liquidity in USD based on the price of the assets at the time of the transaction.
+
 
 Full list of participants and their impact on TVL could be obtained by [this query](sql/s7_defi_tvl.sql).
 
@@ -131,3 +140,4 @@ Full list of participants and their impact on TVL could be obtained by [this que
 |TON Hedge|TVL|10|
 |swap.coffee|TVL|10|
 |Coffin|TVL|20|
+|TONCO|TVL|11|
