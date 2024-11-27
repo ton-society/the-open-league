@@ -1,6 +1,5 @@
 from models.metrics.smc_interaction import SmartContractInteraction
 from models.metrics.token_transfer_from_user import TokenTransferFromUser
-from models.metrics.token_transfer_to_user import TokenTransferToUser
 from models.project import App
 from projects.tokens.JETTON import JETTON
 
@@ -11,8 +10,11 @@ JetTon app
 JetTon = App(
     name="JetTon",
     analytics_key="qqqq", # o_O
-    url='https://t.me/jetton', 
+    url='https://t.me/jetton',
     metrics=[
+        SmartContractInteraction(
+            "Interaction", "EQA7IvmhA3UnbXgKoFZjgLmPtKomEcWH-TEIz8vonFwahcha", comment_required=True
+        ),
         TokenTransferFromUser(
             "Deposits in Jetton",
             jetton_masters=[
@@ -21,7 +23,7 @@ JetTon = App(
             destinations=[
                 "EQA7IvmhA3UnbXgKoFZjgLmPtKomEcWH-TEIz8vonFwahcha"
             ]
-        )
+        ),
     ],
     token=JETTON
 )

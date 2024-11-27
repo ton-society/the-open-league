@@ -39,7 +39,7 @@ class SBTEnrollmentSync:
         end_block = None
         if int(time.time()) > config.end_time:
             end_block = config.block_before_end_ref
-            assert end_block is not None, "Season is closed, one need to specify last block ref"
+            # assert end_block is not None, "Season is closed, one need to specify last block ref"
         code, data = self.tonapi.get_state(config.enrollment_sbt, target_block=end_block)
         # logger.info(f"Got state: {state}")
         [merkle_root] = self.executor.execute(code, data, config.enrollment_sbt, 'get_merkle_root', ['int'])

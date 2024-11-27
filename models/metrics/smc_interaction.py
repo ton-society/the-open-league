@@ -1,4 +1,4 @@
-from models.metric import Metric, CalculationContext, RedoubtMetricImpl
+from models.metric import Metric, CalculationContext, RedoubtMetricImpl, ToncenterCppMetricImpl
 
 
 class SmartContractInteractionRedoubtImpl(RedoubtMetricImpl):
@@ -34,6 +34,47 @@ class SmartContractInteractionRedoubtImpl(RedoubtMetricImpl):
         """
 
 
+class SmartContractInteractionToncenterCppImpl(ToncenterCppMetricImpl):
+
+    def calculate(self, context: CalculationContext, metric):
+        if len(metric.op_codes) > 0:
+            op_codes_filter = " or ".join(map(lambda op: f"opcode = {op}", metric.op_codes))
+        else:
+            op_codes_filter = "TRUE"
+        if metric.comment_regexp:
+            comment_regexp_filter = f"and comment like '{metric.comment_regexp}'"
+        else:
+            comment_regexp_filter = ""
+        if metric.address:
+            address_filter = f"destination ='{self.to_raw(metric.address)}'"
+        else:
+            assert len(metric.addresses) > 0, f"You should provide either address or addresses non empty list " \
+                                              f"({context.project.name}: {metric.description})"
+            address_filter = " OR ".join(map(lambda a: f"destination ='{self.to_raw(a)}'", metric.addresses))
+        if len(metric.comment_not_equals) > 0:
+            comment_not_equals_filter = "and " + " and ".join(map(lambda v: f"comment != '{v}'", metric.comment_not_equals))
+        else:
+            comment_not_equals_filter = ""
+
+        return f"""
+        select 
+            m.tx_hash as id, '{context.project.name}' as project,
+            source as user_address, m.created_at as ts from messages m
+            join transactions t on m.tx_hash = t.hash 
+            -- TODO replace left join to inner join for comment_required case
+            left join parsed.message_comments mc on mc.hash = m.body_hash
+            where compute_exit_code = 0 and action_result_code = 0 and 
+            direction = 'in' and 
+            created_at >= {context.season.start_time}::integer and
+            created_at < {context.season.end_time}::integer and
+            ({address_filter}) {'and length("comment") > 0' if metric.comment_required else ''}
+            {comment_regexp_filter} {comment_not_equals_filter}
+            and (
+            {op_codes_filter}
+            )
+        """
+
+
 """
 Simple smart contract interaction - any message (but resulted in successful transaction) to the address provided
 Options:
@@ -48,7 +89,7 @@ Options:
 class SmartContractInteraction(Metric):
     def __init__(self, description, address=None, addresses=[], is_custodial=False,
                  comment_required=False, op_codes=[], comment_regexp=None, comment_not_equals=[]):
-        Metric.__init__(self, description, [SmartContractInteractionRedoubtImpl()])
+        Metric.__init__(self, description, [SmartContractInteractionRedoubtImpl(), SmartContractInteractionToncenterCppImpl()])
         assert type(addresses) == list
         assert type(op_codes) == list
         self.address = address

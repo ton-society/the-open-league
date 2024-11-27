@@ -1,3 +1,4 @@
+from models.metrics.smc_interaction import SmartContractInteraction
 from models.metrics.token_transfer_from_user import TokenTransferFromUser
 from models.project import App
 
@@ -18,6 +19,11 @@ Mine2Mine = App(
             destinations=[
                 "EQBxr1xLYOL2WI3meenZgEN6ZMRUtrvo3Qn8XFz6mhpnvz7G"
             ]
+        ),
+        SmartContractInteraction(
+            "Interaction_1",
+            "EQAXKwOxy645qaE7zspw6G-zfdIIHyZr4-0-sD56Fk7DYtt4",
+            comment_required=True,
         )
     ]
 )

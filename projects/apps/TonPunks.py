@@ -10,7 +10,7 @@ TonPunks app
 TonPunks = App(
     name="TON Punks",
     analytics_key="TONPunks",
-    url='https://t.me/TonPunksBot',
+    url='https://t.me/punkcity2094bot',
     nfts=["EQAo92DYMokxghKcq-CkCGSk_MgXY5Fo1SPW20gkvZl75iCN"],
     metrics=[
         SmartContractInteraction(

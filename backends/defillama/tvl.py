@@ -77,7 +77,7 @@ class DefillamaDeFiTVLBackend(CalculationBackend):
         end_block = None
         if int(time.time()) > config.end_time:
             end_block = config.block_before_end_ref
-            assert end_block is not None, "Season is closed, one need to specify last block ref"
+            # assert end_block is not None, "Season is closed, one need to specify last block ref"
         logger.info(f"Getting TVL for {config.block_before_start_ref} and {end_block if end_block else 'latest block'}")
 
         excluded_snapshot = { DexPool.DEX_STON: 0, DexPool.DEX_DEDUST: 0}
@@ -93,8 +93,10 @@ class DefillamaDeFiTVLBackend(CalculationBackend):
         logger.info(f"Total excluded current: {excluded_current}, snapshot: {excluded_snapshot}")
 
         def get_tvl_before(history, timestamp):
-            *_, last_item = filter(lambda x: x['date'] < timestamp, history)
-            return last_item['totalLiquidityUSD']
+            items = list(filter(lambda x: x['date'] < timestamp, history))
+            if len(items) == 0:
+                return sorted(history, key=lambda x: x['date'], reverse=True)[-1]['totalLiquidityUSD']
+            return items[-1]['totalLiquidityUSD']
 
         logger.info("Running DeFiLlama backend for DeFi leaderboard")
         results: List[ProjectStat] = []
