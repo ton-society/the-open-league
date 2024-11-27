@@ -131,13 +131,13 @@ Full list of participants and their impact on TVL could be obtained by [this que
 |BigPump by PocketFi|Volume|5|
 |Wagmi|Volume|5|
 |Aqua protocol|TVL|15|
-|JVault|TVL|10|
-|DAOLama|TVL|15|
+|JVault|TVL|5|
+|DAOLama|TVL|10|
 |Parraton|TVL|10|
 |SettleTON|TVL|10|
 |TonPools|TVL|10|
 |TonStable|TVL|15|
 |TON Hedge|TVL|10|
-|swap.coffee|TVL|10|
-|Coffin|TVL|20|
-|TONCO|TVL|11|
+|swap.coffee staking|TVL|5|
+|Coffin|TVL|10|
+|TONCO|TVL|10|
