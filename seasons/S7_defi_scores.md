@@ -14,7 +14,7 @@ User score is calculated as a trading volume in any of target projects nominated
 during the period of the season. Minimum amount of volume to be eligible for receiving points is 20 USD.
 Methodology details for each projects:
 
-### RainbowSwap
+### Rainbow.ag
 
 Includes all trades on any dex in case of transaction chain includes a swap with referrall address [UQBBPVrn4Y6F0Fci4j0mXuSAXmRDeE-nZCRIInQsNC9__8vG](https://tonviewer.com/EQBBPVrn4Y6F0Fci4j0mXuSAXmRDeE-nZCRIInQsNC9__5YD).
 Volume is estimated for all swaps with TON, staked TON or USDT according to the methodology from [TON-ETL](https://github.com/re-doubt/ton-etl/blob/main/parser/parsers/message/swap_volume.py).
@@ -25,7 +25,7 @@ Volume includes trades extracted from [Gaspump events](https://github.com/re-dou
 
 ### swap.coffee
 
-The same methodology as for RainbowSwap, but with list of referral addresses:
+The same methodology as for Rainbow.ag, but with list of referral addresses:
 * UQCZ_pV6EJNSr6XpvPaa-IVkT6ImqkiPftRMOICJP1B_78Hc
 * UQA8OiygwLotKehQvp285LjTvVsTj6OuHZxEDxxTo6PlJWYA
 * UQCoFIQulMX1WciLYp7PUrxFqzIfsaUNo_FLDy1nDD0akyqT
@@ -141,7 +141,7 @@ Full list of participants and their impact on TVL could be obtained by [this que
 
 |DeFi Protocol name | Squad | Points per each 20 USD|
 |:-|:-|-:|
-|Rainbow Swap|Volume|1|
+|Rainbow.ag|Volume|1|
 |GasPump|Volume|5|
 |swap.coffee|Volume|1|
 |TONPump by HOT Wallet|Volume|5|
