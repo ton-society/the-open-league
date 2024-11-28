@@ -446,5 +446,6 @@ tonco_collections as (
    union all
  select 'Farmix' as project, *, floor(tvl_impact / 20.) * 10 as points from farmix_impact
 )
-select p.* from all_projects_impact p
+select extract(epoch from now())::integer as score_time, p.address, project, points, tvl_impact as "value", "count", min_utime, max_utime
+from all_projects_impact p
 join tol.enrollment_degen ed on ed.address = p.address

@@ -87,5 +87,6 @@ with swaps as (
   union all
   select *, floor(volume_usd / 20.) * 5 as points from memepads_volume
 )
-select * from volume_points
+select extract(epoch from now())::integer as score_time, address, project, points, volume_usd as "value", "count", min_utime, max_utime
+from volume_points
 join degens using(address)
