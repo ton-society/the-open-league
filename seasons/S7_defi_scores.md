@@ -16,8 +16,12 @@ Methodology details for each projects:
 
 ### Rainbow.ag
 
-Includes all trades on any dex in case of transaction chain includes a swap with referrall address [UQBBPVrn4Y6F0Fci4j0mXuSAXmRDeE-nZCRIInQsNC9__8vG](https://tonviewer.com/EQBBPVrn4Y6F0Fci4j0mXuSAXmRDeE-nZCRIInQsNC9__5YD).
 Volume is estimated for all swaps with TON, staked TON or USDT according to the methodology from [TON-ETL](https://github.com/re-doubt/ton-etl/blob/main/parser/parsers/message/swap_volume.py).
+Includes all trades on any dex in case of transaction chain includes a swap with referrall address from list:
+* UQBBPVrn4Y6F0Fci4j0mXuSAXmRDeE-nZCRIInQsNC9__8vG
+* UQDscgosGjQeAfyL1m6-57O5_NusTGYFVDesaB0CkEvo_m4g
+* UQCIOI01FJKvUHqUNF-c1BGytouH5HdeOPHCgyk2ddK1Y8oZ
+* UQAaCGsY1S7OIonBkom2lOwx6cBMggGKKHukC_n6aq00Q8Tb
 
 ### GasPump
 

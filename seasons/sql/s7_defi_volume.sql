@@ -2,8 +2,17 @@ with swaps as (
   select * from parsed.dex_swap_parsed dsp 
   where swap_utime  >= 1732705200 and swap_utime < 1734433200
   and volume_usd > 0
+), rainbow_referral_addresses as (
+   select '0:413D5AE7E18E85D05722E23D265EE4805E6443784FA764244822742C342F7FFF' as referral_address
+   union all
+   select '0:EC720A2C1A341E01FC8BD66EBEE7B3B9FCDBAC4C66055437AC681D02904BE8FE' as referral_address
+   union all
+   select '0:88388D351492AF507A94345F9CD411B2B68B87E4775E38F1C283293675D2B563' as referral_address
+   union all
+   select '0:1A086B18D52ECE2289C19289B694EC31E9C04C82018A287BA40BF9FA6AAD3443' as referral_address
 ), rainbow_traces as (
-  select distinct trace_id from swaps where referral_address =upper('0:413d5ae7e18e85d05722e23d265ee4805e6443784fa764244822742c342f7fff')
+  select distinct trace_id from swaps
+  join rainbow_referral_addresses using(referral_address)
 ), rainbow_swaps as (
   select 'rainbow' as project, tx_hash, swap_user as address, volume_usd from swaps join rainbow_traces using(trace_id)
 ), rainbow_points as (
