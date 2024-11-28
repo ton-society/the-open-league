@@ -20,7 +20,8 @@ from backends.tonapi import TonapiAdapter
 from backends.toncenter_cpp.apps_v2_projects import ToncenterCppAppsScores2Projects
 from models.render_method import JsonRenderMethod, HTMLRenderMethod
 from models.season_config import SeasonConfig
-from seasons.s6 import S6_apps, S6_nfts, S6_defi_tvl, S6_defi_volume
+from seasons.s6 import S6_apps, S6_nfts
+from seasons.s7 import S7_defi_volume, S7_defi_tvl
 
 if __name__ == "__main__":
     with psycopg2.connect() as conn:
@@ -40,10 +41,10 @@ if __name__ == "__main__":
                 tonapi=TonapiAdapter(),
                 executor=ContractsExecutor(os.getenv('CONTRACTS_EXECUTOR_URL'))
             )
-            season = S6_defi_tvl
+            season = S7_defi_tvl
         elif sys.argv[1] == 'defi_volume':
             backend = DefillamaDeFiVolumeBackend()
-            season = S6_defi_volume
+            season = S7_defi_volume
         elif sys.argv[1] == 'sbt':
             backend = SBTEnrollmentSync(conn,
                 tonapi=TonapiAdapter(),

@@ -44,7 +44,7 @@ class DefillamaDeFiTVLBackend(CalculationBackend):
     """
     def get_pool_tvl(self, pool: DexPool, ton_rate: float, block=None):
         code, data = self.tonapi.get_state(pool.address, block)
-        method_metadata = DefillamaDeFiBackend.DEX_METHODS[pool.dex]
+        method_metadata = DefillamaDeFiTVLBackend.DEX_METHODS[pool.dex]
         res = self.executor.execute(code, data, pool.address, method_metadata['method'], method_metadata['expected'])
         reserve0, reserve1 = int(res[0]), int(res[1])
         if pool.asset_position == DexPool.POSITION_LEFT:

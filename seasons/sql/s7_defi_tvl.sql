@@ -1,7 +1,10 @@
+-- create table tol.s7_defi_wallets_start 
+-- as
+-- select distinct on(address) address, tx_lt, jetton_master, "owner", balance from parsed.jetton_wallet_balances 
+-- where tx_lt < 51304152000000 order by address, tx_lt desc
+
 with wallets_start as (
-  select distinct on(address) address, tx_lt, jetton_master, "owner", balance from parsed.jetton_wallet_balances 
-  where tx_lt < 51063176000000 -- TODO change to start of season 
-  order by address, tx_lt desc
+  select * from tol.s7_defi_wallets_start
 ), wallets_end as (
   select address, last_transaction_lt as tx_lt, jetton as jetton_master, "owner", balance from jetton_wallets
 ), jvault_pools as (
