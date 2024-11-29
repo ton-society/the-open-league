@@ -126,8 +126,9 @@ order by now desc limit 1)
    from wallets_end b
    where b.jetton_master = upper('0:a4793bce49307006d3f4e97d815fb4c78ff7655faecf8606111ae29f8d6b41f4')
 ), daolama_impact as (
- select address, count(balance_delta), null::bigint as min_utime, null::bigint as max_utime,
- sum((select tvl_usd from daolama_tvl) * balance_delta / (select total_supply from daolama_total_supply)) as tvl_impact
+ select address,
+ sum((select tvl_usd from daolama_tvl) * balance_delta / (select total_supply from daolama_total_supply)) as tvl_impact,
+ count(balance_delta), null::bigint as min_utime, null::bigint as max_utime
  from daolama_balances_delta
  group by 1
 ), tonhedge_tvl as (
@@ -150,8 +151,9 @@ order by now desc limit 1)
    from wallets_end b
    where b.jetton_master = upper('0:57668d751f8c14ab76b3583a61a1486557bd746beeebbd4b2a65418b3fdb5471')
 ), tonhedge_impact as (
- select address, count(balance_delta), null::bigint as min_utime, null::bigint as max_utime,
- sum((select tvl_usd from tonhedge_tvl) * balance_delta / (select total_supply from tonhedge_total_supply)) as tvl_impact 
+ select address,
+  sum((select tvl_usd from tonhedge_tvl) * balance_delta / (select total_supply from tonhedge_total_supply)) as tvl_impact,
+  count(balance_delta), null::bigint as min_utime, null::bigint as max_utime
  from tonhedge_balances_delta
  group by 1
 ), tonpools_operations as (
@@ -199,7 +201,8 @@ order by now desc limit 1)
    group by 1
   having sum(balance) > 0
 ), parraton_impact as (
- select address, count(balance_delta), null::bigint as min_utime, null::bigint as max_utime, sum(value_usd * balance_delta / total_supply) as tvl_impact 
+ select address, sum(value_usd * balance_delta / total_supply) as tvl_impact,
+  count(balance_delta), null::bigint as min_utime, null::bigint as max_utime 
  from parraton_balances_delta
  join parraton_total_supply using(pool_address)
  join parraton_pool_tvls using(pool_address)
@@ -416,8 +419,9 @@ tonco_collections as (
   where tx_now >= 1732705200 and tx_now < 1734433200 and not tx_aborted
   group by pool, "owner"
 ), farmix_impact as (
-  select address, count("count"), min(min_utime) as min_utime, max(max_utime) as max_utime,
-  sum((total_mint_amount - coalesce(total_burn_amount, 0)) / total_mint_amount * total_transfer_amount * price / 1e6) as tvl_impact 
+  select address,
+   sum((total_mint_amount - coalesce(total_burn_amount, 0)) / total_mint_amount * total_transfer_amount * price / 1e6) as tvl_impact,
+   count("count"), min(min_utime) as min_utime, max(max_utime) as max_utime
   from farmix_agg_mints
   left join farmix_agg_burns using (pool, address)
   group by 1
