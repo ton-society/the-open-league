@@ -76,6 +76,22 @@ with swaps as (
   select project, address,
     sum(volume_usd) as volume_usd, count(volume_usd), min(event_time) as min_utime, max(event_time) as max_utime
   from memepads_trades group by 1, 2
+), moki_traces as (
+  select distinct trace_id from swaps where referral_address = '0:4DF40C3711AB8B7143D28E44D5FC198B77E6D76B102E8B06A4EFDCE3B3C83EF0'
+), moki_swaps as (
+  select tx_hash, swap_user as address, volume_usd, swap_utime from swaps join moki_traces using(trace_id)
+), moki_volume as (
+  select 'Moki' as project, address,
+    sum(volume_usd) as volume_usd, count(volume_usd), min(swap_utime) as min_utime, max(swap_utime) as max_utime
+  from moki_swaps group by 1, 2
+), titan_traces as (
+  select distinct trace_id from swaps where referral_address = '0:4F9174B92BE97346C53A4B3FFEA8EED46D7535F1055A62B27510C99D9017CF69'
+), titan_swaps as (
+  select tx_hash, swap_user as address, volume_usd, swap_utime from swaps join titan_traces using(trace_id)
+), titan_volume as (
+  select 'Titan' as project, address,
+    sum(volume_usd) as volume_usd, count(volume_usd), min(swap_utime) as min_utime, max(swap_utime) as max_utime
+  from titan_swaps group by 1, 2
 ), degens as (
   select distinct address from tol.enrollment_degen ed 
 ), volume_points as (
@@ -86,6 +102,10 @@ with swaps as (
   select *, floor(volume_usd / 20.) * 1 as points from swapcoffee_volume
   union all
   select *, floor(volume_usd / 20.) * 5 as points from memepads_volume
+  union all
+  select *, floor(volume_usd / 20.) * 1 as points from moki_volume
+  union all
+  select *, floor(volume_usd / 20.) * 1 as points from titan_volume
 )
 select extract(epoch from now())::integer as score_time, address, project, points, volume_usd as "value", "count", min_utime, max_utime
 from volume_points
