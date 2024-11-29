@@ -14,18 +14,20 @@ with swaps as (
   select distinct trace_id from swaps
   join rainbow_referral_addresses using(referral_address)
 ), rainbow_swaps as (
-  select 'rainbow' as project, tx_hash, swap_user as address, volume_usd from swaps join rainbow_traces using(trace_id)
-), rainbow_points as (
-  select address, floor(sum(volume_usd) / 20.) * 1 as points from rainbow_swaps
-  group by 1
+  select tx_hash, swap_user as address, volume_usd, swap_utime from swaps join rainbow_traces using(trace_id)
+), rainbow_volume as (
+  select 'rainbow' as project, address,
+    sum(volume_usd) as volume_usd, count(volume_usd), min(swap_utime) as min_utime, max(swap_utime) as max_utime
+  from rainbow_swaps group by 1, 2
 ), gaspump as (
-  select 'gaspump' as project, tx_hash, trader_address as address, ton_amount /1e9 
-  * (select price from prices.ton_price where price_ts < event_time order by price_ts desc limit 1)
+  select tx_hash, trader_address as address, event_time,
+  ton_amount / 1e9 * (select price from prices.ton_price where price_ts < event_time order by price_ts desc limit 1)
   as volume_usd from parsed.gaspump_trade
-  where  event_time  >= 1732705200 and event_time < 1734433200
-), gaspump_points as (
-  select address, floor(sum(volume_usd) / 20.) * 5 as points from gaspump
-  group by 1
+  where event_time >= 1732705200 and event_time < 1734433200
+), gaspump_volume as (
+  select 'gaspump' as project, address,
+    sum(volume_usd) as volume_usd, count(volume_usd), min(event_time) as min_utime, max(event_time) as max_utime
+  from gaspump group by 1, 2
 ), swapcoffee_referral_addresses as (
   select '0:99FE957A109352AFA5E9BCF69AF885644FA226AA488F7ED44C3880893F507FEF' as referral_address
   union all
@@ -60,10 +62,11 @@ with swaps as (
   select distinct trace_id from swaps 
   join swapcoffee_referral_addresses using(referral_address)
 ), swapcoffee_swaps as (
-  select 'coffeeswap' as project, tx_hash, swap_user as address, volume_usd from swaps join swapcoffee_traces using(trace_id)
-), swapcoffee_points as (
-  select address, floor(sum(volume_usd) / 20.) * 1 as points from swapcoffee_swaps
-  group by 1
+  select tx_hash, swap_user as address, volume_usd, swap_utime from swaps join swapcoffee_traces using(trace_id)
+), swapcoffee_volume as (
+  select 'swap.coffee' as project, address,
+    sum(volume_usd) as volume_usd, count(volume_usd), min(swap_utime) as min_utime, max(swap_utime) as max_utime
+  from swapcoffee_swaps group by 1, 2
 ), memepads_projects as (
   select 'TONPump by HOT Wallet' as project, upper('0:71ae4a9bf6c55518156a349cc95bd94370ac2186079a9a404936dd678e0a3fb5') as partner_address
   union all
@@ -73,29 +76,46 @@ with swaps as (
   union all
   select 'Wagmi' as project, upper('0:4ad7249b18ed2bcd96efe6f8e3d0dedcdf3d17678f8faaee2e5c305ef3618564') as partner_address
 ), memepads_trades as (
-  select project, tx_hash, trader_address as address, 
+  select project, tx_hash, trader_address as address, event_time,
   ton_amount / 1e9 * (select price from prices.ton_price where price_ts < event_time order by price_ts desc limit 1) as volume_usd
   from parsed.tonfun_bcl_trade
   join memepads_projects using (partner_address)
   where event_time >= 1732705200 and event_time < 1734433200
-), memepads_project_points as (
-  select project, address, floor(sum(volume_usd) / 20.) * 5 as points from memepads_trades
-  group by 1, 2
-), memepads_points as (
-  select address, sum(points) as points from memepads_project_points
-  group by 1
+), memepads_volume as (
+  select project, address,
+    sum(volume_usd) as volume_usd, count(volume_usd), min(event_time) as min_utime, max(event_time) as max_utime
+  from memepads_trades group by 1, 2
+), moki_traces as (
+  select distinct trace_id from swaps where referral_address = '0:4DF40C3711AB8B7143D28E44D5FC198B77E6D76B102E8B06A4EFDCE3B3C83EF0'
+), moki_swaps as (
+  select tx_hash, swap_user as address, volume_usd, swap_utime from swaps join moki_traces using(trace_id)
+), moki_volume as (
+  select 'Moki' as project, address,
+    sum(volume_usd) as volume_usd, count(volume_usd), min(swap_utime) as min_utime, max(swap_utime) as max_utime
+  from moki_swaps group by 1, 2
+), titan_traces as (
+  select distinct trace_id from swaps where referral_address = '0:4F9174B92BE97346C53A4B3FFEA8EED46D7535F1055A62B27510C99D9017CF69'
+), titan_swaps as (
+  select tx_hash, swap_user as address, volume_usd, swap_utime from swaps join titan_traces using(trace_id)
+), titan_volume as (
+  select 'Titan' as project, address,
+    sum(volume_usd) as volume_usd, count(volume_usd), min(swap_utime) as min_utime, max(swap_utime) as max_utime
+  from titan_swaps group by 1, 2
 ), degens as (
-  select distinct address, 1 as degen from tol.enrollment_degen ed 
+  select distinct address from tol.enrollment_degen ed 
 ), volume_points as (
-  select * from rainbow_points
+  select *, floor(volume_usd / 20.) * 1 as points from rainbow_volume
   union all
-  select * from gaspump_points
+  select *, floor(volume_usd / 20.) * 5 as points from gaspump_volume
   union all
-  select * from swapcoffee_points
+  select *, floor(volume_usd / 20.) * 1 as points from swapcoffee_volume
   union all
-  select * from memepads_points
+  select *, floor(volume_usd / 20.) * 5 as points from memepads_volume
+  union all
+  select *, floor(volume_usd / 20.) * 1 as points from moki_volume
+  union all
+  select *, floor(volume_usd / 20.) * 1 as points from titan_volume
 )
-select address, sum(points) as points from volume_points
+select extract(epoch from now())::integer as score_time, address, project, points, volume_usd as "value", "count", min_utime, max_utime
+from volume_points
 join degens using(address)
-where points > 0
-group by 1
