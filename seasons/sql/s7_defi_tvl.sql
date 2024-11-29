@@ -1,7 +1,9 @@
+-- create table tol.s7_defi_wallets_start 
+-- as
+-- select distinct on(address) address, tx_lt, jetton_master, "owner", balance from parsed.jetton_wallet_balances 
+-- where tx_lt < 51304152000000 order by address, tx_lt desc
 with wallets_start as (
-  select distinct on(address) address, tx_lt, jetton_master, "owner", balance from parsed.jetton_wallet_balances 
-  where tx_lt < 51063176000000 -- TODO change to start of season 
-  order by address, tx_lt desc
+  select * from tol.s7_defi_wallets_start
 ), wallets_end as (
   select address, last_transaction_lt as tx_lt, jetton as jetton_master, "owner", balance from jetton_wallets
 ), jvault_pools as (
@@ -35,7 +37,8 @@ with wallets_start as (
    group by 1
    having sum(balance) > 0
 ), jvault_impact as (
- select address, floor(sum(value_usd * balance_delta / total_supply) / 20.) * 5 as tvl_impact from jvault_balances_delta
+ select address, sum(value_usd * balance_delta / total_supply) as tvl_impact, count(balance_delta), null::bigint as min_utime, null::bigint as max_utime
+ from jvault_balances_delta
  join jvault_total_supply using(lp_master)
  join jvault_lp_tokens using(lp_master)
  join jvault_pool_tvls using(pool_address)
@@ -96,7 +99,8 @@ select pool_address, value_usd from settleton_index_pools
  select pool_address, sum(value_usd) as value_usd from settleton_pools_tvl_2_flat
  group by 1
 ), settleton_impact as (
- select address, floor(sum(value_usd * balance_delta / total_supply) / 20.) * 10 as tvl_impact from settleton_balances_delta
+ select address, sum(value_usd * balance_delta / total_supply) as tvl_impact, count(balance_delta), null::bigint as min_utime, null::bigint as max_utime
+ from settleton_balances_delta
  join settleton_total_supply using(pool_address)
  join settleton_pools_tvl_2 using(pool_address)
  group by 1
@@ -122,7 +126,10 @@ order by now desc limit 1)
    from wallets_end b
    where b.jetton_master = upper('0:a4793bce49307006d3f4e97d815fb4c78ff7655faecf8606111ae29f8d6b41f4')
 ), daolama_impact as (
- select address, floor(sum((select tvl_usd from daolama_tvl) * balance_delta / (select total_supply from daolama_total_supply)) / 20.) * 10 as tvl_impact from daolama_balances_delta
+ select address,
+ sum((select tvl_usd from daolama_tvl) * balance_delta / (select total_supply from daolama_total_supply)) as tvl_impact,
+ count(balance_delta), null::bigint as min_utime, null::bigint as max_utime
+ from daolama_balances_delta
  group by 1
 ), tonhedge_tvl as (
  select balance / 1e6 as tvl_usd from wallets_end
@@ -144,16 +151,18 @@ order by now desc limit 1)
    from wallets_end b
    where b.jetton_master = upper('0:57668d751f8c14ab76b3583a61a1486557bd746beeebbd4b2a65418b3fdb5471')
 ), tonhedge_impact as (
- select address, floor(sum((select tvl_usd from tonhedge_tvl) * balance_delta / (select total_supply from tonhedge_total_supply)) / 20.) * 10 as tvl_impact 
+ select address,
+  sum((select tvl_usd from tonhedge_tvl) * balance_delta / (select total_supply from tonhedge_total_supply)) as tvl_impact,
+  count(balance_delta), null::bigint as min_utime, null::bigint as max_utime
  from tonhedge_balances_delta
  group by 1
 ), tonpools_operations as (
-  select source as address, value / 1e9 * 
+  select source as address, created_at, value / 1e9 * 
   (select price from prices.ton_price where price_ts < m.created_at order by price_ts desc limit 1) as value_usd
   from messages m where direction ='in' and destination =upper('0:3bcbd42488fe31b57fc184ea58e3181594b33b2cf718500e108411e115978be1')
   and created_at >= 1732705200 and created_at < 1734433200 and opcode = 569292295
    union all
-  select m_in.source as address, -1 * m_out.value  / 1e9 *
+  select m_in.source as address, m_in.created_at, -1 * m_out.value  / 1e9 *
   (select price from prices.ton_price where price_ts < m_out.created_at order by price_ts desc limit 1) as value_usd
   from messages m_in
   join messages m_out on m_out.tx_hash  = m_in.tx_hash and m_out.direction  = 'out'
@@ -162,7 +171,7 @@ order by now desc limit 1)
   and m_in.created_at  >= 1732705200 and m_in.created_at < 1734433200 and m_in.opcode = 195467089
   and mc."comment" = 'Withdraw completed'
 ), tonpools_impact as (
- select address, floor(sum(value_usd) / 20.) * 10 as tvl_impact
+ select address, sum(value_usd) as tvl_impact, count(value_usd), min(created_at) as min_utime, max(created_at) as max_utime
  from tonpools_operations group by 1
 ), parraton_pools as (
   select address as pool_address from jetton_masters jm where 
@@ -192,7 +201,9 @@ order by now desc limit 1)
    group by 1
   having sum(balance) > 0
 ), parraton_impact as (
- select address, floor(sum(value_usd * balance_delta / total_supply) / 20.) * 10 as tvl_impact from parraton_balances_delta
+ select address, sum(value_usd * balance_delta / total_supply) as tvl_impact,
+  count(balance_delta), null::bigint as min_utime, null::bigint as max_utime 
+ from parraton_balances_delta
  join parraton_total_supply using(pool_address)
  join parraton_pool_tvls using(pool_address)
  group by 1
@@ -202,7 +213,8 @@ order by now desc limit 1)
   else destination end as address,
   case when source = upper('0:b606de2fc1c4a00b000194e7e097be466c6b82d06a515361ac64aaaa307bbe4f') then -1 else 1 end * amount / 1e9 * 
   coalesce((select price from prices.core where asset = jetton_master_address and price_ts < tx_now order by price_ts desc limit 1), 1) *
-  (select price from prices.ton_price where price_ts < tx_now order by price_ts desc limit 1) as tvl_usd
+  (select price from prices.ton_price where price_ts < tx_now order by price_ts desc limit 1) as tvl_usd,
+  tx_now
   from jetton_transfers
   where (jetton_master_address = upper('0:cd872fa7c5816052acdf5332260443faec9aacc8c21cca4d92e7f47034d11892') 
   or jetton_master_address = upper('0:bdf3fa8098d129b54b4f73b5bac5d1e1fd91eb054169c3916dfc8ccd536d1000'))
@@ -213,7 +225,8 @@ order by now desc limit 1)
     source = upper('0:b606de2fc1c4a00b000194e7e097be466c6b82d06a515361ac64aaaa307bbe4f')
   ) and not tx_aborted
 ), tonstable_impact as (
-  select address, floor(sum(tvl_usd) / 20.) * 15 as tvl_impact from tonstable_flow
+  select address, sum(tvl_usd) as tvl_impact, count(tvl_usd), min(tx_now) as min_utime, max(tx_now) as max_utime
+  from tonstable_flow
   group by 1
 ), aqua_flow as (
   select 
@@ -221,7 +234,8 @@ order by now desc limit 1)
   else destination end as address,
   case when source = upper('0:160f2c40452977a25d86d5130b3307a9af7bfa4deaf996cde388096178ab2182') then -1 else 1 end * amount / 1e9 * 
   coalesce((select price from prices.core where asset = jetton_master_address and price_ts < tx_now order by price_ts desc limit 1), 1) *
-  (select price from prices.ton_price where price_ts < tx_now order by price_ts desc limit 1) as tvl_usd
+  (select price from prices.ton_price where price_ts < tx_now order by price_ts desc limit 1) as tvl_usd,
+  tx_now
   from jetton_transfers
   where (jetton_master_address = upper('0:cd872fa7c5816052acdf5332260443faec9aacc8c21cca4d92e7f47034d11892') 
   or jetton_master_address = upper('0:bdf3fa8098d129b54b4f73b5bac5d1e1fd91eb054169c3916dfc8ccd536d1000')
@@ -234,7 +248,8 @@ order by now desc limit 1)
     source = upper('0:160f2c40452977a25d86d5130b3307a9af7bfa4deaf996cde388096178ab2182')
   ) and not tx_aborted
 ), aqua_impact as (
-  select address, floor(sum(tvl_usd) / 20.) * 15 as tvl_impact from aqua_flow
+  select address, sum(tvl_usd) as tvl_impact, count(tvl_usd), min(tx_now) as min_utime, max(tx_now) as max_utime
+  from aqua_flow
   group by 1
 ), swapcoffee_jettons as (
   select upper('0:a5d12e31be87867851a28d3ce271203c8fa1a28ae826256e73c506d94d49edad') as jetton_master_address
@@ -249,14 +264,16 @@ order by now desc limit 1)
       coalesce((select price_usd from prices.agg_prices ap where ap.base = jetton_master_address and price_time < 1734433200 order by price_time desc limit 1) * jt.amount / 1e6, 0)
     else
       coalesce((select jt.amount * tvl_usd / total_supply from prices.dex_pool_history dph where pool = jetton_master_address and "timestamp" < 1734433200 order by "timestamp" desc limit 1), 0)
-  end as tvl_usd
+  end as tvl_usd,
+  tx_now
   from jetton_transfers jt 
   join swapcoffee_jettons using(jetton_master_address)
   where destination = upper('0:29f90533937d696105883b981e9427d1ae411eef5b08eab83f4af89c495d27df')
   and not tx_aborted
   and tx_now >= 1732705200 and tx_now < 1734433200
 ), swapcoffee_impact as (
-  select address, floor(sum(tvl_usd) / 20.) * 5 as tvl_impact from swapcoffee_flow
+  select address, sum(tvl_usd) as tvl_impact, count(tvl_usd), min(tx_now) as min_utime, max(tx_now) as max_utime
+  from swapcoffee_flow
   group by 1
 ), coffin_assets as (
   select 'TON' as symbol,
@@ -292,20 +309,20 @@ order by now desc limit 1)
   end as price
   from coffin_assets
 ), coffin_events as (
-  select tx_hash, owner_address as address, asset_id, amount from parsed.evaa_supply es
+  select tx_hash, owner_address as address, asset_id, amount, utime from parsed.evaa_supply es
   where pool_address = '0:68CF02950F26BD20BDCAC38991E40429878CA8D7912E31DC97F272E58DE694C6'
   and utime >= 1732705200 and utime < 1734433200
   union all 
-  select tx_hash, owner_address, asset_id, -amount from parsed.evaa_withdraw ew
+  select tx_hash, owner_address, asset_id, -amount, utime from parsed.evaa_withdraw ew
   where pool_address = '0:68CF02950F26BD20BDCAC38991E40429878CA8D7912E31DC97F272E58DE694C6'
   and utime >= 1732705200 and utime < 1734433200
 ), coffin_totals as (
-  select address, asset_id, sum(amount * price / 1e6) as volume_usd
+  select address, asset_id, sum(amount * price / 1e6) as volume_usd, count(amount), min(utime) as min_utime, max(utime) as max_utime
   from coffin_events
   join coffin_prices using (asset_id)
   group by 1, 2
 ), coffin_impact as (
-  select address, floor(sum(volume_usd) / 20.) * 10 as tvl_impact
+  select address, sum(volume_usd) as tvl_impact, count("count"), min(min_utime) as min_utime, max(max_utime) as max_utime
   from coffin_totals
   group by 1
 ),
@@ -372,7 +389,7 @@ tonco_collections as (
   select owner_address, amount_usd from tonco_jetton_liquidity_transfers where amount_usd is not null
 ), tonco_impact as (
   -- final calculation of impact
-  select owner_address as address, floor(sum(amount_usd) / 20.) * 10 as tvl_impact
+  select owner_address as address, sum(amount_usd) as tvl_impact, count(amount_usd), null::bigint as min_utime, null::bigint as max_utime
   from tonco_liquidity_transfers group by 1
 ), farmix_pools as (
   select upper('0:be8e55fcdc36198125915b9abf5ee1cb5961503e9db11a673c042a1e59c90aa5') as pool, -- pTON pool
@@ -389,7 +406,8 @@ tonco_collections as (
     where ap.base = upper('0:2f956143c461769579baef2e32cc2d7bc18283f40d20bb03e432cd603ac33ffc') and price_time < 1734433200 
     order by price_time desc limit 1) as price
 ), farmix_agg_mints as (
-  select fp.pool, jt."source" as address, sum(jt.amount) as total_transfer_amount, sum(jm.amount) as total_mint_amount, fp.price
+  select fp.pool, jt."source" as address, sum(jt.amount) as total_transfer_amount, sum(jm.amount) as total_mint_amount,
+    fp.price, count(jm.amount), min(jm.utime) as min_utime, max(jm.utime) as max_utime
   from parsed.jetton_mint jm
   join farmix_pools fp on jetton_master_address = pool
   join jetton_transfers jt on jm.trace_id = jt.trace_id and jt.destination = fp.pool and jt.jetton_master_address = fp.jetton and not jt.tx_aborted
@@ -401,38 +419,87 @@ tonco_collections as (
   where tx_now >= 1732705200 and tx_now < 1734433200 and not tx_aborted
   group by pool, "owner"
 ), farmix_impact as (
-  select address, floor(sum((total_mint_amount - coalesce(total_burn_amount, 0)) / total_mint_amount * total_transfer_amount * price / 1e6) / 20.) * 10 as tvl_impact 
+  select address,
+   sum((total_mint_amount - coalesce(total_burn_amount, 0)) / total_mint_amount * total_transfer_amount * price / 1e6) as tvl_impact,
+   count("count"), min(min_utime) as min_utime, max(max_utime) as max_utime
   from farmix_agg_mints
   left join farmix_agg_burns using (pool, address)
   group by 1
+), crouton_vaults as (
+  select 'TON' as symbol,
+  '0:1D5FDACD17489F917240A3B097839BFBF3205B3FD3B52F850BECCF442345CC92' as vault_address,
+  '0:0000000000000000000000000000000000000000000000000000000000000000' as jetton_address
+    union all
+  select 'stTON' as symbol,
+  '0:D1A320E2F0B5505B8092F3819D02EBDABD2BA0C683F52C2138F5A7C4A6064CB5' as vault_address,
+  '0:CD872FA7C5816052ACDF5332260443FAEC9AACC8C21CCA4D92E7F47034D11892' as jetton_address
+    union all
+  select 'tsTON' as symbol,
+  '0:260820E60D38B53C03BD6711FD333C3B10B2A0223658A320CF856D3BA1272B30' as vault_address,
+  '0:BDF3FA8098D129B54B4F73B5BAC5D1E1FD91EB054169C3916DFC8CCD536D1000' as jetton_address
+), crouton_vaults_tvl as (
+  select symbol,
+  case 
+    when symbol = 'TON' then
+      (select balance * (select price from prices.ton_price where price_ts < 1734433200 order by price_ts desc limit 1) / 1e9
+      from account_states as2 
+      where hash = (select account_state_hash_after from transactions where account = vault_address and now < 1734433200 order by now desc limit 1))
+    else
+      (select balance * (select price_usd from prices.agg_prices ap 
+      where ap.base = jetton_address and price_time < 1734433200 order by price_time desc limit 1) / 1e6
+      from wallets_end where "owner" = vault_address and jetton_master = jetton_address)
+  end as tvl_usd
+  from crouton_vaults
+), crouton_total_tvl as (
+  select sum(tvl_usd) as total_tvl_usd from crouton_vaults_tvl
+), crouton_balances_before as (
+  select ed.address, balance from wallets_start b
+  join tol.enrollment_degen ed on ed.address = b."owner"
+  where b.jetton_master = '0:7B3ABBA2D73FDD28E3681EE825BE2D9B314A660F87F0D19E02DA07B00F614FD0'
+), crouton_balances_after as (
+  select ed.address, balance from wallets_end b
+  join tol.enrollment_degen ed on ed.address = b."owner"
+  where b.jetton_master = '0:7B3ABBA2D73FDD28E3681EE825BE2D9B314A660F87F0D19E02DA07B00F614FD0'
+), crouton_balances_delta as (
+  select address, coalesce(cba.balance, 0) - coalesce(cbb.balance, 0) as balance_delta
+  from crouton_balances_after cba left join crouton_balances_before cbb using(address) 
+), crouton_total_supply as (
+  select sum(balance) as total_supply from wallets_end b
+  where b.jetton_master = '0:7B3ABBA2D73FDD28E3681EE825BE2D9B314A660F87F0D19E02DA07B00F614FD0'
+), crouton_impact as (
+  select address, sum(total_tvl_usd * balance_delta / total_supply) as tvl_impact,
+    count(balance_delta), null::bigint as min_utime, null::bigint as max_utime 
+  from crouton_balances_delta
+  cross join crouton_total_supply
+  cross join crouton_total_tvl
+  group by 1
 ), all_projects_impact as (
- select 'jVault' as project, * from jvault_impact
+ select 'jVault' as project, *, floor(tvl_impact / 20.) * 5 as points from jvault_impact
    union all
- select 'SettleTon' as project, * from settleton_impact
+ select 'SettleTon' as project, *, floor(tvl_impact / 20.) * 10 as points from settleton_impact
    union all
- select 'DAOLama' as project, * from daolama_impact
+ select 'DAOLama' as project, *, floor(tvl_impact / 20.) * 10 as points from daolama_impact
    union all
- select 'TONHedge' as project, * from tonhedge_impact
+ select 'TONHedge' as project, *, floor(tvl_impact / 20.) * 10 as points from tonhedge_impact
    union all
- select 'TONPools' as project, * from tonpools_impact
+ select 'TONPools' as project, *, floor(tvl_impact / 20.) * 10 as points from tonpools_impact
    union all
- select 'Parraton' as project, * from parraton_impact
+ select 'Parraton' as project, *, floor(tvl_impact / 20.) * 10 as points from parraton_impact
    union all
- select 'TONStable' as project, * from tonstable_impact
+ select 'TONStable' as project, *, floor(tvl_impact / 20.) * 15 as points from tonstable_impact
    union all
- select 'Aqua' as project, * from aqua_impact
+ select 'Aqua' as project, *, floor(tvl_impact / 20.) * 15 as points from aqua_impact
    union all
- select 'swap.coffee' as project, * from swapcoffee_impact
+ select 'swap.coffee staking' as project, *, floor(tvl_impact / 20.) * 5 as points from swapcoffee_impact
    union all
- select 'Coffin' as project, * from coffin_impact
+ select 'Coffin' as project, *, floor(tvl_impact / 20.) * 10 as points from coffin_impact
    union all
- select 'TONCO' as project, * from tonco_impact
+ select 'TONCO' as project, *, floor(tvl_impact / 20.) * 10 as points from tonco_impact
    union all
- select 'Farmix' as project, * from farmix_impact
-), all_projects_degen_only as (
-select p.* from all_projects_impact p
-join tol.enrollment_degen ed on ed.address = p.address
+ select 'Farmix' as project, *, floor(tvl_impact / 20.) * 10 as points from farmix_impact
+   union all
+ select 'Crouton' as project, *, floor(tvl_impact / 20.) * 10 as points from crouton_impact
 )
-select address, sum(tvl_impact) as points from all_projects_degen_only
-where tvl_impact > 0
-group by 1
+select extract(epoch from now())::integer as score_time, p.address, project, points, tvl_impact as "value", "count", min_utime, max_utime
+from all_projects_impact p
+join tol.enrollment_degen ed on ed.address = p.address

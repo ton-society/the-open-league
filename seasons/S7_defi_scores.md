@@ -46,6 +46,14 @@ The same methodology as for RainbowSwap, but with list of referral addresses:
 
 Volume includes trades extracted from [TONFun events](https://github.com/re-doubt/ton-etl/blob/main/parser/parsers/message/tonfun.py) for projects: TONPump by HOT Wallet, Blum, BigPump by PocketFi, Wagmi. USD value is calculated as a product of trade amount and price of TON at the time of trade.
 
+### Moki
+
+The same methodology as for RainbowSwap, but with referral address [EQBN9Aw3EauLcUPSjkTV_BmLd-bXaxAuiwak79zjs8g-8Ajg](https://tonviewer.com/EQBN9Aw3EauLcUPSjkTV_BmLd-bXaxAuiwak79zjs8g-8Ajg).
+
+### Titan
+
+The same methodology as for RainbowSwap, but with referral address [EQBPkXS5K-lzRsU6Sz_-qO7UbXU18QVaYrJ1EMmdkBfPaffM](https://tonviewer.com/EQBPkXS5K-lzRsU6Sz_-qO7UbXU18QVaYrJ1EMmdkBfPaffM).
+
 
 Full list of volume generating transaction and eligible users could be obtained using [the following query](sql/s7_defi_volume.sql).
 
@@ -133,6 +141,20 @@ List of Farmix pools:
 - [USDT](https://tonviewer.com/EQD6gQSWCayHh0FvUnTXlpfizIWiq7UeE4gYvXGYtEhIYJ8q)
 - [NOT](https://tonviewer.com/EQCE_6TevKEpj8OTz3rZt1D5bR6fENQbSN2bbW0jzxbWGGIo)
 
+### Crouton
+
+All users can deposit TON/stTON/tsTON to 3-assets pool [3TON](https://crouton.finance/pools/EQB7Orui1z_dKONoHuglvi2bMUpmD4fw0Z4C2gewD2FP0BpL), all assets are stored on three vaults:
+- https://tonviewer.com/EQAmCCDmDTi1PAO9ZxH9Mzw7ELKgIjZYoyDPhW07oScrMFhC
+- https://tonviewer.com/EQDRoyDi8LVQW4CS84GdAuvavSugxoP1LCE49afEpgZMtYIB
+- https://tonviewer.com/EQAdX9rNF0ifkXJAo7CXg5v78yBbP9O1L4UL7M9EI0XMksB0
+
+Users hold LP tokens [Crouton LP](https://tonviewer.com/EQB7Orui1z_dKONoHuglvi2bMUpmD4fw0Z4C2gewD2FP0BpL) which is used to estimate TVL increase. Algorithm is the following:
+
+- Calculating increase of Crouton LP balance for each user
+- Calculating total supply of Crouton LP at the current moment (or at the end of the season)
+- Get actual balances for the vaults at the current moment (or at the end of the season) and estimate total TVL based on the current price of TON/stTON/tsTON
+- User impact is equal to `Crouton LP balance increase` / `Total supply of Crouton LP` * `Total TVL`
+
 
 Full list of participants and their impact on TVL could be obtained by [this query](sql/s7_defi_tvl.sql).
 
@@ -148,6 +170,8 @@ Full list of participants and their impact on TVL could be obtained by [this que
 |Blum|Volume|5|
 |BigPump by PocketFi|Volume|5|
 |Wagmi|Volume|5|
+|Moki|Volume|1|
+|Titan|Volume|1|
 |Aqua protocol|TVL|15|
 |JVault|TVL|5|
 |DAOLama|TVL|10|
@@ -160,3 +184,4 @@ Full list of participants and their impact on TVL could be obtained by [this que
 |Coffin|TVL|10|
 |TONCO|TVL|10|
 |Farmix|TVL|10|
+|Crouton|TVL|10|

@@ -4,6 +4,7 @@ SwapCoffeeTVL = DeFi(
     name="swap.coffee",
     defillama_slug="swap.coffee",
     url="https://swap.coffee/stake",
+    chain='TON-staking'
 )
 
 
