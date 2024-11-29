@@ -172,16 +172,16 @@ Full list of participants and their impact on TVL could be obtained by [this que
 |Wagmi|Volume|5|
 |Moki|Volume|1|
 |Titan|Volume|1|
-|Aqua protocol|TVL|15|
+|Aqua protocol|TVL|10|
 |JVault|TVL|5|
 |DAOLama|TVL|10|
 |Parraton|TVL|10|
 |SettleTON|TVL|10|
-|TonPools|TVL|10|
-|TonStable|TVL|15|
+|TonPools|TVL|5|
+|TonStable|TVL|10|
 |TON Hedge|TVL|10|
 |swap.coffee staking|TVL|5|
-|Coffin|TVL|10|
+|Coffin|TVL|5|
 |TONCO|TVL|10|
 |Farmix|TVL|10|
 |Crouton|TVL|10|
