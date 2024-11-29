@@ -1,24 +1,25 @@
 """
-S6 season config
+S7 season config
 """
-from models.season_config import SeasonConfig, DexPool
+from models.season_config import SeasonConfig
 from projects.defi.Farmix import Farmix
 from projects.defi.Coffin import Coffin
 from projects.defi.SwapCoffee import SwapCoffeeVolume, SwapCoffeeTVL
 from projects.defi.AquaProtocol import AquaProtocol
+from projects.defi.Crouton import Crouton
 from projects.defi.DAOLama import DAOLama
 from projects.defi.GasPump import GasPumpDeFi
+from projects.defi.Moki import Moki
 from projects.defi.RainbowSwap import RainbowSwap
 from projects.defi.SettleTON import SettleTON
 from projects.defi.JVault import JVault
+from projects.defi.Titan import Titan
 from projects.defi.TONCO import TONCO
 from projects.defi.TONHedge import TONHedge
 from projects.defi.TonStable import TonStable
 from projects.defi.Parraton import Parraton
 from projects.defi.TonPools import TonPools
-from seasons.app_models import AppLeaderboardModelS6
 from seasons.defi_models import DeFiTVLContribution, DeFiVolumeContribution
-from seasons.nfts_models import NFTLeaderboardModelV1
 
 
 S7_START = 1732705200 # Wed Nov 27 2024 11:00:00 GMT+0000
@@ -33,7 +34,8 @@ S7_defi_tvl = SeasonConfig(
     projects=[
         DAOLama, SettleTON, JVault,
         TONHedge, TonStable, Parraton, TonPools,
-        AquaProtocol, SwapCoffeeTVL, Coffin, TONCO, Farmix
+        AquaProtocol, SwapCoffeeTVL, Coffin, TONCO, Farmix,
+        Crouton
     ],
     score_model=DeFiTVLContribution(squads=[
         (lambda tvl: tvl >= 5e6, "Over 5M$"),
@@ -49,7 +51,7 @@ S7_defi_volume = SeasonConfig(
     start_time=S7_START,
     end_time=S7_END,
     projects=[
-        GasPumpDeFi, RainbowSwap, SwapCoffeeVolume
+        GasPumpDeFi, RainbowSwap, SwapCoffeeVolume, Moki, Titan
     ],
     score_model=DeFiVolumeContribution(squads=[
         (lambda tvl: tvl >= 50 * 1e6, "Over 50M$"),
