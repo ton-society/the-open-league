@@ -482,17 +482,17 @@ tonco_collections as (
    union all
  select 'TONHedge' as project, *, floor(tvl_impact / 20.) * 10 as points from tonhedge_impact
    union all
- select 'TONPools' as project, *, floor(tvl_impact / 20.) * 10 as points from tonpools_impact
+ select 'TONPools' as project, *, floor(tvl_impact / 20.) * 5 as points from tonpools_impact
    union all
  select 'Parraton' as project, *, floor(tvl_impact / 20.) * 10 as points from parraton_impact
    union all
- select 'TONStable' as project, *, floor(tvl_impact / 20.) * 15 as points from tonstable_impact
+ select 'TONStable' as project, *, floor(tvl_impact / 20.) * 10 as points from tonstable_impact
    union all
- select 'Aqua' as project, *, floor(tvl_impact / 20.) * 15 as points from aqua_impact
+ select 'Aqua' as project, *, floor(tvl_impact / 20.) * 10 as points from aqua_impact
    union all
  select 'swap.coffee staking' as project, *, floor(tvl_impact / 20.) * 5 as points from swapcoffee_impact
    union all
- select 'Coffin' as project, *, floor(tvl_impact / 20.) * 10 as points from coffin_impact
+ select 'Coffin' as project, *, floor(tvl_impact / 20.) * 5 as points from coffin_impact
    union all
  select 'TONCO' as project, *, floor(tvl_impact / 20.) * 10 as points from tonco_impact
    union all
