@@ -157,7 +157,7 @@ Users hold LP tokens [Crouton LP](https://tonviewer.com/EQB7Orui1z_dKONoHuglvi2b
 - Calculating increase of Crouton LP balance for each user
 - Calculating total supply of Crouton LP at the current moment (or at the end of the season)
 - Get actual balances for the vaults at the current moment (or at the end of the season) and estimate total TVL based on the current price of TON/stTON/tsTON
-- User impact is equal to `Crouton LP balance increase` * `Total supply of Crouton LP` * `Total TVL`
+- User impact is equal to `Crouton LP balance increase` / `Total supply of Crouton LP` * `Total TVL`
 
 
 Full list of participants and their impact on TVL could be obtained by [this query](sql/s7_defi_tvl.sql).

@@ -425,6 +425,54 @@ tonco_collections as (
   from farmix_agg_mints
   left join farmix_agg_burns using (pool, address)
   group by 1
+), crouton_vaults as (
+  select 'TON' as symbol,
+  '0:1D5FDACD17489F917240A3B097839BFBF3205B3FD3B52F850BECCF442345CC92' as vault_address,
+  '0:0000000000000000000000000000000000000000000000000000000000000000' as jetton_address
+    union all
+  select 'stTON' as symbol,
+  '0:D1A320E2F0B5505B8092F3819D02EBDABD2BA0C683F52C2138F5A7C4A6064CB5' as vault_address,
+  '0:CD872FA7C5816052ACDF5332260443FAEC9AACC8C21CCA4D92E7F47034D11892' as jetton_address
+    union all
+  select 'tsTON' as symbol,
+  '0:260820E60D38B53C03BD6711FD333C3B10B2A0223658A320CF856D3BA1272B30' as vault_address,
+  '0:BDF3FA8098D129B54B4F73B5BAC5D1E1FD91EB054169C3916DFC8CCD536D1000' as jetton_address
+), crouton_vaults_tvl as (
+  select symbol,
+  case 
+    when symbol = 'TON' then
+      (select balance * (select price from prices.ton_price where price_ts < 1734433200 order by price_ts desc limit 1) / 1e9
+      from account_states as2 
+      where hash = (select account_state_hash_after from transactions where account = vault_address and now < 1734433200 order by now desc limit 1))
+    else
+      (select balance * (select price_usd from prices.agg_prices ap 
+      where ap.base = jetton_address and price_time < 1734433200 order by price_time desc limit 1) / 1e6
+      from wallets_end where "owner" = vault_address and jetton_master = jetton_address)
+  end as tvl_usd
+  from crouton_vaults
+), crouton_total_tvl as (
+  select sum(tvl_usd) as total_tvl_usd from crouton_vaults_tvl
+), crouton_balances_before as (
+  select ed.address, balance from wallets_start b
+  join tol.enrollment_degen ed on ed.address = b."owner"
+  where b.jetton_master = '0:7B3ABBA2D73FDD28E3681EE825BE2D9B314A660F87F0D19E02DA07B00F614FD0'
+), crouton_balances_after as (
+  select ed.address, balance from wallets_end b
+  join tol.enrollment_degen ed on ed.address = b."owner"
+  where b.jetton_master = '0:7B3ABBA2D73FDD28E3681EE825BE2D9B314A660F87F0D19E02DA07B00F614FD0'
+), crouton_balances_delta as (
+  select address, coalesce(cba.balance, 0) - coalesce(cbb.balance, 0) as balance_delta
+  from crouton_balances_after cba left join crouton_balances_before cbb using(address) 
+), crouton_total_supply as (
+  select sum(balance) as total_supply from wallets_end b
+  where b.jetton_master = '0:7B3ABBA2D73FDD28E3681EE825BE2D9B314A660F87F0D19E02DA07B00F614FD0'
+), crouton_impact as (
+  select address, sum(total_tvl_usd * balance_delta / total_supply) as tvl_impact,
+    count(balance_delta), null::bigint as min_utime, null::bigint as max_utime 
+  from crouton_balances_delta
+  cross join crouton_total_supply
+  cross join crouton_total_tvl
+  group by 1
 ), all_projects_impact as (
  select 'jVault' as project, *, floor(tvl_impact / 20.) * 5 as points from jvault_impact
    union all
@@ -449,6 +497,8 @@ tonco_collections as (
  select 'TONCO' as project, *, floor(tvl_impact / 20.) * 10 as points from tonco_impact
    union all
  select 'Farmix' as project, *, floor(tvl_impact / 20.) * 10 as points from farmix_impact
+   union all
+ select 'Crouton' as project, *, floor(tvl_impact / 20.) * 10 as points from crouton_impact
 )
 select extract(epoch from now())::integer as score_time, p.address, project, points, tvl_impact as "value", "count", min_utime, max_utime
 from all_projects_impact p
