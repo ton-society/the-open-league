@@ -160,6 +160,12 @@ Users hold LP tokens [Crouton LP](https://tonviewer.com/EQB7Orui1z_dKONoHuglvi2b
 - User impact is equal to `Crouton LP balance increase` / `Total supply of Crouton LP` * `Total TVL`
 
 
+### UTONIC
+
+[UTONIC](https://utonic.finance/) allows to deposit TON/stTON/tsTON to the pool and receive uTON as a reward.
+User impact is calculated as mints minus burns for each user.
+
+
 Full list of participants and their impact on TVL could be obtained by [this query](sql/s7_defi_tvl.sql).
 
 
@@ -189,3 +195,4 @@ Full list of participants and their impact on TVL could be obtained by [this que
 |TONCO|TVL|10|
 |Farmix|TVL|10|
 |Crouton|TVL|10|
+|UTONIC|TVL|10|
