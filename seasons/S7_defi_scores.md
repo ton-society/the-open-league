@@ -161,6 +161,15 @@ Users hold LP tokens [Crouton LP](https://tonviewer.com/EQB7Orui1z_dKONoHuglvi2b
 [UTONIC](https://utonic.finance/) allows to deposit TON/stTON/tsTON to the pool and receive uTON as a reward.
 User impact is calculated as mints minus burns for each user.
 
+### Delea
+
+[Delea](https://app.delea.finance/) is a CDP and users can deposit TON/stTON/tsTON to the pool and mint DONE. Later users 
+can repay their position by sending DONE to the vault smart contract (and unlock their underlying collateral).
+Vault addresses:
+* [TON](https://tonviewer.com/EQB6rkS8xt3Ey4XugdVqQDe1vt4KJDh813_k2ceoONTCBnyD)
+* [stTON](https://tonviewer.com/EQA2OzCuP8-d_lN2MYxLv5WCNfpLH1NUuugppOZBZgNYn-aa)
+* [tsTON](https://tonviewer.com/EQCwIIRKpuV9fQpQxdTMhLAO30MNHa6GOYd00TsySOOYtA9n)
+
 
 Full list of participants and their impact on TVL could be obtained by [this query](sql/s7_defi_tvl.sql).
 
@@ -192,3 +201,4 @@ Full list of participants and their impact on TVL could be obtained by [this que
 |Farmix|TVL|10|
 |Crouton|TVL|10|
 |UTONIC|TVL|10|
+|Delea|TVL|10|
