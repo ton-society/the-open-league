@@ -473,6 +473,29 @@ tonco_collections as (
   cross join crouton_total_supply
   cross join crouton_total_tvl
   group by 1
+), utonic_flow as (
+  -- get all mints and burns during the period
+  select "owner" as address, amount,
+  utime as event_time from parsed.jetton_mint jm
+  where jetton_master_address = upper('0:1f1798f724c2296652e6002bfb51bed11fb5a689532e5788af7203581ef367a8')
+  and utime >= 1732705200 and utime < 1734433200 and successful
+  
+  union all
+  
+  -- burns come with negative amount
+  select "owner" as address, -1 * amount as amount,
+  tx_now as event_time from public.jetton_burns
+  where jetton_master_address = upper('0:1f1798f724c2296652e6002bfb51bed11fb5a689532e5788af7203581ef367a8')
+  and tx_now >= 1732705200 and tx_now < 1734433200 and not tx_aborted
+), uton_price as (
+  -- uTON is traded on DEXs so will get price from the agg_prices just before the period end
+  select coalesce((select price_usd from prices.agg_prices ap where ap.base = upper('0:1f1798f724c2296652e6002bfb51bed11fb5a689532e5788af7203581ef367a8')
+  and price_time < 1734433200 order by price_time desc limit 1), 0) as price
+), utonic_impact as (
+  -- final user impact - sum of all mints and burns (with negative value of the amount) converted to USD using DEX price
+  select address, sum(amount) * (select price from uton_price) / 1e6 as tvl_impact, count(1), min(event_time) as min_utime, max(event_time) as max_utime
+  from utonic_flow
+  group by 1
 ), all_projects_impact as (
  select 'jVault' as project, *, floor(tvl_impact / 20.) * 5 as points from jvault_impact
    union all
@@ -499,6 +522,8 @@ tonco_collections as (
  select 'Farmix' as project, *, floor(tvl_impact / 20.) * 10 as points from farmix_impact
    union all
  select 'Crouton' as project, *, floor(tvl_impact / 20.) * 10 as points from crouton_impact
+   union all
+ select 'UTONIC' as project, *, floor(tvl_impact / 20.) * 10 as points from utonic_impact
 )
 select extract(epoch from now())::integer as score_time, p.address, project, points, tvl_impact as "value", "count", min_utime, max_utime
 from all_projects_impact p
