@@ -496,6 +496,36 @@ tonco_collections as (
   select address, sum(amount) * (select price from uton_price) / 1e6 as tvl_impact, count(1), min(event_time) as min_utime, max(event_time) as max_utime
   from utonic_flow
   group by 1
+), delea_flow as (
+  -- get all mints during the period
+  select "owner" as address, amount,
+  utime as event_time from parsed.jetton_mint jm
+  where jetton_master_address = upper('0:a0194301feed4692bb24c36a38d3b220f3299099f9315ae3d6d9de0836e4283c')
+  and utime >= 1732705200 and utime < 1734433200 and successful
+  
+  union all
+  
+  -- all transfers to the vaults (repay)
+  select "source" as address, -1 * amount as amount,
+  tx_now as event_time from public.jetton_transfers jt 
+  where jetton_master_address = upper('0:a0194301feed4692bb24c36a38d3b220f3299099f9315ae3d6d9de0836e4283c')
+  and tx_now >= 1732705200 and tx_now < 1734433200 and not tx_aborted
+  and (
+  destination  = upper('0:7aae44bcc6ddc4cb85ee81d56a4037b5bede0a24387cd77fe4d9c7a838d4c206') -- TON vault
+  or 
+  destination  = upper('0:b020844aa6e57d7d0a50c5d4cc84b00edf430d1dae86398774d13b3248e398b4') -- tsTON vault
+    or 
+  destination  = upper('0:363b30ae3fcf9dfe5376318c4bbf958235fa4b1f5354bae829a4e6416603589f') -- stTON vault
+  )
+), delea_price as (
+  -- DONE is a stablecoin, but it is more reliable to get price from DEX trades
+  select coalesce((select price_usd from prices.agg_prices ap where ap.base = upper('0:a0194301feed4692bb24c36a38d3b220f3299099f9315ae3d6d9de0836e4283c')
+  and price_time < 1734433200 order by price_time desc limit 1), 0) as price
+), delea_impact as (
+  -- final user impact - sum of all mints and repays (with negative value of the amount) converted to USD using DEX price
+  select address, sum(amount) * (select price from delea_price) / 1e6 as tvl_impact, count(1), min(event_time) as min_utime, max(event_time) as max_utime
+  from delea_flow
+  group by 1
 ), all_projects_impact as (
  select 'jVault' as project, *, floor(tvl_impact / 20.) * 5 as points from jvault_impact
    union all
@@ -524,6 +554,8 @@ tonco_collections as (
  select 'Crouton' as project, *, floor(tvl_impact / 20.) * 10 as points from crouton_impact
    union all
  select 'UTONIC' as project, *, floor(tvl_impact / 20.) * 10 as points from utonic_impact
+   union all
+ select 'Delea' as project, *, floor(tvl_impact / 20.) * 10 as points from delea_impact
 )
 select extract(epoch from now())::integer as score_time, p.address, project, points, tvl_impact as "value", "count", min_utime, max_utime
 from all_projects_impact p
