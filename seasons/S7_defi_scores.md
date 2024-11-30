@@ -153,7 +153,13 @@ Users hold LP tokens [Crouton LP](https://tonviewer.com/EQB7Orui1z_dKONoHuglvi2b
 - Calculating increase of Crouton LP balance for each user
 - Calculating total supply of Crouton LP at the current moment (or at the end of the season)
 - Get actual balances for the vaults at the current moment (or at the end of the season) and estimate total TVL based on the current price of TON/stTON/tsTON
-- User impact is equal to `Crouton LP balance increase` * `Total supply of Crouton LP` * `Total TVL`
+- User impact is equal to `Crouton LP balance increase` / `Total supply of Crouton LP` * `Total TVL`
+
+
+### UTONIC
+
+[UTONIC](https://utonic.finance/) allows to deposit TON/stTON/tsTON to the pool and receive uTON as a reward.
+User impact is calculated as mints minus burns for each user.
 
 
 Full list of participants and their impact on TVL could be obtained by [this query](sql/s7_defi_tvl.sql).
@@ -172,16 +178,17 @@ Full list of participants and their impact on TVL could be obtained by [this que
 |Wagmi|Volume|5|
 |Moki|Volume|1|
 |Titan|Volume|1|
-|Aqua protocol|TVL|15|
+|Aqua protocol|TVL|10|
 |JVault|TVL|5|
 |DAOLama|TVL|10|
 |Parraton|TVL|10|
 |SettleTON|TVL|10|
-|TonPools|TVL|10|
-|TonStable|TVL|15|
+|TonPools|TVL|5|
+|TonStable|TVL|10|
 |TON Hedge|TVL|10|
 |swap.coffee staking|TVL|5|
-|Coffin|TVL|10|
+|Coffin|TVL|5|
 |TONCO|TVL|10|
 |Farmix|TVL|10|
 |Crouton|TVL|10|
+|UTONIC|TVL|10|
