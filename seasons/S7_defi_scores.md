@@ -113,6 +113,9 @@ TVL originated after deposits, so it is a sum of all supported token transfers b
 
 TVL originated after CES/Ston.fi CES-TON LP/DeDust CES-TON LP deposits, so it is a sum of all transfers CES/Ston.fi CES-TON LP/DeDust CES-TON LP by the users to 
 [the project smart-contract](https://tonviewer.com/EQAp-QUzk31pYQWIO5gelCfRrkEe71sI6rg_SvicSV0n31rf)
+And
+TVL originated after XROCK/Ston.fi XROCK-USDT LP/DeDust XROCK-USDT LP deposits, so it is a sum of all transfers XROCK/Ston.fi XROCK-USDT LP/DeDust XROCK-USDT LP by the users to 
+[the project smart-contract](https://tonviewer.com/EQDITerx2VbV-AvnIrva7roz1w0Gis6Xxvwj4b_rVonhyiJW)
 
 ### Coffin
 
