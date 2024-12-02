@@ -182,7 +182,7 @@
       "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_delea.png",
       "name": "Delea",
       "link": "https://app.delea.finance/",
-      "target_action": "Borrow DONE",
+      "target_action": "Deposit TON, stTON or tsTON to mint $DONE",
       "protocol_type": "Stable coin",
       "points": "10"
     }
