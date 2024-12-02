@@ -299,6 +299,14 @@ order by now desc limit 1)
   select 'durev' as symbol,
   '0:5FF06029CA6BABEDB1633E6081A63944086058E3DD3681FDE6F292729B14B096' as asset_id,
   '0:74D8327471D503E2240345B06FE1A606DE1B5E3C70512B5B46791B429DAB5EB1' as jetton_address
+  union all
+  select 'PEPE' as symbol,
+  '0:E63FFAC3F5E5CF4AF7A2C2F5C95C90F20AF44D01F0B02287E7B1445EB1298993' as asset_id,
+  '0:97cceec78682b97c342e08e344e3797cf90b2b7aae73abcf5954d8449dadb878' as jetton_address
+  union all
+  select 'BOLGUR' as symbol,
+  '0:5D12CB57CCA228F04A89E10F5629C18A94E8B4180CD2A8D5AB577AA80F7C6290' as asset_id,
+  '0:538d1d671a5c537516464921de5d8bdc903919737783c2ea73045873e5c0f1f9' as jetton_address
 ), coffin_prices as (
   select asset_id, 
   case 
