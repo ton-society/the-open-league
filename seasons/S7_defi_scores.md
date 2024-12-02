@@ -23,6 +23,37 @@ Volume is estimated for all swaps with TON, staked TON or USDT according to the 
 
 Volume includes trades extracted from [Gaspump events](https://github.com/re-doubt/ton-etl/blob/main/parser/parsers/message/gaspump.py). USD value is calculated as a product of trade amount and price of TON at the time of trade.
 
+### swap.coffee
+
+The same methodology as for RainbowSwap, but with list of referral addresses:
+* UQCZ_pV6EJNSr6XpvPaa-IVkT6ImqkiPftRMOICJP1B_78Hc
+* UQA8OiygwLotKehQvp285LjTvVsTj6OuHZxEDxxTo6PlJWYA
+* UQCoFIQulMX1WciLYp7PUrxFqzIfsaUNo_FLDy1nDD0akyqT
+* UQCo2ftIP6_GV9D1BPEctJmrSpyWE0i7Duv9VUKrUgKb-ycW
+* UQAZoipwVLWfqgIklSmsKRbmRn-SOHlddH7L6MStlrP1hqTY
+* UQD_uBfQr0Rr2_gbBVlDEgCb6CJ-dkoTKs7RCKeZytffxVY6
+* UQCyW2VKRoUcVUXl9pc9AV5prdrQa97MMUr5tNNvDtEh6tEy
+* UQBVdtzxVLDvdK4MO5goiNeGXJ4m0fsD38u2bo_99_yKN4zK
+* UQCboL33t5GC9A8QDbxP7wqR0hIVOhDmAQwD0nJWC2e6T17t
+* UQDpBMtznS0tXtOsh-dHbCkdp49Reh96JHxitxDSLPUAUHLx
+* UQAG_gX-oEBVLOAJDPqak6U_7Pdjm3H460q-2-g5jJqYt8TA
+* UQC2fgcn74hlpvCxbVdtZ5gTVSOWHXYHVGXbqC9uB5JBQW_f
+* UQCXCdHQu9HQN-fEITMUPVA8IcEB5z0UMkXlNi2mL6hlNBOr
+* UQCTd7dmlSgjcjVbWPOcldoeXBgP6NmZcRnpQIWliobe3xk5
+* UQAIXBvCyFYdTTXdjgNec5vy-9Tjnqsw_lJ-RFJyA25Mr9M8
+
+### Memepads
+
+Volume includes trades extracted from [TONFun events](https://github.com/re-doubt/ton-etl/blob/main/parser/parsers/message/tonfun.py) for projects: TONPump by HOT Wallet, Blum, BigPump by PocketFi, Wagmi. USD value is calculated as a product of trade amount and price of TON at the time of trade.
+
+### Moki
+
+The same methodology as for RainbowSwap, but with referral address [EQBN9Aw3EauLcUPSjkTV_BmLd-bXaxAuiwak79zjs8g-8Ajg](https://tonviewer.com/EQBN9Aw3EauLcUPSjkTV_BmLd-bXaxAuiwak79zjs8g-8Ajg).
+
+### Titan
+
+The same methodology as for RainbowSwap, but with referral address [EQBPkXS5K-lzRsU6Sz_-qO7UbXU18QVaYrJ1EMmdkBfPaffM](https://tonviewer.com/EQBPkXS5K-lzRsU6Sz_-qO7UbXU18QVaYrJ1EMmdkBfPaffM).
+
 
 Full list of volume generating transaction and eligible users could be obtained using [the following query](sql/s7_defi_volume.sql).
 
@@ -74,6 +105,66 @@ TVL originated after tsTON/stTON deposits, so it is a sum of all tsTON/stTON tra
 TVL originated after tsTON/stTON/hTON deposits, so it is a sum of all tsTON/stTON/hTON transfers by the users to 
 [the project smart-contract](https://tonviewer.com/EQAWDyxARSl3ol2G1RMLMwepr3v6Ter5ls3jiAlheKshgg0K)
 
+### swap.coffee
+
+TVL originated after CES/Ston.fi CES-TON LP/DeDust CES-TON LP deposits, so it is a sum of all transfers CES/Ston.fi CES-TON LP/DeDust CES-TON LP by the users to 
+[the project smart-contract](https://tonviewer.com/EQAp-QUzk31pYQWIO5gelCfRrkEe71sI6rg_SvicSV0n31rf)
+
+### Coffin
+
+Coffin protocol is based on EVAA protocol and uses dedicated router contract EQBozwKVDya9IL3Kw4mR5AQph4yo15EuMdyX8nLljeaUxrpM. Each user can provide liquidity using supply method (and also withdraw it later using withdraw). For each wallet TVL impact is calculated based on amount supplied - amount withdrawn.
+
+### TONCO
+
+TONCO is a CLMM DEX and every time user provides liquidity to the pool, new NFT is minted. 
+User can withdraw entire amount of liquidity at any time, when it is done, liquidity goes back to the user
+and NFT marked as init=false. So to get all active liqudity positions by the user we are getting all NFTs
+from collections owner by [router contract](https://tonviewer.com/EQC_-t0nCnOFMdp7E7qPxAOCbCWGFz-e3pwxb6tTvFmshjt5)
+and init=true. Next we are extracting initial liquidity transfers during the NFT mint transaction chain
+and estimating that liquidity in USD based on the price of the assets at the time of the transaction.
+
+### Farmix
+
+To count TVL impact for each wallet we are using the following algorightm:
+
+- Getting all JettonPools mints during the season
+- Since each mint has preceding deposit transfer, for each jetton mint we are getting jetton transfers within the same trace_id
+- Aggregating by wallet address and JettonPool to get two numbers:
+    - Total deposit (nominated in the underlying jetton)
+    - Total amount minted
+- Also getting all burns (i.e. withdrawals) for the JettonPools and adding to the previous table as Total amount burned
+- Calculating TVL impact for each wallet using the following formula:
+    - (`Total amount minted` - `Total amount burned`) / `Total amount minted`  * `Total deposit` * `Latest price of the asset`
+
+List of Farmix pools:
+- [TON](https://tonviewer.com/EQC-jlX83DYZgSWRW5q_XuHLWWFQPp2xGmc8BCoeWckKpeHs)
+- [USDT](https://tonviewer.com/EQD6gQSWCayHh0FvUnTXlpfizIWiq7UeE4gYvXGYtEhIYJ8q)
+- [NOT](https://tonviewer.com/EQCE_6TevKEpj8OTz3rZt1D5bR6fENQbSN2bbW0jzxbWGGIo)
+
+### Crouton
+
+All users can deposit TON/stTON/tsTON to 3-assets pool [3TON](https://crouton.finance/pools/EQB7Orui1z_dKONoHuglvi2bMUpmD4fw0Z4C2gewD2FP0BpL), all assets are stored on three vaults:
+- https://tonviewer.com/EQAmCCDmDTi1PAO9ZxH9Mzw7ELKgIjZYoyDPhW07oScrMFhC
+- https://tonviewer.com/EQDRoyDi8LVQW4CS84GdAuvavSugxoP1LCE49afEpgZMtYIB
+- https://tonviewer.com/EQAdX9rNF0ifkXJAo7CXg5v78yBbP9O1L4UL7M9EI0XMksB0
+
+Users hold LP tokens [Crouton LP](https://tonviewer.com/EQB7Orui1z_dKONoHuglvi2bMUpmD4fw0Z4C2gewD2FP0BpL) which is used to estimate TVL increase. Algorithm is the following:
+
+- Calculating increase of Crouton LP balance for each user
+- Calculating total supply of Crouton LP at the current moment (or at the end of the season)
+- Get actual balances for the vaults at the current moment (or at the end of the season) and estimate total TVL based on the current price of TON/stTON/tsTON
+- User impact is equal to `Crouton LP balance increase` / `Total supply of Crouton LP` * `Total TVL`
+
+
+### Delea
+
+[Delea](https://app.delea.finance/) is a CDP and users can deposit TON/stTON/tsTON to the pool and mint DONE. Later users 
+can repay their position by sending DONE to the vault smart contract (and unlock their underlying collateral).
+Vault addresses:
+* [TON](https://tonviewer.com/EQB6rkS8xt3Ey4XugdVqQDe1vt4KJDh813_k2ceoONTCBnyD)
+* [stTON](https://tonviewer.com/EQA2OzCuP8-d_lN2MYxLv5WCNfpLH1NUuugppOZBZgNYn-aa)
+* [tsTON](https://tonviewer.com/EQCwIIRKpuV9fQpQxdTMhLAO30MNHa6GOYd00TsySOOYtA9n)
+
 
 Full list of participants and their impact on TVL could be obtained by [this query](sql/s7_defi_tvl.sql).
 
@@ -83,13 +174,25 @@ Full list of participants and their impact on TVL could be obtained by [this que
 |DeFi Protocol name | Squad | Points per each 20 USD|
 |:-|:-|-:|
 |Rainbow Swap|Volume|1|
-|DEX Diamonds|Volume|1|
 |GasPump|Volume|5|
-|Aqua protocol|TVL|15|
-|JVault|TVL|10|
-|DAOLama|TVL|15|
+|swap.coffee|Volume|1|
+|TONPump by HOT Wallet|Volume|5|
+|Blum|Volume|5|
+|BigPump by PocketFi|Volume|5|
+|Wagmi|Volume|5|
+|Moki|Volume|1|
+|Titan|Volume|1|
+|Aqua protocol|TVL|10|
+|JVault|TVL|5|
+|DAOLama|TVL|10|
 |Parraton|TVL|10|
 |SettleTON|TVL|10|
-|TonPools|TVL|10|
-|TonStable|TVL|15|
+|TonPools|TVL|5|
+|TonStable|TVL|10|
 |TON Hedge|TVL|10|
+|swap.coffee staking|TVL|5|
+|Coffin|TVL|5|
+|TONCO|TVL|10|
+|Farmix|TVL|10|
+|Crouton|TVL|10|
+|Delea|TVL|10|
