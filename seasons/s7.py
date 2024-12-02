@@ -2,6 +2,8 @@
 S7 season config
 """
 from models.season_config import SeasonConfig
+from projects.defi.Beetroot import Beetroot
+from projects.defi.Delea import Delea
 from projects.defi.UTONIC import UTONIC
 from projects.defi.Farmix import Farmix
 from projects.defi.Coffin import Coffin
@@ -36,7 +38,7 @@ S7_defi_tvl = SeasonConfig(
         DAOLama, SettleTON, JVault,
         TONHedge, TonStable, Parraton, TonPools,
         AquaProtocol, SwapCoffeeTVL, Coffin, TONCO, Farmix,
-        Crouton, UTONIC
+        Crouton, Delea
     ],
     score_model=DeFiTVLContribution(squads=[
         (lambda tvl: tvl >= 5e6, "Over 5M$"),

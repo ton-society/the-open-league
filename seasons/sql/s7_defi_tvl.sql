@@ -473,30 +473,88 @@ tonco_collections as (
   cross join crouton_total_supply
   cross join crouton_total_tvl
   group by 1
-), utonic_flow as (
-  -- get all mints and burns during the period
+), delea_flow as (
+  -- get all mints during the period
   select "owner" as address, amount,
   utime as event_time from parsed.jetton_mint jm
-  where jetton_master_address = upper('0:1f1798f724c2296652e6002bfb51bed11fb5a689532e5788af7203581ef367a8')
+  where jetton_master_address = upper('0:a0194301feed4692bb24c36a38d3b220f3299099f9315ae3d6d9de0836e4283c')
   and utime >= 1732705200 and utime < 1734433200 and successful
   
   union all
   
-  -- burns come with negative amount
-  select "owner" as address, -1 * amount as amount,
-  tx_now as event_time from public.jetton_burns
-  where jetton_master_address = upper('0:1f1798f724c2296652e6002bfb51bed11fb5a689532e5788af7203581ef367a8')
+  -- all transfers to the vaults (repay)
+  select "source" as address, -1 * amount as amount,
+  tx_now as event_time from public.jetton_transfers jt 
+  where jetton_master_address = upper('0:a0194301feed4692bb24c36a38d3b220f3299099f9315ae3d6d9de0836e4283c')
   and tx_now >= 1732705200 and tx_now < 1734433200 and not tx_aborted
-), uton_price as (
-  -- uTON is traded on DEXs so will get price from the agg_prices just before the period end
-  select coalesce((select price_usd from prices.agg_prices ap where ap.base = upper('0:1f1798f724c2296652e6002bfb51bed11fb5a689532e5788af7203581ef367a8')
+  and (
+  destination  = upper('0:7aae44bcc6ddc4cb85ee81d56a4037b5bede0a24387cd77fe4d9c7a838d4c206') -- TON vault
+  or 
+  destination  = upper('0:b020844aa6e57d7d0a50c5d4cc84b00edf430d1dae86398774d13b3248e398b4') -- tsTON vault
+    or 
+  destination  = upper('0:363b30ae3fcf9dfe5376318c4bbf958235fa4b1f5354bae829a4e6416603589f') -- stTON vault
+  )
+), delea_price as (
+  -- DONE is a stablecoin, but it is more reliable to get price from DEX trades
+  select coalesce((select price_usd from prices.agg_prices ap where ap.base = upper('0:a0194301feed4692bb24c36a38d3b220f3299099f9315ae3d6d9de0836e4283c')
   and price_time < 1734433200 order by price_time desc limit 1), 0) as price
-), utonic_impact as (
-  -- final user impact - sum of all mints and burns (with negative value of the amount) converted to USD using DEX price
-  select address, sum(amount) * (select price from uton_price) / 1e6 as tvl_impact, count(1), min(event_time) as min_utime, max(event_time) as max_utime
-  from utonic_flow
+), delea_impact as (
+  -- final user impact - sum of all mints and repays (with negative value of the amount) converted to USD using DEX price
+  select address, sum(amount) * (select price from delea_price) / 1e6 as tvl_impact, count(1), min(event_time) as min_utime, max(event_time) as max_utime
+  from delea_flow
   group by 1
-), all_projects_impact as (
+), beetroot_flow as (
+select "owner" as address, amount,
+  -- all mints
+  utime as event_time from parsed.jetton_mint jm
+  where jetton_master_address = upper('0:051a19b1d7df681fa9262fbf0f1811f2031e1de4288975f5f04a30cae45e4817')
+  and utime >= 1732705200 and utime < 1734433200 and successful
+  
+  union all
+  
+  -- transfers to the smart contract to withdraw funds
+  select "source" as address, -1 * amount as amount,
+  tx_now as event_time from public.jetton_transfers jt 
+  where jetton_master_address =  upper('0:051a19b1d7df681fa9262fbf0f1811f2031e1de4288975f5f04a30cae45e4817')
+  and tx_now >= 1732705200 and tx_now < 1734433200 and not tx_aborted
+  and destination  = upper('0:c2f0c639b58e6b3cce8a145c73e7c7cc5044baa92b05c62fcf6da8a0d50b8edc')
+), beetroot_tvl as (
+  select 
+  -- Storm SLP balance of the protocol
+  (select balance from wallets_end where owner = upper('0:c2f0c639b58e6b3cce8a145c73e7c7cc5044baa92b05c62fcf6da8a0d50b8edc')
+  and jetton_master = upper('0:aea78c710ae94270dc263a870cf47b4360f53cc5ed38e3db502e9e9afb904b11')
+  )
+  * 
+  -- SLP price: SLP/USDT
+  (select price from prices.core c where asset = upper('0:aea78c710ae94270dc263a870cf47b4360f53cc5ed38e3db502e9e9afb904b11')
+  order by price_ts desc limit 1) / 1e9
+
+  + 
+
+  -- Tradoor LP balance of the protocol
+  (select balance from wallets_end where owner = upper('0:c2f0c639b58e6b3cce8a145c73e7c7cc5044baa92b05c62fcf6da8a0d50b8edc')
+  and jetton_master = upper('0:332c916f885a26051cb3a121f00c2bda459339eb103df36fe484df0b87b39384')
+  )
+  * 
+  -- Tradoor vault USDT balance
+  (select balance from wallets_end jw where owner = upper('0:ff1338c9f6ed1fa4c264a19052bff64d10c8ad028628f52b2e0f4b357a12227e')
+  and jetton_master = upper('0:b113a994b5024a16719f69139328eb759596c38a25f59028b146fecdc3621dfe')
+  )
+  /
+  -- Tradoor total supply
+  (
+  select sum(balance) from wallets_end where jetton_master = upper('0:332c916f885a26051cb3a121f00c2bda459339eb103df36fe484df0b87b39384')
+  ) / 1e6
+
+  as tvl
+), beetroot_supply as (
+  select sum(balance) as supply from wallets_end where jetton_master = upper('0:051a19b1d7df681fa9262fbf0f1811f2031e1de4288975f5f04a30cae45e4817')
+), beetroot_impact as (
+  select address, sum(amount) * (select tvl from beetroot_tvl) / (select supply from beetroot_supply) as tvl_impact, count(1), min(event_time) as min_utime, max(event_time) as max_utime
+  from beetroot_flow
+  group by 1
+)
+, all_projects_impact as (
  select 'jVault' as project, *, floor(tvl_impact / 20.) * 5 as points from jvault_impact
    union all
  select 'SettleTon' as project, *, floor(tvl_impact / 20.) * 10 as points from settleton_impact
@@ -523,7 +581,9 @@ tonco_collections as (
    union all
  select 'Crouton' as project, *, floor(tvl_impact / 20.) * 10 as points from crouton_impact
    union all
- select 'UTONIC' as project, *, floor(tvl_impact / 20.) * 10 as points from utonic_impact
+ select 'Delea' as project, *, floor(tvl_impact / 20.) * 10 as points from delea_impact
+   -- union all
+ -- select 'Beetroot' as project, *, floor(tvl_impact / 20.) * 10 as points from beetroot_impact
 )
 select extract(epoch from now())::integer as score_time, p.address, project, points, tvl_impact as "value", "count", min_utime, max_utime
 from all_projects_impact p
