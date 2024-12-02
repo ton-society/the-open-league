@@ -166,17 +166,6 @@ Vault addresses:
 * [tsTON](https://tonviewer.com/EQCwIIRKpuV9fQpQxdTMhLAO30MNHa6GOYd00TsySOOYtA9n)
 
 
-### Beetroor Finance
-
-[Beetroor](https://app.beetroot.finance/) is a yield farming protocol which reinvests usesr funds (USDT) into StormTrade
-and Tradoor vaults. Two assets are used for reinvesting:
-* [StormTrade](https://tonviewer.com/EQCup4xxCulCcNwmOocM9HtDYPU8xe0449tQLp6a-5BLEegW)
-* [Tradoor](https://tonviewer.com/EQAzLJFviFomBRyzoSHwDCvaRZM56xA982_khN8Lh7OThD9z)
-
-User position is estimated as sum of all mints of ROOT token minus all transfers to the project [smart contract](https://tonviewer.com/EQDC8MY5tY5rPM6KFFxz58fMUES6qSsFxi_Pbaig1QuO3F7y). TVL is calculated as a value of all USDT assets
-on the project [smart contract](https://tonviewer.com/EQDC8MY5tY5rPM6KFFxz58fMUES6qSsFxi_Pbaig1QuO3F7y).
-
-
 Full list of participants and their impact on TVL could be obtained by [this query](sql/s7_defi_tvl.sql).
 
 
@@ -207,4 +196,3 @@ Full list of participants and their impact on TVL could be obtained by [this que
 |Farmix|TVL|10|
 |Crouton|TVL|10|
 |Delea|TVL|10|
-|Beetroot|TVL|10|

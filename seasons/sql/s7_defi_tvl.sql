@@ -582,8 +582,8 @@ select "owner" as address, amount,
  select 'Crouton' as project, *, floor(tvl_impact / 20.) * 10 as points from crouton_impact
    union all
  select 'Delea' as project, *, floor(tvl_impact / 20.) * 10 as points from delea_impact
-   union all
- select 'Beetroot' as project, *, floor(tvl_impact / 20.) * 10 as points from beetroot_impact
+   -- union all
+ -- select 'Beetroot' as project, *, floor(tvl_impact / 20.) * 10 as points from beetroot_impact
 )
 select extract(epoch from now())::integer as score_time, p.address, project, points, tvl_impact as "value", "count", min_utime, max_utime
 from all_projects_impact p
