@@ -522,7 +522,7 @@ select "owner" as address, amount,
   select 
   -- Storm SLP balance of the protocol
   (select balance from wallets_end where owner = upper('0:c2f0c639b58e6b3cce8a145c73e7c7cc5044baa92b05c62fcf6da8a0d50b8edc')
-  and jetton = upper('0:aea78c710ae94270dc263a870cf47b4360f53cc5ed38e3db502e9e9afb904b11')
+  and jetton_master = upper('0:aea78c710ae94270dc263a870cf47b4360f53cc5ed38e3db502e9e9afb904b11')
   )
   * 
   -- SLP price: SLP/USDT
@@ -533,22 +533,22 @@ select "owner" as address, amount,
 
   -- Tradoor LP balance of the protocol
   (select balance from wallets_end where owner = upper('0:c2f0c639b58e6b3cce8a145c73e7c7cc5044baa92b05c62fcf6da8a0d50b8edc')
-  and jetton = upper('0:332c916f885a26051cb3a121f00c2bda459339eb103df36fe484df0b87b39384')
+  and jetton_master = upper('0:332c916f885a26051cb3a121f00c2bda459339eb103df36fe484df0b87b39384')
   )
   * 
   -- Tradoor vault USDT balance
   (select balance from wallets_end jw where owner = upper('0:ff1338c9f6ed1fa4c264a19052bff64d10c8ad028628f52b2e0f4b357a12227e')
-  and jetton = upper('0:b113a994b5024a16719f69139328eb759596c38a25f59028b146fecdc3621dfe')
+  and jetton_master = upper('0:b113a994b5024a16719f69139328eb759596c38a25f59028b146fecdc3621dfe')
   )
   /
   -- Tradoor total supply
   (
-  select sum(balance) from wallets_end where jetton = upper('0:332c916f885a26051cb3a121f00c2bda459339eb103df36fe484df0b87b39384')
+  select sum(balance) from wallets_end where jetton_master = upper('0:332c916f885a26051cb3a121f00c2bda459339eb103df36fe484df0b87b39384')
   ) / 1e6
 
   as tvl
 ), beetroot_supply as (
-  select sum(balance) as supply from wallets_end where jetton = upper('0:051a19b1d7df681fa9262fbf0f1811f2031e1de4288975f5f04a30cae45e4817')
+  select sum(balance) as supply from wallets_end where jetton_master = upper('0:051a19b1d7df681fa9262fbf0f1811f2031e1de4288975f5f04a30cae45e4817')
 ), beetroot_impact as (
   select address, sum(amount) * (select tvl from beetroot_tvl) / (select supply from beetroot_supply) as tvl_impact, count(1), min(event_time) as min_utime, max(event_time) as max_utime
   from beetroot_flow
