@@ -106,7 +106,7 @@ TVL originated after tsTON/stTON deposits, so it is a sum of all tsTON/stTON tra
 
 ### Aqua Protocol
 
-TVL originated after tsTON/stTON/hTON deposits, so it is a sum of all tsTON/stTON/hTON transfers by the users to 
+TVL originated after deposits, so it is a sum of all supported token transfers by the users to 
 [the project smart-contract](https://tonviewer.com/EQAWDyxARSl3ol2G1RMLMwepr3v6Ter5ls3jiAlheKshgg0K)
 
 ### swap.coffee
