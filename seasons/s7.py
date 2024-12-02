@@ -38,7 +38,7 @@ S7_defi_tvl = SeasonConfig(
         DAOLama, SettleTON, JVault,
         TONHedge, TonStable, Parraton, TonPools,
         AquaProtocol, SwapCoffeeTVL, Coffin, TONCO, Farmix,
-        Crouton, Delea, Beetroot
+        Crouton, Delea
     ],
     score_model=DeFiTVLContribution(squads=[
         (lambda tvl: tvl >= 5e6, "Over 5M$"),
