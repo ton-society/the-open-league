@@ -170,6 +170,19 @@ order by now desc limit 1)
   where m_in.direction ='in' and m_in.destination =upper('0:3bcbd42488fe31b57fc184ea58e3181594b33b2cf718500e108411e115978be1')
   and m_in.created_at  >= 1732705200 and m_in.created_at < 1734433200 and m_in.opcode = 195467089
   and mc."comment" = 'Withdraw completed'
+    union all
+  select
+  case when destination = upper('0:eb4b3f56e2d8f09eacb5178cfe3b8564769f20d983fde1c9a1d765f945b6297a') then source
+  else destination end as address, tx_now as created_at,
+  case when source = upper('0:eb4b3f56e2d8f09eacb5178cfe3b8564769f20d983fde1c9a1d765f945b6297a') then -1 else 1 end * amount / 1e6 as value_usd
+  from jetton_transfers
+  where jetton_master_address = upper('0:b113a994b5024a16719f69139328eb759596c38a25f59028b146fecdc3621dfe')
+  and tx_now >= 1732705200 and tx_now < 1734433200 
+  and (
+    destination = upper('0:eb4b3f56e2d8f09eacb5178cfe3b8564769f20d983fde1c9a1d765f945b6297a')
+  or
+    source = upper('0:eb4b3f56e2d8f09eacb5178cfe3b8564769f20d983fde1c9a1d765f945b6297a')
+  ) and not tx_aborted
 ), tonpools_impact as (
  select address, sum(value_usd) as tvl_impact, count(value_usd), min(created_at) as min_utime, max(created_at) as max_utime
  from tonpools_operations group by 1
