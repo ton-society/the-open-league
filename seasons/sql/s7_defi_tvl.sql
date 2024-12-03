@@ -373,6 +373,14 @@ order by now desc limit 1)
   select 'BOLGUR' as symbol,
   '0:5D12CB57CCA228F04A89E10F5629C18A94E8B4180CD2A8D5AB577AA80F7C6290' as asset_id,
   '0:538d1d671a5c537516464921de5d8bdc903919737783c2ea73045873e5c0f1f9' as jetton_address
+  union all
+  select 'TONNEL' as symbol,
+  '0:2d8914957057c4ca105a5ce4573e5834851e0d5134ec6e8441050b4458fe933a' as asset_id,
+  '0:cd0efe78bff4c4539b76eab17293296c74f42cbf99ec499687fefec94893ed32' as jetton_address
+  union all
+  select 'KINGY' as symbol,
+  '0:c2d5e499b19c82eaddd196859faa88d20d730964132836c987569b48ca4731a4' as asset_id,
+  '0:beb5d4638e860ccf7317296e298fde5b35982f4725b0676dc98b1de987b82ebc' as jetton_address
 ), coffin_prices as (
   select asset_id, 
   case 
