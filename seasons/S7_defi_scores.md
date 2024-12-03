@@ -101,7 +101,7 @@ TVL originated from deposits and decreased by withdrawals. Deposits are messages
 
 ### TON Stable
 
-TVL originated after tsTON/stTON deposits, so it is a sum of all tsTON/stTON transfers by the users to 
+TVL originated after tsTON/stTON/STAKED deposits, so it is a sum of all tsTON/stTON/STAKED transfers by the users to 
 [the project smart-contract](https://tonviewer.com/EQC2Bt4vwcSgCwABlOfgl75GbGuC0GpRU2GsZKqqMHu-T0gk)
 
 ### Aqua Protocol
