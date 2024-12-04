@@ -32,9 +32,17 @@ class NFT(Project):
 
 
 @dataclass
+class Correction:
+    value_usd: float # correction value in USD
+    tx_hash: str # hash transaction
+    description: str # description
+
+
+@dataclass
 class DeFi(Project):
     url: str # project url
     defillama_slug: str # Defillama slug
     prizes: bool = True # flat to ignore project in reward calculation
     category: str = "dexs" # category for the project (for the Volume Leaderboard)
     chain: str = "TON" # Chain for TVL queries - allows to override default TON into TON-Staking
+    corrections: List[Correction] = None # corrections list
