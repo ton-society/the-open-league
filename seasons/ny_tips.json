@@ -4,7 +4,7 @@
   "items": [
     {
       "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_rainbowswap.png",
-      "name": "Rainbow Swap",
+      "name": "Rainbow.ag",
       "link": "https://t.me/rainbow_swap_bot?startapp=ny",
       "target_action": "Swap",
       "protocol_type": "DEX aggregator",
@@ -22,7 +22,7 @@
       "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_aqua%20protocol.png",
       "name": "Aqua protocol",
       "link": "https://app.aquaprotocol.xyz/mint",
-      "target_action": "Deposit liquidity to mint AquaUSD",
+      "target_action": "Deposit liquidity to mint $AquaUSD",
       "protocol_type": "Stable coin",
       "points": "10"
     },
@@ -62,7 +62,7 @@
       "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_tonpools.png",
       "name": "TonPools",
       "link": "https://t.me/tonpools_bot?startapp=ny",
-      "target_action": "Stake TON",
+      "target_action": "Stake TON or USDT",
       "protocol_type": "No-loss staking protocol with prizes",
       "points": "5"
     },
@@ -70,7 +70,7 @@
       "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_tonstable.png",
       "name": "TonStable",
       "link": "https://t.me/TonStableBot?startapp=ny",
-      "target_action": "Deposit liquidity to mint USDG",
+      "target_action": "Deposit stTON, tsTON or STAKED to mint $USDG",
       "protocol_type": "Stable coin",
       "points": "10"
     },
@@ -150,7 +150,7 @@
       "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_farmix.png",
       "name": "Farmix",
       "link": "https://app.farmix.tg/lending",
-      "target_action": "Lend",
+      "target_action": "Lend TON, USDT or NOT",
       "protocol_type": "Yield farming",
       "points": "10"
     },
