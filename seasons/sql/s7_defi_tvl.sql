@@ -44,21 +44,23 @@ with wallets_start as (
  join jvault_pool_tvls using(pool_address)
  group by 1
 ), settleton_pools as (
-  select upper('0:64216a0ead5819dca7d1719fc912cfa6673665a1c5fcf7338ca5b2ce65f12f80') as pool_address
+  select upper('0:64216a0ead5819dca7d1719fc912cfa6673665a1c5fcf7338ca5b2ce65f12f80') as pool_address -- WEB3 Vault
   union all
-  select upper('0:9be109c3d18d14d6f271f1c311831aef109c2f02062f504726af26ba707f0292') as pool_address
+  select upper('0:9be109c3d18d14d6f271f1c311831aef109c2f02062f504726af26ba707f0292') as pool_address -- SettleTON Index - Middle 1
   union all
-  select upper('0:f26a93829fdf8448a4ed3cce22a7c92433be18fb668e63cf048a96c5b27fffaa') as pool_address
+  select upper('0:f26a93829fdf8448a4ed3cce22a7c92433be18fb668e63cf048a96c5b27fffaa') as pool_address -- JVT Vault
   union all
-  select upper('0:ab9d7bda5f91c06fc3cf737acfed24b63080a65db1b5e95400d503a24c047ed5') as pool_address
+  select upper('0:ab9d7bda5f91c06fc3cf737acfed24b63080a65db1b5e95400d503a24c047ed5') as pool_address -- DUST Vault
   union all
-  select upper('0:3848b9a49c1d1a8e9c7101e5a3a80a5638ba968d52882bf34ef4c8eb4090cc60') as pool_address
+  select upper('0:3848b9a49c1d1a8e9c7101e5a3a80a5638ba968d52882bf34ef4c8eb4090cc60') as pool_address -- HYDRA Vault
   union all
-  select upper('0:56f5e805e4e407d61a20ad94c83e3aaefa0854be28c633f658aca4c679f8c5e7') as pool_address
+  select upper('0:56f5e805e4e407d61a20ad94c83e3aaefa0854be28c633f658aca4c679f8c5e7') as pool_address -- USDT Vault
   union all
-  select upper('0:dacaea937930943b921d18c34da7ed31d95c5ec17948b2246554b2c6422b2747') as pool_address
+  select upper('0:dacaea937930943b921d18c34da7ed31d95c5ec17948b2246554b2c6422b2747') as pool_address -- DYOR Vault
   union all
-  select upper('0:5b46607213a02eec4061be961e41f69a6bfdb4ccb56b2a7ae5d38d25b42eff1d') as pool_address
+  select upper('0:5b46607213a02eec4061be961e41f69a6bfdb4ccb56b2a7ae5d38d25b42eff1d') as pool_address -- JETTON Vault
+  union all
+  select upper('0:df2807a89cb6f0f7244847e632a8c4dee6cee7262006a7c3699d696b092040d4') as pool_address -- STORM Vault
 ), settleton_pool_tvls as (
  select pool_address, 
   coalesce (sum( (select tvl_usd / total_supply from prices.dex_pool_history dph where pool = jetton_master and timestamp < 1734433200 order by timestamp desc limit 1) * balance), 0)
