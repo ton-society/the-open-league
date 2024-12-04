@@ -110,6 +110,8 @@ class DefillamaDeFiTVLBackend(CalculationBackend):
             snapshot_tvl = get_tvl_before(tvl_history, config.start_time)
             latest_tvl = get_tvl_before(tvl_history, config.end_time)
             correction_latest = -1 * excluded_current.get(project.name, 0)
+            if project.corrections:
+                correction_latest -= sum(correction.value_usd for correction in project.corrections)
             correction_snapshot = -1 * excluded_snapshot.get(project.name, 0)
             logger.info(f"{project.name}: {snapshot_tvl}({correction_snapshot}) => {latest_tvl}({correction_latest})")
             
