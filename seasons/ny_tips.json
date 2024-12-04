@@ -62,7 +62,7 @@
       "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_tonpools.png",
       "name": "TonPools",
       "link": "https://t.me/tonpools_bot?startapp=ny",
-      "target_action": "Stake TON",
+      "target_action": "Stake TON or USDT",
       "protocol_type": "No-loss staking protocol with prizes",
       "points": "5"
     },
