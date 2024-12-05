@@ -14,10 +14,14 @@ User score is calculated as a trading volume in any of target projects nominated
 during the period of the season. Minimum amount of volume to be eligible for receiving points is 20 USD.
 Methodology details for each projects:
 
-### RainbowSwap
+### Rainbow.ag
 
-Includes all trades on any dex in case of transaction chain includes a swap with referrall address [UQBBPVrn4Y6F0Fci4j0mXuSAXmRDeE-nZCRIInQsNC9__8vG](https://tonviewer.com/EQBBPVrn4Y6F0Fci4j0mXuSAXmRDeE-nZCRIInQsNC9__5YD).
 Volume is estimated for all swaps with TON, staked TON or USDT according to the methodology from [TON-ETL](https://github.com/re-doubt/ton-etl/blob/main/parser/parsers/message/swap_volume.py).
+Includes all trades on any dex in case of transaction chain includes a swap with referrall address from list:
+* UQBBPVrn4Y6F0Fci4j0mXuSAXmRDeE-nZCRIInQsNC9__8vG
+* UQDscgosGjQeAfyL1m6-57O5_NusTGYFVDesaB0CkEvo_m4g
+* UQCIOI01FJKvUHqUNF-c1BGytouH5HdeOPHCgyk2ddK1Y8oZ
+* UQAaCGsY1S7OIonBkom2lOwx6cBMggGKKHukC_n6aq00Q8Tb
 
 ### GasPump
 
@@ -25,7 +29,7 @@ Volume includes trades extracted from [Gaspump events](https://github.com/re-dou
 
 ### swap.coffee
 
-The same methodology as for RainbowSwap, but with list of referral addresses:
+The same methodology as for Rainbow.ag, but with list of referral addresses:
 * UQCZ_pV6EJNSr6XpvPaa-IVkT6ImqkiPftRMOICJP1B_78Hc
 * UQA8OiygwLotKehQvp285LjTvVsTj6OuHZxEDxxTo6PlJWYA
 * UQCoFIQulMX1WciLYp7PUrxFqzIfsaUNo_FLDy1nDD0akyqT
@@ -97,18 +101,21 @@ TVL originated from deposits and decreased by withdrawals. Deposits are messages
 
 ### TON Stable
 
-TVL originated after tsTON/stTON deposits, so it is a sum of all tsTON/stTON transfers by the users to 
+TVL originated after tsTON/stTON/STAKED deposits, so it is a sum of all tsTON/stTON/STAKED transfers by the users to 
 [the project smart-contract](https://tonviewer.com/EQC2Bt4vwcSgCwABlOfgl75GbGuC0GpRU2GsZKqqMHu-T0gk)
 
 ### Aqua Protocol
 
-TVL originated after tsTON/stTON/hTON deposits, so it is a sum of all tsTON/stTON/hTON transfers by the users to 
+TVL originated after deposits, so it is a sum of all supported token transfers by the users to 
 [the project smart-contract](https://tonviewer.com/EQAWDyxARSl3ol2G1RMLMwepr3v6Ter5ls3jiAlheKshgg0K)
 
 ### swap.coffee
 
 TVL originated after CES/Ston.fi CES-TON LP/DeDust CES-TON LP deposits, so it is a sum of all transfers CES/Ston.fi CES-TON LP/DeDust CES-TON LP by the users to 
 [the project smart-contract](https://tonviewer.com/EQAp-QUzk31pYQWIO5gelCfRrkEe71sI6rg_SvicSV0n31rf)
+And
+TVL originated after XROCK/Ston.fi XROCK-USDT LP/DeDust XROCK-USDT LP deposits, so it is a sum of all transfers XROCK/Ston.fi XROCK-USDT LP/DeDust XROCK-USDT LP by the users to 
+[the project smart-contract](https://tonviewer.com/EQDITerx2VbV-AvnIrva7roz1w0Gis6Xxvwj4b_rVonhyiJW)
 
 ### Coffin
 
@@ -173,7 +180,7 @@ Full list of participants and their impact on TVL could be obtained by [this que
 
 |DeFi Protocol name | Squad | Points per each 20 USD|
 |:-|:-|-:|
-|Rainbow Swap|Volume|1|
+|Rainbow.ag|Volume|1|
 |GasPump|Volume|5|
 |swap.coffee|Volume|1|
 |TONPump by HOT Wallet|Volume|5|

@@ -44,21 +44,23 @@ with wallets_start as (
  join jvault_pool_tvls using(pool_address)
  group by 1
 ), settleton_pools as (
-  select upper('0:64216a0ead5819dca7d1719fc912cfa6673665a1c5fcf7338ca5b2ce65f12f80') as pool_address
+  select upper('0:64216a0ead5819dca7d1719fc912cfa6673665a1c5fcf7338ca5b2ce65f12f80') as pool_address -- WEB3 Vault
   union all
-  select upper('0:9be109c3d18d14d6f271f1c311831aef109c2f02062f504726af26ba707f0292') as pool_address
+  select upper('0:9be109c3d18d14d6f271f1c311831aef109c2f02062f504726af26ba707f0292') as pool_address -- SettleTON Index - Middle 1
   union all
-  select upper('0:f26a93829fdf8448a4ed3cce22a7c92433be18fb668e63cf048a96c5b27fffaa') as pool_address
+  select upper('0:f26a93829fdf8448a4ed3cce22a7c92433be18fb668e63cf048a96c5b27fffaa') as pool_address -- JVT Vault
   union all
-  select upper('0:ab9d7bda5f91c06fc3cf737acfed24b63080a65db1b5e95400d503a24c047ed5') as pool_address
+  select upper('0:ab9d7bda5f91c06fc3cf737acfed24b63080a65db1b5e95400d503a24c047ed5') as pool_address -- DUST Vault
   union all
-  select upper('0:3848b9a49c1d1a8e9c7101e5a3a80a5638ba968d52882bf34ef4c8eb4090cc60') as pool_address
+  select upper('0:3848b9a49c1d1a8e9c7101e5a3a80a5638ba968d52882bf34ef4c8eb4090cc60') as pool_address -- HYDRA Vault
   union all
-  select upper('0:56f5e805e4e407d61a20ad94c83e3aaefa0854be28c633f658aca4c679f8c5e7') as pool_address
+  select upper('0:56f5e805e4e407d61a20ad94c83e3aaefa0854be28c633f658aca4c679f8c5e7') as pool_address -- USDT Vault
   union all
-  select upper('0:dacaea937930943b921d18c34da7ed31d95c5ec17948b2246554b2c6422b2747') as pool_address
+  select upper('0:dacaea937930943b921d18c34da7ed31d95c5ec17948b2246554b2c6422b2747') as pool_address -- DYOR Vault
   union all
-  select upper('0:5b46607213a02eec4061be961e41f69a6bfdb4ccb56b2a7ae5d38d25b42eff1d') as pool_address
+  select upper('0:5b46607213a02eec4061be961e41f69a6bfdb4ccb56b2a7ae5d38d25b42eff1d') as pool_address -- JETTON Vault
+  union all
+  select upper('0:df2807a89cb6f0f7244847e632a8c4dee6cee7262006a7c3699d696b092040d4') as pool_address -- STORM Vault
 ), settleton_pool_tvls as (
  select pool_address, 
   coalesce (sum( (select tvl_usd / total_supply from prices.dex_pool_history dph where pool = jetton_master and timestamp < 1734433200 order by timestamp desc limit 1) * balance), 0)
@@ -170,6 +172,19 @@ order by now desc limit 1)
   where m_in.direction ='in' and m_in.destination =upper('0:3bcbd42488fe31b57fc184ea58e3181594b33b2cf718500e108411e115978be1')
   and m_in.created_at  >= 1732705200 and m_in.created_at < 1734433200 and m_in.opcode = 195467089
   and mc."comment" = 'Withdraw completed'
+    union all
+  select
+  case when destination = upper('0:eb4b3f56e2d8f09eacb5178cfe3b8564769f20d983fde1c9a1d765f945b6297a') then source
+  else destination end as address, tx_now as created_at,
+  case when source = upper('0:eb4b3f56e2d8f09eacb5178cfe3b8564769f20d983fde1c9a1d765f945b6297a') then -1 else 1 end * amount / 1e6 as value_usd
+  from jetton_transfers
+  where jetton_master_address = upper('0:b113a994b5024a16719f69139328eb759596c38a25f59028b146fecdc3621dfe')
+  and tx_now >= 1732705200 and tx_now < 1734433200 
+  and (
+    destination = upper('0:eb4b3f56e2d8f09eacb5178cfe3b8564769f20d983fde1c9a1d765f945b6297a')
+  or
+    source = upper('0:eb4b3f56e2d8f09eacb5178cfe3b8564769f20d983fde1c9a1d765f945b6297a')
+  ) and not tx_aborted
 ), tonpools_impact as (
  select address, sum(value_usd) as tvl_impact, count(value_usd), min(created_at) as min_utime, max(created_at) as max_utime
  from tonpools_operations group by 1
@@ -207,18 +222,28 @@ order by now desc limit 1)
  join parraton_total_supply using(pool_address)
  join parraton_pool_tvls using(pool_address)
  group by 1
+), tonstable_assets as (
+  select 'stTON' as symbol, upper('0:cd872fa7c5816052acdf5332260443faec9aacc8c21cca4d92e7f47034d11892') as jetton_master_address
+    union all
+  select 'tsTON' as symbol, upper('0:bdf3fa8098d129b54b4f73b5bac5d1e1fd91eb054169c3916dfc8ccd536d1000') as jetton_master_address
+    union all
+  select 'STAKED' as symbol, upper('0:aa0ba121449feda569e02b12fa755d24e834a7454aecf4649590b6df742aac8f') as jetton_master_address
 ), tonstable_flow as (
   select 
   case when destination = upper('0:b606de2fc1c4a00b000194e7e097be466c6b82d06a515361ac64aaaa307bbe4f') then source
   else destination end as address,
   case when source = upper('0:b606de2fc1c4a00b000194e7e097be466c6b82d06a515361ac64aaaa307bbe4f') then -1 else 1 end * amount / 1e9 * 
-  coalesce((select price from prices.core where asset = jetton_master_address and price_ts < tx_now order by price_ts desc limit 1), 1) *
-  (select price from prices.ton_price where price_ts < tx_now order by price_ts desc limit 1) as tvl_usd,
+  case when symbol in ('stTON', 'tsTON') then
+    coalesce((select price from prices.core where asset = jetton_master_address and price_ts < tx_now order by price_ts desc limit 1), 0) *
+    (select price from prices.ton_price where price_ts < tx_now order by price_ts desc limit 1)
+  when symbol = 'STAKED' then 
+    coalesce((select price_usd from prices.agg_prices 
+      where base = jetton_master_address and price_time < tx_now order by price_time desc limit 1), 0) * 1e3 end
+  as tvl_usd,
   tx_now
   from jetton_transfers
-  where (jetton_master_address = upper('0:cd872fa7c5816052acdf5332260443faec9aacc8c21cca4d92e7f47034d11892') 
-  or jetton_master_address = upper('0:bdf3fa8098d129b54b4f73b5bac5d1e1fd91eb054169c3916dfc8ccd536d1000'))
-  and tx_now  >= 1732705200 and tx_now < 1734433200 
+  join tonstable_assets using (jetton_master_address)
+  where tx_now >= 1732705200 and tx_now < 1734433200 
   and (
     destination = upper('0:b606de2fc1c4a00b000194e7e097be466c6b82d06a515361ac64aaaa307bbe4f')
   or
@@ -228,20 +253,44 @@ order by now desc limit 1)
   select address, sum(tvl_usd) as tvl_impact, count(tvl_usd), min(tx_now) as min_utime, max(tx_now) as max_utime
   from tonstable_flow
   group by 1
+), aqua_assets as (
+  select 'stTON' as symbol, upper('0:cd872fa7c5816052acdf5332260443faec9aacc8c21cca4d92e7f47034d11892') as jetton_master_address
+    union all
+  select 'tsTON' as symbol, upper('0:bdf3fa8098d129b54b4f73b5bac5d1e1fd91eb054169c3916dfc8ccd536d1000') as jetton_master_address
+    union all
+  select 'hTON' as symbol, upper('0:cf76af318c0872b58a9f1925fc29c156211782b9fb01f56760d292e56123bf87') as jetton_master_address
+    union all
+  select 'STAKED' as symbol, upper('0:aa0ba121449feda569e02b12fa755d24e834a7454aecf4649590b6df742aac8f') as jetton_master_address
+    union all
+  select 'TON-SLP' as symbol, upper('0:8d636010dd90d8c0902ac7f9f397d8bd5e177f131ee2cca24ce894f15d19ceea') as jetton_master_address
+    union all
+  select 'USDT-SLP' as symbol, upper('0:aea78c710ae94270dc263a870cf47b4360f53cc5ed38e3db502e9e9afb904b11') as jetton_master_address
+    union all
+  select 'LP TON/USDT' as symbol, upper('0:3e5ffca8ddfcf36c36c9ff46f31562aab51b9914845ad6c26cbde649d58a5588') as jetton_master_address
+    union all
+  select 'LP tsTON/USDT' as symbol, upper('0:6487b31ce35d564d8174a34f3932dc09a58a6f1a164e301a61848173129ce554') as jetton_master_address
+    union all
+  select 'LP stTON/USDT' as symbol, upper('0:a6f76cc50642defea7050e9ed606f23a245483b26e166c33ef67bc4d77b9cf2f') as jetton_master_address
 ), aqua_flow as (
   select 
   case when destination = upper('0:160f2c40452977a25d86d5130b3307a9af7bfa4deaf996cde388096178ab2182') then source
   else destination end as address,
   case when source = upper('0:160f2c40452977a25d86d5130b3307a9af7bfa4deaf996cde388096178ab2182') then -1 else 1 end * amount / 1e9 * 
-  coalesce((select price from prices.core where asset = jetton_master_address and price_ts < tx_now order by price_ts desc limit 1), 1) *
-  (select price from prices.ton_price where price_ts < tx_now order by price_ts desc limit 1) as tvl_usd,
+  case when symbol in ('stTON', 'tsTON', 'hTON', 'TON-SLP') then
+    coalesce((select price from prices.core where asset = jetton_master_address and price_ts < tx_now order by price_ts desc limit 1), 1) *
+    (select price from prices.ton_price where price_ts < tx_now order by price_ts desc limit 1)
+  when symbol = 'USDT-SLP' then 
+    coalesce((select price from prices.core where asset = jetton_master_address and price_ts < tx_now order by price_ts desc limit 1), 0)
+  when symbol = 'STAKED' then 
+    coalesce((select price_usd from prices.agg_prices 
+      where base = jetton_master_address and price_time < tx_now order by price_time desc limit 1), 0) * 1e3
+  else (select tvl_usd / total_supply * 1e9 from prices.dex_pool_history 
+    where pool = jetton_master_address and "timestamp" < tx_now order by "timestamp" desc limit 1) end
+  as tvl_usd,
   tx_now
   from jetton_transfers
-  where (jetton_master_address = upper('0:cd872fa7c5816052acdf5332260443faec9aacc8c21cca4d92e7f47034d11892') 
-  or jetton_master_address = upper('0:bdf3fa8098d129b54b4f73b5bac5d1e1fd91eb054169c3916dfc8ccd536d1000')
-  or jetton_master_address = upper('0:cf76af318c0872b58a9f1925fc29c156211782b9fb01f56760d292e56123bf87')
-  )
-  and tx_now  >= 1732705200 and tx_now < 1734433200 
+  join aqua_assets using (jetton_master_address)
+  where tx_now  >= 1732705200 and tx_now < 1734433200 
   and (
     destination = upper('0:160f2c40452977a25d86d5130b3307a9af7bfa4deaf996cde388096178ab2182')
   or
@@ -251,26 +300,43 @@ order by now desc limit 1)
   select address, sum(tvl_usd) as tvl_impact, count(tvl_usd), min(tx_now) as min_utime, max(tx_now) as max_utime
   from aqua_flow
   group by 1
-), swapcoffee_jettons as (
-  select upper('0:a5d12e31be87867851a28d3ce271203c8fa1a28ae826256e73c506d94d49edad') as jetton_master_address
-  union all
-  select upper('0:123e245683bd5e93ae787764ebf22291306f4a3fcbb2dcfcf9e337186af92c83') as jetton_master_address
-  union all
-  select upper('0:6a839f7a9d6e5303d71f51e3c41469f2c35574179eb4bfb420dca624bb989753') as jetton_master_address
+), swapcoffee_pools as (
+  select 'CES' as pool_name, '0:29F90533937D696105883B981E9427D1AE411EEF5B08EAB83F4AF89C495D27DF' as pool_address
+    union all
+  select 'XROCK' as pool_name, '0:C84DEAF1D956D5F80BE722BBDAEEBA33D70D068ACE97C6FC23E1BFEB5689E1CA' as pool_address
+), swapcoffee_assets as (
+  select 'CES' as pool_name, 'CES' as symbol,
+  '0:A5D12E31BE87867851A28D3CE271203C8FA1A28AE826256E73C506D94D49EDAD' as jetton_master_address
+    union all
+  select 'CES' as pool_name, 'DeDust CES-TON LP' as symbol,
+  '0:123E245683BD5E93AE787764EBF22291306F4A3FCBB2DCFCF9E337186AF92C83' as jetton_master_address
+    union all
+  select 'CES' as pool_name, 'Ston.fi CES-TON LP' as symbol,
+  '0:6A839F7A9D6E5303D71F51E3C41469F2C35574179EB4BFB420DCA624BB989753' as jetton_master_address
+    union all
+  select 'XROCK' as pool_name, 'XROCK' as symbol,
+  '0:157C463688A4A91245218052C5580807792CF6347D9757E32F0EE88A179A6549' as jetton_master_address
+    union all
+  select 'XROCK' as pool_name, 'DeDust XROCK-USDT LP' as symbol,
+  '0:9CF96B400DEEDD4143BD113D8D767F0042515E2AD510C4B4ADBE734CD30563B8' as jetton_master_address
+    union all
+  select 'XROCK' as pool_name, 'Ston.fi XROCK-USDT LP' as symbol,
+  '0:6BA0E19F6ADACBEFDCBBC859407241EFF578F4A57EDC8E3E05E86DCFBB283F20' as jetton_master_address
 ), swapcoffee_flow as (
   select "source" as address,
   case
-    when jetton_master_address = upper('0:a5d12e31be87867851a28d3ce271203c8fa1a28ae826256e73c506d94d49edad') then
-      coalesce((select price_usd from prices.agg_prices ap where ap.base = jetton_master_address and price_time < 1734433200 order by price_time desc limit 1) * jt.amount / 1e6, 0)
+    when symbol in ('CES', 'XROCK') then
+      coalesce((select price_usd from prices.agg_prices ap
+      where ap.base = jetton_master_address and price_time < 1734433200 order by price_time desc limit 1) * jt.amount / 1e6, 0)
     else
-      coalesce((select jt.amount * tvl_usd / total_supply from prices.dex_pool_history dph where pool = jetton_master_address and "timestamp" < 1734433200 order by "timestamp" desc limit 1), 0)
+      coalesce((select jt.amount * tvl_usd / total_supply from prices.dex_pool_history dph
+      where pool = jetton_master_address and "timestamp" < 1734433200 order by "timestamp" desc limit 1), 0)
   end as tvl_usd,
   tx_now
   from jetton_transfers jt 
-  join swapcoffee_jettons using(jetton_master_address)
-  where destination = upper('0:29f90533937d696105883b981e9427d1ae411eef5b08eab83f4af89c495d27df')
-  and not tx_aborted
-  and tx_now >= 1732705200 and tx_now < 1734433200
+  join swapcoffee_assets sa using(jetton_master_address)
+  join swapcoffee_pools sp on sa.pool_name = sp.pool_name and destination = sp.pool_address
+  where tx_now >= 1732705200 and tx_now < 1734433200 and not tx_aborted
 ), swapcoffee_impact as (
   select address, sum(tvl_usd) as tvl_impact, count(tvl_usd), min(tx_now) as min_utime, max(tx_now) as max_utime
   from swapcoffee_flow
@@ -299,6 +365,14 @@ order by now desc limit 1)
   select 'durev' as symbol,
   '0:5FF06029CA6BABEDB1633E6081A63944086058E3DD3681FDE6F292729B14B096' as asset_id,
   '0:74D8327471D503E2240345B06FE1A606DE1B5E3C70512B5B46791B429DAB5EB1' as jetton_address
+  union all
+  select 'PEPE' as symbol,
+  '0:E63FFAC3F5E5CF4AF7A2C2F5C95C90F20AF44D01F0B02287E7B1445EB1298993' as asset_id,
+  '0:97cceec78682b97c342e08e344e3797cf90b2b7aae73abcf5954d8449dadb878' as jetton_address
+  union all
+  select 'BOLGUR' as symbol,
+  '0:5D12CB57CCA228F04A89E10F5629C18A94E8B4180CD2A8D5AB577AA80F7C6290' as asset_id,
+  '0:538d1d671a5c537516464921de5d8bdc903919737783c2ea73045873e5c0f1f9' as jetton_address
 ), coffin_prices as (
   select asset_id, 
   case 

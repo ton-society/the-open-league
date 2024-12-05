@@ -1,0 +1,190 @@
+{
+  "update_time": 1732894533,
+  "build_time": 1732894533,
+  "items": [
+    {
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_rainbowswap.png",
+      "name": "Rainbow.ag",
+      "link": "https://t.me/rainbow_swap_bot?startapp=ny",
+      "target_action": "Swap",
+      "protocol_type": "DEX aggregator",
+      "points": "1"
+    },
+    {
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_gaspump.png",
+      "name": "GasPump",
+      "link": "https://t.me/gasPump_bot?startapp=ny",
+      "target_action": "Trade memecoins",
+      "protocol_type": "Memepad",
+      "points": "5"
+    },
+    {
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_aqua%20protocol.png",
+      "name": "Aqua protocol",
+      "link": "https://app.aquaprotocol.xyz/mint",
+      "target_action": "Deposit liquidity to mint $AquaUSD",
+      "protocol_type": "Stable coin",
+      "points": "10"
+    },
+    {
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_jvault.png",
+      "name": "JVault",
+      "link": "https://jvault.xyz/staking/v2/stake",
+      "target_action": "Stake tokens",
+      "protocol_type": "Jetton staking",
+      "points": "5"
+    },
+    {
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_daolama.png",
+      "name": "DAOLama",
+      "link": "https://app.daolama.co/yield",
+      "target_action": "Provide TON into vault",
+      "protocol_type": "NFT lending",
+      "points": "10"
+    },
+    {
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_parraton.png",
+      "name": "Parraton",
+      "link": "https://t.me/parraton_bot?startapp=ny",
+      "target_action": "Deposit liquidity into pools",
+      "protocol_type": "Vaults",
+      "points": "10"
+    },
+    {
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_settleton.png",
+      "name": "SettleTON",
+      "link": "https://t.me/settleton_bot?startapp=ny",
+      "target_action": "Invest into vaults or indexes",
+      "protocol_type": "Indexes & Vaults",
+      "points": "10"
+    },
+    {
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_tonpools.png",
+      "name": "TonPools",
+      "link": "https://t.me/tonpools_bot?startapp=ny",
+      "target_action": "Stake TON or USDT",
+      "protocol_type": "No-loss staking protocol with prizes",
+      "points": "5"
+    },
+    {
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_tonstable.png",
+      "name": "TonStable",
+      "link": "https://t.me/TonStableBot?startapp=ny",
+      "target_action": "Deposit stTON, tsTON or STAKED to mint $USDG",
+      "protocol_type": "Stable coin",
+      "points": "10"
+    },
+  	{
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_ton%20hedge.png",
+      "name": "TON Hedge",
+      "link": "https://t.me/ton_hedge_bot?startapp=ny",
+      "target_action": "Stake USDT",
+      "protocol_type": "Options trading",
+      "points": "10"
+    },
+    {
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/apps_hot%20wallet.png",
+      "name": "TONPump by HOT Wallet",
+      "link": "https://t.me/herewalletbot/app?startapp=ny",
+      "target_action": "Trade memecoins",
+      "protocol_type": "Memepad",
+      "points": "5"
+    },
+    {
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/PocketFi_logo.png",
+      "name": "BigPump by PocketFi",
+      "link": "https://t.me/pocketfi_bot/BigPump?startapp=ny",
+      "target_action": "Trade memecoins",
+      "protocol_type": "Memepad",
+      "points": "5"
+    },
+    {
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/apps_blum.png",
+      "name": "Blum",
+      "link": "https://t.me/BlumCryptoBot?startapp=ny",
+      "target_action": "Trade memecoins",
+      "protocol_type": "Memepad",
+      "points": "5"
+    },
+    {
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/wagmi_logo.jpg",
+      "name": "Wagmi",
+      "link": "https://t.me/wagmi_app_bot?startapp=ny",
+      "target_action": "Trade memecoins",
+      "protocol_type": "Memepad",
+      "points": "5"
+    },
+    {
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/apps_swap.coffee.png",
+      "name": "swap.coffee",
+      "link": "https://swap.coffee/dex",
+      "target_action": "Swap",
+      "protocol_type": "DEX aggregator",
+      "points": "1"
+    },
+    {
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/apps_swap.coffee.png",
+      "name": "swap.coffee staking",
+      "link": "https://swap.coffee/stake",
+      "target_action": "Stake CES or LP tokens",
+      "protocol_type": "Jetton staking",
+      "points": "5"
+    },
+    {
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/Coffin.meme_logo.jpg",
+      "name": "Coffin",
+      "link": "https://t.me/MemeCoffin_Bot?startapp=ny",
+      "target_action": "Supply tokens into vaults",
+      "protocol_type": "Decentralised options",
+      "points": "5"
+    },
+    {
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/tonco_logo.jpg",
+      "name": "TONCO",
+      "link": "https://app.tonco.io/#/pools",
+      "target_action": "Provide liqudity into pools",
+      "protocol_type": "DEX with concentrated liquidity",
+      "points": "10"
+    },
+    {
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_farmix.png",
+      "name": "Farmix",
+      "link": "https://app.farmix.tg/lending",
+      "target_action": "Lend TON, USDT or NOT",
+      "protocol_type": "Yield farming",
+      "points": "10"
+    },
+    {
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_crouton.png",
+      "name": "Crouton",
+      "link": "https://t.me/croutonfibot?startapp=ny",
+      "target_action": "Deposit TON, tsTON and stTON",
+      "protocol_type": "Stable swaps",
+      "points": "10"
+    },
+    {
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_moki.png",
+      "name": "Moki",
+      "link": "https://t.me/MokiSwapBot?startapp=ny",
+      "target_action": "Swap",
+      "protocol_type": "DEX aggregator",
+      "points": "1"
+    },
+    {
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_titan.png",
+      "name": "Titan",
+      "link": "https://t.me/TitanTradeBot?startapp=ny",
+      "target_action": "Swap",
+      "protocol_type": "DEX Aggregator",
+      "points": "1"
+    },
+    {
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_delea.png",
+      "name": "Delea",
+      "link": "https://app.delea.finance/",
+      "target_action": "Deposit TON, stTON or tsTON to mint $DONE",
+      "protocol_type": "Stable coin",
+      "points": "10"
+    }
+  ]
+}
