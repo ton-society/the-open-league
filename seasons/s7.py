@@ -9,6 +9,7 @@ from projects.defi.Farmix import Farmix
 from projects.defi.Coffin import Coffin
 from projects.defi.SwapCoffee import SwapCoffeeVolume, SwapCoffeeTVL
 from projects.defi.AquaProtocol import AquaProtocol
+from projects.defi.BigPump import BigPump
 from projects.defi.Crouton import Crouton
 from projects.defi.DAOLama import DAOLama
 from projects.defi.GasPump import GasPumpDeFi
@@ -54,7 +55,7 @@ S7_defi_volume = SeasonConfig(
     start_time=S7_START,
     end_time=S7_END,
     projects=[
-        GasPumpDeFi, RainbowSwap, SwapCoffeeVolume, Moki, Titan
+        GasPumpDeFi, RainbowSwap, SwapCoffeeVolume, Moki, Titan, BigPump
     ],
     score_model=DeFiVolumeContribution(squads=[
         (lambda tvl: tvl >= 50 * 1e6, "Over 50M$"),
