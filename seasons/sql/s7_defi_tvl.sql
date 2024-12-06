@@ -500,52 +500,78 @@ tonco_collections as (
   left join farmix_agg_burns using (pool, address)
   group by 1
 ), crouton_vaults as (
-  select 'TON' as symbol,
+  select '3TON' as agg_pool, 'TON' as symbol,
   '0:1D5FDACD17489F917240A3B097839BFBF3205B3FD3B52F850BECCF442345CC92' as vault_address,
   '0:0000000000000000000000000000000000000000000000000000000000000000' as jetton_address
     union all
-  select 'stTON' as symbol,
+  select '3TON' as agg_pool, 'stTON' as symbol,
   '0:D1A320E2F0B5505B8092F3819D02EBDABD2BA0C683F52C2138F5A7C4A6064CB5' as vault_address,
   '0:CD872FA7C5816052ACDF5332260443FAEC9AACC8C21CCA4D92E7F47034D11892' as jetton_address
     union all
-  select 'tsTON' as symbol,
+  select '3TON' as agg_pool, 'tsTON' as symbol,
   '0:260820E60D38B53C03BD6711FD333C3B10B2A0223658A320CF856D3BA1272B30' as vault_address,
   '0:BDF3FA8098D129B54B4F73B5BAC5D1E1FD91EB054169C3916DFC8CCD536D1000' as jetton_address
+    union all
+  select 'USDT' as agg_pool, 'USDT' as symbol,
+  '0:79EC163AE7F967F97BF61E9AB3B2D32AA0B2D5160FC464F70ED2DA12F9D2E55C' as vault_address,
+  '0:B113A994B5024A16719F69139328EB759596C38A25F59028B146FECDC3621DFE' as jetton_address
+    union all
+  select 'USDT' as agg_pool, 'DONE' as symbol,
+  '0:6667F3B8B2E7F6E0893C064907F9DBE6920A4D9907C941657E88B1A37EA96D28' as vault_address,
+  '0:A0194301FEED4692BB24C36A38D3B220F3299099F9315AE3D6D9DE0836E4283C' as jetton_address
+    union all
+  select 'USDT' as agg_pool, 'AquaUSD' as symbol,
+  '0:8CD61774DC5D6478A34A881D8504F753EDE6E9A3420C22F2CCAC0997E9B3BE20' as vault_address,
+  '0:160F2C40452977A25D86D5130B3307A9AF7BFA4DEAF996CDE388096178AB2182' as jetton_address
+), crouton_pools as (
+  select '3TON' as agg_pool, '0:7B3ABBA2D73FDD28E3681EE825BE2D9B314A660F87F0D19E02DA07B00F614FD0' as pool_address
+    union all
+  select 'USDT' as agg_pool, '0:58C90C9E8379FEE9110984A724CB898AE56A666E085176902CCFE062E5C25751' as pool_address
+    union all
+  select 'USDT' as agg_pool, '0:79A2C147EA4CC1376CCAF5FDC0D4B6467892A6A9CC8646E99884982DB9695B8C' as pool_address    
 ), crouton_vaults_tvl as (
-  select symbol,
+  select agg_pool,
   case 
     when symbol = 'TON' then
       (select balance * (select price from prices.ton_price where price_ts < 1734433200 order by price_ts desc limit 1) / 1e9
       from account_states as2 
       where hash = (select account_state_hash_after from transactions where account = vault_address and now < 1734433200 order by now desc limit 1))
-    else
+    when symbol in ('stTON', 'tsTON') then
       (select balance * (select price_usd from prices.agg_prices ap 
       where ap.base = jetton_address and price_time < 1734433200 order by price_time desc limit 1) / 1e6
       from wallets_end where "owner" = vault_address and jetton_master = jetton_address)
+    when symbol = 'DONE' then
+      (select balance / 1e9 from wallets_end where "owner" = vault_address and jetton_master = jetton_address)
+    else
+      (select balance / 1e6 from wallets_end where "owner" = vault_address and jetton_master = jetton_address)
   end as tvl_usd
   from crouton_vaults
 ), crouton_total_tvl as (
-  select sum(tvl_usd) as total_tvl_usd from crouton_vaults_tvl
+  select agg_pool, sum(tvl_usd) as total_tvl_usd from crouton_vaults_tvl group by agg_pool
 ), crouton_balances_before as (
-  select ed.address, balance from wallets_start b
+  select agg_pool, ed.address, sum(balance) as balance from wallets_start b
   join tol.enrollment_degen ed on ed.address = b."owner"
-  where b.jetton_master = '0:7B3ABBA2D73FDD28E3681EE825BE2D9B314A660F87F0D19E02DA07B00F614FD0'
+  join crouton_pools cp on b.jetton_master = cp.pool_address
+  group by (agg_pool, ed.address)
 ), crouton_balances_after as (
-  select ed.address, balance from wallets_end b
+  select agg_pool, ed.address, sum(balance) as balance from wallets_end b
   join tol.enrollment_degen ed on ed.address = b."owner"
-  where b.jetton_master = '0:7B3ABBA2D73FDD28E3681EE825BE2D9B314A660F87F0D19E02DA07B00F614FD0'
+  join crouton_pools cp on b.jetton_master = cp.pool_address
+  group by (agg_pool, ed.address)
 ), crouton_balances_delta as (
-  select address, coalesce(cba.balance, 0) - coalesce(cbb.balance, 0) as balance_delta
-  from crouton_balances_after cba left join crouton_balances_before cbb using(address) 
+  select agg_pool, address, coalesce(cba.balance, 0) - coalesce(cbb.balance, 0) as balance_delta
+  from crouton_balances_after cba 
+  left join crouton_balances_before cbb using(agg_pool, address) 
 ), crouton_total_supply as (
-  select sum(balance) as total_supply from wallets_end b
-  where b.jetton_master = '0:7B3ABBA2D73FDD28E3681EE825BE2D9B314A660F87F0D19E02DA07B00F614FD0'
+  select agg_pool, sum(balance) as total_supply from wallets_end b
+  join crouton_pools cp on b.jetton_master = cp.pool_address
+  group by agg_pool
 ), crouton_impact as (
   select address, sum(total_tvl_usd * balance_delta / total_supply) as tvl_impact,
     count(balance_delta), null::bigint as min_utime, null::bigint as max_utime 
   from crouton_balances_delta
-  cross join crouton_total_supply
-  cross join crouton_total_tvl
+  join crouton_total_supply using(agg_pool)
+  join crouton_total_tvl using(agg_pool)
   group by 1
 ), delea_flow as (
   -- get all mints during the period

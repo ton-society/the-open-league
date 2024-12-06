@@ -150,17 +150,30 @@ List of Farmix pools:
 
 ### Crouton
 
-All users can deposit TON/stTON/tsTON to 3-assets pool [3TON](https://crouton.finance/pools/EQB7Orui1z_dKONoHuglvi2bMUpmD4fw0Z4C2gewD2FP0BpL), all assets are stored on three vaults:
-- https://tonviewer.com/EQAmCCDmDTi1PAO9ZxH9Mzw7ELKgIjZYoyDPhW07oScrMFhC
-- https://tonviewer.com/EQDRoyDi8LVQW4CS84GdAuvavSugxoP1LCE49afEpgZMtYIB
-- https://tonviewer.com/EQAdX9rNF0ifkXJAo7CXg5v78yBbP9O1L4UL7M9EI0XMksB0
+All users can deposit:
+1. [TON/stTON/tsTON](https://crouton.finance/pools/EQB7Orui1z_dKONoHuglvi2bMUpmD4fw0Z4C2gewD2FP0BpL)
+2. [DONE/USDT](https://crouton.finance/pools/EQBYyQyeg3n-6REJhKcky4mK5WpmbghRdpAsz-Bi5cJXUWWL)
+3. [AquaUSD/USDT](https://crouton.finance/pools/EQB5osFH6kzBN2zK9f3A1LZGeJKmqcyGRumYhJgtuWlbjB8w)
 
-Users hold LP tokens [Crouton LP](https://tonviewer.com/EQB7Orui1z_dKONoHuglvi2bMUpmD4fw0Z4C2gewD2FP0BpL) which is used to estimate TVL increase. Algorithm is the following:
+All assets are stored on the following vaults:
+- TON – https://tonviewer.com/EQAmCCDmDTi1PAO9ZxH9Mzw7ELKgIjZYoyDPhW07oScrMFhC
+- tsTON – https://tonviewer.com/EQDRoyDi8LVQW4CS84GdAuvavSugxoP1LCE49afEpgZMtYIB
+- stTON – https://tonviewer.com/EQAdX9rNF0ifkXJAo7CXg5v78yBbP9O1L4UL7M9EI0XMksB0
+- USDT – https://tonviewer.com/EQB57BY65_ln-Xv2HpqzstMqoLLVFg_EZPcO0toS-dLlXA2c
+- DONE – https://tonviewer.com/EQBmZ_O4suf24Ik8BkkH-dvmkgpNmQfJQWV-iLGjfqltKP2v
+- AquaUSD – https://tonviewer.com/EQCM1hd03F1keKNKiB2FBPdT7ebpo0IMIvLMrAmX6bO-IFE9
+
+Users hold LP tokens:
+- [TON/stTON/tsTON](https://tonviewer.com/EQB7Orui1z_dKONoHuglvi2bMUpmD4fw0Z4C2gewD2FP0BpL)
+- [DONE/USDT](https://tonviewer.com/EQBYyQyeg3n-6REJhKcky4mK5WpmbghRdpAsz-Bi5cJXUWWL)
+- [AquaUSD/USDT](https://tonviewer.com/EQB5osFH6kzBN2zK9f3A1LZGeJKmqcyGRumYhJgtuWlbjB8w)
+
+Those are used to estimate TVL increase. Algorithm is the following:
 
 - Calculating increase of Crouton LP balance for each user
 - Calculating total supply of Crouton LP at the current moment (or at the end of the season)
-- Get actual balances for the vaults at the current moment (or at the end of the season) and estimate total TVL based on the current price of TON/stTON/tsTON
-- User impact is equal to `Crouton LP balance increase` / `Total supply of Crouton LP` * `Total TVL`
+- Get actual balances for the vaults at the current moment (or at the end of the season) and estimate total TVL based on the prices of tokens in pools
+- User impact is equal to SUM ( `Crouton LP balance increase` / `Total supply of Crouton LP` * `TVL in particular pool` )
 
 
 ### Delea
