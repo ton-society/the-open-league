@@ -69,7 +69,7 @@
     {
       "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_tonstable.png",
       "name": "TonStable",
-      "link": "https://t.me/TonStableBot?startapp=ny",
+      "link": "https://t.me/TonStableBot/tonstable",
       "target_action": "Deposit stTON, tsTON or STAKED to mint $USDG",
       "protocol_type": "Stable coin",
       "points": "10"
@@ -109,7 +109,7 @@
     {
       "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/wagmi_logo.jpg",
       "name": "Wagmi",
-      "link": "https://t.me/wagmi_app_bot?startapp=ny",
+      "link": "https://t.me/wagmi_app_bot/wagmi?startapp=ny",
       "target_action": "Trade memecoins",
       "protocol_type": "Memepad",
       "points": "5"
@@ -157,8 +157,8 @@
     {
       "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_crouton.png",
       "name": "Crouton",
-      "link": "https://t.me/croutonfibot?startapp=ny",
-      "target_action": "Deposit TON, tsTON and stTON",
+      "link": "https://t.me/croutonfibot/crouton?startapp=ny",
+      "target_action": "Provide liqudity into pools",
       "protocol_type": "Stable swaps",
       "points": "10"
     },
