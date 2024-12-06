@@ -23,6 +23,7 @@ from projects.defi.TONHedge import TONHedge
 from projects.defi.TonStable import TonStable
 from projects.defi.Parraton import Parraton
 from projects.defi.TonPools import TonPools
+from projects.defi.Wagmi import Wagmi
 from seasons.defi_models import DeFiTVLContribution, DeFiVolumeContribution
 
 
@@ -55,7 +56,7 @@ S7_defi_volume = SeasonConfig(
     start_time=S7_START,
     end_time=S7_END,
     projects=[
-        GasPumpDeFi, RainbowSwap, SwapCoffeeVolume, Moki, Titan, BigPump
+        GasPumpDeFi, RainbowSwap, SwapCoffeeVolume, Moki, Titan, BigPump, Wagmi
     ],
     score_model=DeFiVolumeContribution(squads=[
         (lambda tvl: tvl >= 50 * 1e6, "Over 50M$"),
