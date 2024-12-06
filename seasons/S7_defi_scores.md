@@ -82,6 +82,7 @@ Minimum amount of TVL increase to be eligible for receiving points is 20 USD.
 All pools are SBTs from [this collection](https://tonviewer.com/EQAYS3AO2NaFr5-wl1CU8QMiCxrP0OEXYn82iqnuST9FKo9I). 
 Each SBT owns one or more jetton masters and all holders of these jettons are 
 considered as LPs. Total amount of TVL for each pool is a sum of all tokens and DEX LP tokens owned by this pool.
+Only pools with at least 200$ of initially added rewards should be counted. List of excluded pools can be found here: https://jvault.xyz/staking/v2/excluded_pools
 
 ### SettleTon
 
