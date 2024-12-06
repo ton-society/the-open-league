@@ -12,6 +12,15 @@ All queries provided below works with postgres DB produced by [TON-ETL](https://
 
 User score is calculated as a trading volume in any of target projects nominated in USD. Trading volume is calculated
 during the period of the season. Minimum amount of volume to be eligible for receiving points is 20 USD.
+For trading volume in pools with low fees a reduction factor of 0.1 is applied:
+* [NIKO/pTON](https://app.ston.fi/pools/EQAGUk1UZNw4etyy2Y3Lacii_u18RUPPaw_s5FLV6yMsatly)
+* [tsTON/TON](https://app.ston.fi/pools/EQC_OxV6MQ6csZXNk2Zu6jMrsGRI6m4YRzL2McKaPCYmNk6l)
+* [AquaUSD/USDT](https://app.ston.fi/pools/EQDmFQFfmQHA2zril2F3yQswZAYc-k1hN6CK0il1izLe2892)
+* [AquaUSD/USDT](https://dedust.io/pools/EQBGCoxXu8a_CdJ5r1u2iiWUvJAAHvVU7qZgEmfKRSfBf2CW)
+* [stTON/TON](https://dedust.io/pools/EQCHFiQM_TTSIiKhUCmWSN4aPSTqxJ4VSBEyDFaZ4izyq95Y)
+* [wsTON/TON](https://dedust.io/pools/EQABt8YegyD7VJnZdFVwom8wwqp0E0X8tN2Y6NhrDmbrnSXP)
+* [DONE/USDT](https://dedust.io/pools/EQBA-CMqyAbvW1pcoEzpEIrPQG4RDY2iq0BLXJx1m1-Ni3ON)
+
 Methodology details for each projects:
 
 ### Rainbow.ag
