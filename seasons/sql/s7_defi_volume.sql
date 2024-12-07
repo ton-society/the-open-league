@@ -14,7 +14,7 @@ with lowfee_pools as (
   select '0:40F8232AC806EF5B5A5CA04CE9108ACF406E110D8DA2AB404B5C9C759B5F8D8B' as swap_pool -- DeDust DONE/USDT
 ), swaps as (
   select tx_hash, trace_id, swap_utime, swap_user, referral_address, 
-    case when lp.swap_pool is null then volume_usd else 0.1 * volume_usd end as volume_usd
+    case when lp.swap_pool is null or swap_utime < 1733495400 then volume_usd else 0.1 * volume_usd end as volume_usd
   from parsed.dex_swap_parsed dsp 
   left join lowfee_pools lp using (swap_pool)
   where swap_utime  >= 1732705200 and swap_utime < 1734433200
