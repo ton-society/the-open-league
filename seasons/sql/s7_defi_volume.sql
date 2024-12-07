@@ -1,5 +1,22 @@
-with swaps as (
-  select * from parsed.dex_swap_parsed dsp 
+with lowfee_pools as (
+  select '0:06524D5464DC387ADCB2D98DCB69C8A2FEED7C4543CF6B0FECE452D5EB232C6A' as swap_pool -- Ston.fi NIKO/pTON
+    union all
+  select '0:BF3B157A310E9CB195CD93666EEA332BB06448EA6E184732F631C29A3C262636' as swap_pool -- Ston.fi tsTON/TON
+    union all
+  select '0:E615015F9901C0DB3AE2976177C90B3064061CFA4D6137A08AD229758B32DEDB' as swap_pool -- Ston.fi AquaUSD/USDT
+    union all
+  select '0:460A8C57BBC6BF09D279AF5BB68A2594BC90001EF554EEA6601267CA4527C17F' as swap_pool -- DeDust AquaUSD/USDT
+    union all
+  select '0:8716240CFD34D22222A150299648DE1A3D24EAC49E154811320C5699E22CF2AB' as swap_pool -- DeDust stTON/TON
+    union all
+  select '0:01B7C61E8320FB5499D9745570A26F30C2AA741345FCB4DD98E8D86B0E66EB9D' as swap_pool -- DeDust wsTON/TON
+    union all
+  select '0:40F8232AC806EF5B5A5CA04CE9108ACF406E110D8DA2AB404B5C9C759B5F8D8B' as swap_pool -- DeDust DONE/USDT
+), swaps as (
+  select tx_hash, trace_id, swap_utime, swap_user, referral_address, 
+    case when lp.swap_pool is null or swap_utime < 1733495400 then volume_usd else 0.1 * volume_usd end as volume_usd
+  from parsed.dex_swap_parsed dsp 
+  left join lowfee_pools lp using (swap_pool)
   where swap_utime  >= 1732705200 and swap_utime < 1734433200
   and volume_usd > 0
 ), rainbow_referral_addresses as (
