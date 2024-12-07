@@ -12,7 +12,7 @@ All queries provided below works with postgres DB produced by [TON-ETL](https://
 
 User score is calculated as a trading volume in any of target projects nominated in USD. Trading volume is calculated
 during the period of the season. Minimum amount of volume to be eligible for receiving points is 20 USD.
-For trading volume in pools with low fees a reduction factor of 0.1 is applied:
+For trading volume in pools with low fees a reduction factor of 0.1 is applied since Fri Dec 06 2024 14:30:00 GMT:
 * [NIKO/pTON](https://app.ston.fi/pools/EQAGUk1UZNw4etyy2Y3Lacii_u18RUPPaw_s5FLV6yMsatly)
 * [tsTON/TON](https://app.ston.fi/pools/EQC_OxV6MQ6csZXNk2Zu6jMrsGRI6m4YRzL2McKaPCYmNk6l)
 * [AquaUSD/USDT](https://app.ston.fi/pools/EQDmFQFfmQHA2zril2F3yQswZAYc-k1hN6CK0il1izLe2892)
