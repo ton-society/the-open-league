@@ -391,7 +391,7 @@ order by now desc limit 1)
   where pool_address = '0:68CF02950F26BD20BDCAC38991E40429878CA8D7912E31DC97F272E58DE694C6'
   and utime >= 1732705200 and utime < 1734433200
 ), coffin_totals as (
-  select address, asset_id, sum(amount * price / 1e6) as volume_usd, count(amount), min(utime) as min_utime, max(utime) as max_utime
+  select address, asset_id, coalesce(sum(amount * price / 1e6), 0) as volume_usd, count(amount), min(utime) as min_utime, max(utime) as max_utime
   from coffin_events
   join coffin_prices using (asset_id)
   group by 1, 2
