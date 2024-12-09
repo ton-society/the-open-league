@@ -185,6 +185,14 @@
       "target_action": "Deposit TON, stTON or tsTON to mint $DONE",
       "protocol_type": "Stable coin",
       "points": "10"
+    },
+    {
+      "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_cattonfi.png",
+      "name": "Catton",
+      "link": "https://t.me/CattonAiBot/CattonFi",
+      "target_action": "Provide liqudity into pools",
+      "protocol_type": "CDP",
+      "points": "10"
     }
   ]
 }

@@ -195,6 +195,10 @@ Vault addresses:
 * [tsTON](https://tonviewer.com/EQCwIIRKpuV9fQpQxdTMhLAO30MNHa6GOYd00TsySOOYtA9n)
 
 
+### CattonFi
+
+Users can provide liquidity into [TON/cTON](https://tonviewer.com/EQAze1aSZHY1yUGz1BFndH62k-VYpXYeDiYofCXTRZClF8Qr) and [USDT/cUSDT](https://tonviewer.com/EQBy7pjr6IBzqW8vuVCZ780evtnkiIF3jZSRRDxeqScfZoU9) pools. The methodology for tracking the user impact to TVL is the same as for Crouton.
+
 Full list of participants and their impact on TVL could be obtained by [this query](sql/s7_defi_tvl.sql).
 
 
@@ -225,3 +229,4 @@ Full list of participants and their impact on TVL could be obtained by [this que
 |Farmix|TVL|10|
 |Crouton|TVL|10|
 |Delea|TVL|10|
+|CattonFi|TVL|10|
