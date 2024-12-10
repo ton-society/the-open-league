@@ -11,6 +11,7 @@ from projects.defi.SwapCoffee import SwapCoffeeVolume, SwapCoffeeTVL
 from projects.defi.AquaProtocol import AquaProtocol
 from projects.defi.BigPump import BigPump
 from projects.defi.Blum import Blum
+from projects.defi.CattonFi import CattonFi
 from projects.defi.Crouton import Crouton
 from projects.defi.DAOLama import DAOLama
 from projects.defi.GasPump import GasPumpDeFi
@@ -41,7 +42,7 @@ S7_defi_tvl = SeasonConfig(
         DAOLama, SettleTON, JVault,
         TONHedge, TonStable, Parraton, TonPools,
         AquaProtocol, SwapCoffeeTVL, Coffin, TONCO, Farmix,
-        Crouton, Delea
+        Crouton, Delea, CattonFi
     ],
     score_model=DeFiTVLContribution(squads=[
         (lambda tvl: tvl >= 5e6, "Over 5M$"),

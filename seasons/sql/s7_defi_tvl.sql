@@ -653,8 +653,65 @@ select "owner" as address, amount,
   select address, sum(amount) * (select tvl from beetroot_tvl) / (select supply from beetroot_supply) as tvl_impact, count(1), min(event_time) as min_utime, max(event_time) as max_utime
   from beetroot_flow
   group by 1
-)
-, all_projects_impact as (
+), catton_assets as (
+  select 'cTON-TON' as pool, 'TON' as symbol,
+  '0:0000000000000000000000000000000000000000000000000000000000000000' as jetton_address
+    union all
+  select 'cTON-TON' as pool, 'cTON' as symbol,
+  '0:86CF8401D283627A87B58C367B440CAD933AB8AA7B383419E8FF7D1A00C945F8' as jetton_address
+    union all
+  select 'ctUSD-USDT' as pool, 'ctUSD' as symbol,
+  '0:9FB449CE8FB43D0F682C713C01D9D8357C7CD0D4A49DD64DD585926990174A4E' as jetton_address
+    union all
+  select 'ctUSD-USDT' as pool, 'USDT' as symbol,
+  '0:B113A994B5024A16719F69139328EB759596C38A25F59028B146FECDC3621DFE' as jetton_address
+), catton_pools as (
+  select 'cTON-TON' as pool, '0:337B5692647635C941B3D41167747EB693E558A5761E0E26287C25D34590A517' as pool_address
+    union all
+  select 'ctUSD-USDT' as pool, '0:72EE98EBE88073A96F2FB95099EFCD1EBED9E48881778D9491443C5EA9271F66' as pool_address
+), catton_assets_tvl as (
+  select pool,
+  case 
+    when symbol = 'TON' then
+      (select balance * (select price from prices.ton_price where price_ts < 1734433200 order by price_ts desc limit 1) / 1e9
+      from account_states as2 
+      where hash = (select account_state_hash_after from transactions where account = pool_address and now < 1734433200 order by now desc limit 1))
+    when symbol = 'cTON' then
+      (select balance * (select price from prices.ton_price where price_ts < 1734433200 order by price_ts desc limit 1) / 1e9
+      from wallets_end where "owner" = pool_address and jetton_master = jetton_address)
+    else
+      (select balance / 1e6 from wallets_end where "owner" = pool_address and jetton_master = jetton_address)
+  end as tvl_usd
+  from catton_assets
+  join catton_pools using (pool)
+), catton_total_tvl as (
+  select pool, sum(tvl_usd) as total_tvl_usd from catton_assets_tvl group by pool
+), catton_balances_before as (
+  select pool, ed.address, sum(balance) as balance from wallets_start b
+  join tol.enrollment_degen ed on ed.address = b."owner"
+  join catton_pools cp on b.jetton_master = cp.pool_address
+  group by (pool, ed.address)
+), catton_balances_after as (
+  select pool, ed.address, sum(balance) as balance from wallets_end b
+  join tol.enrollment_degen ed on ed.address = b."owner"
+  join catton_pools cp on b.jetton_master = cp.pool_address
+  group by (pool, ed.address)
+), catton_balances_delta as (
+  select pool, address, coalesce(cba.balance, 0) - coalesce(cbb.balance, 0) as balance_delta
+  from catton_balances_after cba 
+  left join catton_balances_before cbb using(pool, address) 
+), catton_total_supply as (
+  select pool, sum(balance) as total_supply from wallets_end b
+  join catton_pools cp on b.jetton_master = cp.pool_address
+  group by pool
+), catton_impact as (
+  select address, sum(total_tvl_usd * balance_delta / total_supply) as tvl_impact,
+    count(balance_delta), null::bigint as min_utime, null::bigint as max_utime 
+  from catton_balances_delta
+  join catton_total_supply using(pool)
+  join catton_total_tvl using(pool)
+  group by 1
+), all_projects_impact as (
  select 'jVault' as project, *, floor(tvl_impact / 20.) * 5 as points from jvault_impact
    union all
  select 'SettleTon' as project, *, floor(tvl_impact / 20.) * 10 as points from settleton_impact
@@ -684,6 +741,8 @@ select "owner" as address, amount,
  select 'Delea' as project, *, floor(tvl_impact / 20.) * 10 as points from delea_impact
    -- union all
  -- select 'Beetroot' as project, *, floor(tvl_impact / 20.) * 10 as points from beetroot_impact
+   union all
+ select 'Catton' as project, *, floor(tvl_impact / 20.) * 10 as points from catton_impact
 )
 select extract(epoch from now())::integer as score_time, p.address, project, points, tvl_impact as "value", "count", min_utime, max_utime
 from all_projects_impact p
