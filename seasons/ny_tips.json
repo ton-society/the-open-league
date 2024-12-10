@@ -70,7 +70,7 @@
       "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/defi_tonstable.png",
       "name": "TonStable",
       "link": "https://t.me/TonStableBot/tonstable",
-      "target_action": "Deposit stTON, tsTON or STAKED to mint $USDG",
+      "target_action": "Deposit stTON, tsTON or STAKED to mint $USTG",
       "protocol_type": "Stable coin",
       "points": "10"
     },
