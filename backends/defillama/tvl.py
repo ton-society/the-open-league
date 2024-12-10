@@ -110,8 +110,7 @@ class DefillamaDeFiTVLBackend(CalculationBackend):
             snapshot_tvl = get_tvl_before(tvl_history, config.start_time)
             latest_tvl = get_tvl_before(tvl_history, config.end_time)
             correction_latest = -1 * excluded_current.get(project.name, 0)
-            if project.corrections:
-                correction_latest -= sum(correction.value_usd for correction in project.corrections)
+            correction_delta = -sum(correction.value_usd for correction in project.corrections) if project.corrections else 0
             correction_snapshot = -1 * excluded_snapshot.get(project.name, 0)
             logger.info(f"{project.name}: {snapshot_tvl}({correction_snapshot}) => {latest_tvl}({correction_latest})")
             
@@ -124,7 +123,8 @@ class DefillamaDeFiTVLBackend(CalculationBackend):
                     ProjectStat.DEFI_TVL_BEFORE_COUNTED: snapshot_tvl + correction_snapshot,
                     ProjectStat.DEFI_TVL_AFTER_COUNTED: latest_tvl + correction_latest,
                     ProjectStat.DEFI_TVL_DELTA: latest_tvl - snapshot_tvl,
-                    ProjectStat.DEFI_TVL_DELTA_COUNTED: latest_tvl + correction_latest - snapshot_tvl - correction_snapshot,
+                    ProjectStat.DEFI_TVL_DELTA_COUNTED: (latest_tvl + correction_latest + correction_delta
+                                                        - snapshot_tvl - correction_snapshot),
                     ProjectStat.URL: project.url,
                     ProjectStat.PRIZES: project.prizes,
                 }

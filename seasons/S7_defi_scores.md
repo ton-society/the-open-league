@@ -12,6 +12,15 @@ All queries provided below works with postgres DB produced by [TON-ETL](https://
 
 User score is calculated as a trading volume in any of target projects nominated in USD. Trading volume is calculated
 during the period of the season. Minimum amount of volume to be eligible for receiving points is 20 USD.
+For trading volume in pools with low fees a reduction factor of 0.1 is applied since Fri Dec 06 2024 14:30:00 GMT:
+* [NIKO/pTON](https://app.ston.fi/pools/EQAGUk1UZNw4etyy2Y3Lacii_u18RUPPaw_s5FLV6yMsatly)
+* [tsTON/TON](https://app.ston.fi/pools/EQC_OxV6MQ6csZXNk2Zu6jMrsGRI6m4YRzL2McKaPCYmNk6l)
+* [AquaUSD/USDT](https://app.ston.fi/pools/EQDmFQFfmQHA2zril2F3yQswZAYc-k1hN6CK0il1izLe2892)
+* [AquaUSD/USDT](https://dedust.io/pools/EQBGCoxXu8a_CdJ5r1u2iiWUvJAAHvVU7qZgEmfKRSfBf2CW)
+* [stTON/TON](https://dedust.io/pools/EQCHFiQM_TTSIiKhUCmWSN4aPSTqxJ4VSBEyDFaZ4izyq95Y)
+* [wsTON/TON](https://dedust.io/pools/EQABt8YegyD7VJnZdFVwom8wwqp0E0X8tN2Y6NhrDmbrnSXP)
+* [DONE/USDT](https://dedust.io/pools/EQBA-CMqyAbvW1pcoEzpEIrPQG4RDY2iq0BLXJx1m1-Ni3ON)
+
 Methodology details for each projects:
 
 ### Rainbow.ag
@@ -159,17 +168,30 @@ List of Farmix pools:
 
 ### Crouton
 
-All users can deposit TON/stTON/tsTON to 3-assets pool [3TON](https://crouton.finance/pools/EQB7Orui1z_dKONoHuglvi2bMUpmD4fw0Z4C2gewD2FP0BpL), all assets are stored on three vaults:
-- https://tonviewer.com/EQAmCCDmDTi1PAO9ZxH9Mzw7ELKgIjZYoyDPhW07oScrMFhC
-- https://tonviewer.com/EQDRoyDi8LVQW4CS84GdAuvavSugxoP1LCE49afEpgZMtYIB
-- https://tonviewer.com/EQAdX9rNF0ifkXJAo7CXg5v78yBbP9O1L4UL7M9EI0XMksB0
+All users can deposit:
+1. [TON/stTON/tsTON](https://crouton.finance/pools/EQB7Orui1z_dKONoHuglvi2bMUpmD4fw0Z4C2gewD2FP0BpL)
+2. [DONE/USDT](https://crouton.finance/pools/EQBYyQyeg3n-6REJhKcky4mK5WpmbghRdpAsz-Bi5cJXUWWL)
+3. [AquaUSD/USDT](https://crouton.finance/pools/EQB5osFH6kzBN2zK9f3A1LZGeJKmqcyGRumYhJgtuWlbjB8w)
 
-Users hold LP tokens [Crouton LP](https://tonviewer.com/EQB7Orui1z_dKONoHuglvi2bMUpmD4fw0Z4C2gewD2FP0BpL) which is used to estimate TVL increase. Algorithm is the following:
+All assets are stored on the following vaults:
+- TON – https://tonviewer.com/EQAmCCDmDTi1PAO9ZxH9Mzw7ELKgIjZYoyDPhW07oScrMFhC
+- tsTON – https://tonviewer.com/EQDRoyDi8LVQW4CS84GdAuvavSugxoP1LCE49afEpgZMtYIB
+- stTON – https://tonviewer.com/EQAdX9rNF0ifkXJAo7CXg5v78yBbP9O1L4UL7M9EI0XMksB0
+- USDT – https://tonviewer.com/EQB57BY65_ln-Xv2HpqzstMqoLLVFg_EZPcO0toS-dLlXA2c
+- DONE – https://tonviewer.com/EQBmZ_O4suf24Ik8BkkH-dvmkgpNmQfJQWV-iLGjfqltKP2v
+- AquaUSD – https://tonviewer.com/EQCM1hd03F1keKNKiB2FBPdT7ebpo0IMIvLMrAmX6bO-IFE9
+
+Users hold LP tokens:
+- [TON/stTON/tsTON](https://tonviewer.com/EQB7Orui1z_dKONoHuglvi2bMUpmD4fw0Z4C2gewD2FP0BpL)
+- [DONE/USDT](https://tonviewer.com/EQBYyQyeg3n-6REJhKcky4mK5WpmbghRdpAsz-Bi5cJXUWWL)
+- [AquaUSD/USDT](https://tonviewer.com/EQB5osFH6kzBN2zK9f3A1LZGeJKmqcyGRumYhJgtuWlbjB8w)
+
+Those are used to estimate TVL increase. Algorithm is the following:
 
 - Calculating increase of Crouton LP balance for each user
 - Calculating total supply of Crouton LP at the current moment (or at the end of the season)
-- Get actual balances for the vaults at the current moment (or at the end of the season) and estimate total TVL based on the current price of TON/stTON/tsTON
-- User impact is equal to `Crouton LP balance increase` / `Total supply of Crouton LP` * `Total TVL`
+- Get actual balances for the vaults at the current moment (or at the end of the season) and estimate total TVL based on the prices of tokens in pools
+- User impact is equal to SUM ( `Crouton LP balance increase` / `Total supply of Crouton LP` * `TVL in particular pool` )
 
 
 ### Delea
@@ -181,6 +203,10 @@ Vault addresses:
 * [stTON](https://tonviewer.com/EQA2OzCuP8-d_lN2MYxLv5WCNfpLH1NUuugppOZBZgNYn-aa)
 * [tsTON](https://tonviewer.com/EQCwIIRKpuV9fQpQxdTMhLAO30MNHa6GOYd00TsySOOYtA9n)
 
+
+### CattonFi
+
+Users can provide liquidity into [TON/cTON](https://tonviewer.com/EQAze1aSZHY1yUGz1BFndH62k-VYpXYeDiYofCXTRZClF8Qr) and [USDT/cUSDT](https://tonviewer.com/EQBy7pjr6IBzqW8vuVCZ780evtnkiIF3jZSRRDxeqScfZoU9) pools. The methodology for tracking the user impact to TVL is the same as for Crouton.
 
 Full list of participants and their impact on TVL could be obtained by [this query](sql/s7_defi_tvl.sql).
 
@@ -212,3 +238,4 @@ Full list of participants and their impact on TVL could be obtained by [this que
 |Farmix|TVL|10|
 |Crouton|TVL|10|
 |Delea|TVL|10|
+|CattonFi|TVL|10|
