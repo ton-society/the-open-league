@@ -6,17 +6,38 @@ with wallets_start as (
   select * from tol.s7_defi_wallets_start
 ), wallets_end as (
   select address, last_transaction_lt as tx_lt, jetton as jetton_master, "owner", balance from jetton_wallets
+), core_prices as (
+  select distinct on (asset) asset as token_address, 
+  case when asset = '0:B113A994B5024A16719F69139328EB759596C38A25F59028B146FECDC3621DFE' then 1e3
+    when asset = '0:AEA78C710AE94270DC263A870CF47B4360F53CC5ED38E3DB502E9E9AFB904B11' then price 
+    when asset = '0:2AB634CFCBDBE3B97503691E0780C3D07C9069210A2B24B991BA4F9941B453F9' 
+      then price * (select price_usd from prices.agg_prices where base = '0:2F956143C461769579BAEF2E32CC2D7BC18283F40D20BB03E432CD603AC33FFC' 
+        and price_time < 1734433200 order by price_time desc limit 1) * 1e3
+    else price * (select price from prices.ton_price where price_ts < 1734433200 order by price_ts desc limit 1)
+  end / 1e9 as price_usd
+  from prices.core p where p.price_ts < 1734433200 order by asset, price_ts desc
+), lptokens_prices as (
+  select distinct on (pool) pool as token_address, tvl_usd / total_supply as price_usd from prices.dex_pool_history
+  where timestamp < 1734433200 and total_supply > 0 and tvl_usd is not null order by pool, timestamp desc
+), jettons_prices as (
+  select distinct on (base) base as token_address, price_usd / 1e6 as price_usd from prices.agg_prices ap 
+  where price_time < 1734433200 order by base, price_time desc
+), current_prices as (
+  select distinct on (token_address) * from 
+    (select * from core_prices union all select * from lptokens_prices union all select * from jettons_prices)
+), jvault_excluded_pools as (
+  select '0:019A00628A27EF0F33E57B602971D3C4FA50FAAED1E4273546B1D6CFC14CED4C' as pool_address
 ), jvault_pools as (
- select address as pool_address from nft_items ni where collection_address =upper('0:184b700ed8d685af9fb0975094f103220b1acfd0e117627f368aa9ee493f452a')
+ select address as pool_address from nft_items ni
+ left join jvault_excluded_pools jep on address = pool_address
+ where collection_address = upper('0:184b700ed8d685af9fb0975094f103220b1acfd0e117627f368aa9ee493f452a')
+ and pool_address is null
 ), jvault_pool_tvls as (
- select pool_address, 
-  coalesce (sum( (select price_usd from prices.agg_prices ap where ap.base = jetton_master and price_time < 1734433200 order by price_time desc limit 1) * balance / 1e6), 0)
-  +
-  coalesce (sum( (select tvl_usd / total_supply from prices.dex_pool_history dph where pool = jetton_master and timestamp < 1734433200 order by timestamp desc limit 1) * balance), 0)
-   as value_usd
-   from wallets_end b
-   join jvault_pools p on p.pool_address = b."owner"
-   group by 1
+ select pool_address, coalesce (sum(price_usd * balance), 0) as value_usd
+ from wallets_end b
+ join jvault_pools p on p.pool_address = b."owner"
+ join current_prices on jetton_master = token_address
+ group by 1
 ), jvault_lp_tokens as (
    select jm.address as lp_master, pool_address from jetton_masters jm join jvault_pools p on p.pool_address =admin_address
 ), jvault_balances_before as (
@@ -31,7 +52,7 @@ with wallets_start as (
  select address, lp_master, coalesce(jvault_balances_after.balance, 0) - coalesce(jvault_balances_before.balance, 0) as balance_delta
  from jvault_balances_after left join jvault_balances_before using(address, lp_master) 
 ), jvault_total_supply as (
-   select lp_master, sum(balance) as total_supply
+   select pool_address, sum(balance) as total_supply
    from wallets_end b
    join jvault_lp_tokens on lp_master = b.jetton_master
    group by 1
@@ -39,8 +60,8 @@ with wallets_start as (
 ), jvault_impact as (
  select address, sum(value_usd * balance_delta / total_supply) as tvl_impact, count(balance_delta), null::bigint as min_utime, null::bigint as max_utime
  from jvault_balances_delta
- join jvault_total_supply using(lp_master)
  join jvault_lp_tokens using(lp_master)
+ join jvault_total_supply using(pool_address)
  join jvault_pool_tvls using(pool_address)
  group by 1
 ), settleton_pools as (
