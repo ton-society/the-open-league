@@ -6,17 +6,38 @@ with wallets_start as (
   select * from tol.s7_defi_wallets_start
 ), wallets_end as (
   select address, last_transaction_lt as tx_lt, jetton as jetton_master, "owner", balance from jetton_wallets
+), core_prices as (
+  select distinct on (asset) asset as token_address, 
+  case when asset = '0:B113A994B5024A16719F69139328EB759596C38A25F59028B146FECDC3621DFE' then 1e3
+    when asset = '0:AEA78C710AE94270DC263A870CF47B4360F53CC5ED38E3DB502E9E9AFB904B11' then price 
+    when asset = '0:2AB634CFCBDBE3B97503691E0780C3D07C9069210A2B24B991BA4F9941B453F9' 
+      then price * (select price_usd from prices.agg_prices where base = '0:2F956143C461769579BAEF2E32CC2D7BC18283F40D20BB03E432CD603AC33FFC' 
+        and price_time < 1734433200 order by price_time desc limit 1) * 1e3
+    else price * (select price from prices.ton_price where price_ts < 1734433200 order by price_ts desc limit 1)
+  end / 1e9 as price_usd
+  from prices.core p where p.price_ts < 1734433200 order by asset, price_ts desc
+), lptokens_prices as (
+  select distinct on (pool) pool as token_address, tvl_usd / total_supply as price_usd from prices.dex_pool_history
+  where timestamp < 1734433200 and total_supply > 0 and tvl_usd is not null order by pool, timestamp desc
+), jettons_prices as (
+  select distinct on (base) base as token_address, price_usd / 1e6 as price_usd from prices.agg_prices ap 
+  where price_time < 1734433200 order by base, price_time desc
+), current_prices as (
+  select distinct on (token_address) * from 
+    (select * from core_prices union all select * from lptokens_prices union all select * from jettons_prices)
+), jvault_excluded_pools as (
+  select '0:019A00628A27EF0F33E57B602971D3C4FA50FAAED1E4273546B1D6CFC14CED4C' as pool_address
 ), jvault_pools as (
- select address as pool_address from nft_items ni where collection_address =upper('0:184b700ed8d685af9fb0975094f103220b1acfd0e117627f368aa9ee493f452a')
+ select address as pool_address from nft_items ni
+ left join jvault_excluded_pools jep on address = pool_address
+ where collection_address = upper('0:184b700ed8d685af9fb0975094f103220b1acfd0e117627f368aa9ee493f452a')
+ and pool_address is null
 ), jvault_pool_tvls as (
- select pool_address, 
-  coalesce (sum( (select price_usd from prices.agg_prices ap where ap.base = jetton_master and price_time < 1734433200 order by price_time desc limit 1) * balance / 1e6), 0)
-  +
-  coalesce (sum( (select tvl_usd / total_supply from prices.dex_pool_history dph where pool = jetton_master and timestamp < 1734433200 order by timestamp desc limit 1) * balance), 0)
-   as value_usd
-   from wallets_end b
-   join jvault_pools p on p.pool_address = b."owner"
-   group by 1
+ select pool_address, coalesce (sum(price_usd * balance), 0) as value_usd
+ from wallets_end b
+ join jvault_pools p on p.pool_address = b."owner"
+ join current_prices on jetton_master = token_address
+ group by 1
 ), jvault_lp_tokens as (
    select jm.address as lp_master, pool_address from jetton_masters jm join jvault_pools p on p.pool_address =admin_address
 ), jvault_balances_before as (
@@ -31,7 +52,7 @@ with wallets_start as (
  select address, lp_master, coalesce(jvault_balances_after.balance, 0) - coalesce(jvault_balances_before.balance, 0) as balance_delta
  from jvault_balances_after left join jvault_balances_before using(address, lp_master) 
 ), jvault_total_supply as (
-   select lp_master, sum(balance) as total_supply
+   select pool_address, sum(balance) as total_supply
    from wallets_end b
    join jvault_lp_tokens on lp_master = b.jetton_master
    group by 1
@@ -39,8 +60,8 @@ with wallets_start as (
 ), jvault_impact as (
  select address, sum(value_usd * balance_delta / total_supply) as tvl_impact, count(balance_delta), null::bigint as min_utime, null::bigint as max_utime
  from jvault_balances_delta
- join jvault_total_supply using(lp_master)
  join jvault_lp_tokens using(lp_master)
+ join jvault_total_supply using(pool_address)
  join jvault_pool_tvls using(pool_address)
  group by 1
 ), settleton_pools as (
@@ -373,6 +394,14 @@ order by now desc limit 1)
   select 'BOLGUR' as symbol,
   '0:5D12CB57CCA228F04A89E10F5629C18A94E8B4180CD2A8D5AB577AA80F7C6290' as asset_id,
   '0:538d1d671a5c537516464921de5d8bdc903919737783c2ea73045873e5c0f1f9' as jetton_address
+  union all
+  select 'TONNEL' as symbol,
+  '0:2D8914957057C4CA105A5CE4573E5834851E0D5134EC6E8441050B4458FE933A' as asset_id,
+  '0:CD0EFE78BFF4C4539B76EAB17293296C74F42CBF99EC499687FEFEC94893ED32' as jetton_address
+  union all
+  select 'KINGY' as symbol,
+  '0:C2D5E499B19C82EADDD196859FAA88D20D730964132836C987569B48CA4731A4' as asset_id,
+  '0:BEB5D4638E860CCF7317296E298FDE5B35982F4725B0676DC98B1DE987B82EBC' as jetton_address
 ), coffin_prices as (
   select asset_id, 
   case 
@@ -466,35 +495,43 @@ tonco_collections as (
   select owner_address as address, sum(amount_usd) as tvl_impact, count(amount_usd), null::bigint as min_utime, null::bigint as max_utime
   from tonco_liquidity_transfers group by 1
 ), farmix_pools as (
-  select upper('0:be8e55fcdc36198125915b9abf5ee1cb5961503e9db11a673c042a1e59c90aa5') as pool, -- pTON pool
-    upper('0:1bb30d579441ffdbc4f3ab248a460cd748e2a9f044dc0d59ba7871da31648268') as jetton,
-    (select price from prices.ton_price p where p.price_ts < 1734433200 order by price_ts desc limit 1) / 1e3 as price
+  select '0:BE8E55FCDC36198125915B9ABF5EE1CB5961503E9DB11A673C042A1E59C90AA5' as pool, -- pTON pool
+    '0:1BB30D579441FFDBC4F3AB248A460CD748E2A9F044DC0D59BA7871DA31648268' as jetton
   union all
-  select upper('0:fa81049609ac8787416f5274d79697e2cc85a2abb51e138818bd7198b4484860') as pool, -- USDT pool
-    upper('0:b113a994b5024a16719f69139328eb759596c38a25f59028b146fecdc3621dfe') as jetton,
-    1 as price
+  select '0:FA81049609AC8787416F5274D79697E2CC85A2ABB51E138818BD7198B4484860' as pool, -- USDT pool
+    '0:B113A994B5024A16719F69139328EB759596C38A25F59028B146FECDC3621DFE' as jetton
   union all
-  select upper('0:84ffa4debca1298fc393cf7ad9b750f96d1e9f10d41b48dd9b6d6d23cf16d618') as pool, -- NOT pool
-    upper('0:2f956143c461769579baef2e32cc2d7bc18283f40d20bb03e432cd603ac33ffc') as jetton,
-    (select price_usd from prices.agg_prices ap 
-    where ap.base = upper('0:2f956143c461769579baef2e32cc2d7bc18283f40d20bb03e432cd603ac33ffc') and price_time < 1734433200 
-    order by price_time desc limit 1) as price
+  select '0:84FFA4DEBCA1298FC393CF7AD9B750F96D1E9F10D41B48DD9B6D6D23CF16D618' as pool, -- NOT pool
+    '0:2F956143C461769579BAEF2E32CC2D7BC18283F40D20BB03E432CD603AC33FFC' as jetton
+  union all
+  select '0:B61F15E9B6753BBECB51119387CA17864DA7E714D4A556EB3923077C224F3D43' as pool, -- tsTON pool
+    '0:BDF3FA8098D129B54B4F73B5BAC5D1E1FD91EB054169C3916DFC8CCD536D1000' as jetton
+  union all
+  select '0:EE33B74CEA6C34BC032EADD63485335111E9E5651D720AEAEAAA8F7DAB7A38DA' as pool, -- stTON pool
+    '0:CD872FA7C5816052ACDF5332260443FAEC9AACC8C21CCA4D92E7F47034D11892' as jetton
+), farmix_pools_with_price as (
+  select fp.*, 
+    case when fp.jetton = '0:1BB30D579441FFDBC4F3AB248A460CD748E2A9F044DC0D59BA7871DA31648268' 
+      then (select price from prices.ton_price where price_ts < 1734433200 order by price_ts desc limit 1) / 1e9
+      else price_usd end as price_usd 
+  from farmix_pools fp
+  left join current_prices cp on jetton = token_address
 ), farmix_agg_mints as (
   select fp.pool, jt."source" as address, sum(jt.amount) as total_transfer_amount, sum(jm.amount) as total_mint_amount,
-    fp.price, count(jm.amount), min(jm.utime) as min_utime, max(jm.utime) as max_utime
+    fp.price_usd, count(jm.amount), min(jm.utime) as min_utime, max(jm.utime) as max_utime
   from parsed.jetton_mint jm
-  join farmix_pools fp on jetton_master_address = pool
+  join farmix_pools_with_price fp on jetton_master_address = pool
   join jetton_transfers jt on jm.trace_id = jt.trace_id and jt.destination = fp.pool and jt.jetton_master_address = fp.jetton and not jt.tx_aborted
   where jm.utime >= 1732705200 and jm.utime < 1734433200 and jm.successful
-  group by fp.pool, jt."source", fp.price
+  group by fp.pool, jt."source", fp.price_usd
 ), farmix_agg_burns as (
   select pool, "owner" as address, sum(amount) as total_burn_amount from jetton_burns jb 
-  join farmix_pools fp on jetton_master_address = pool
+  join farmix_pools_with_price fp on jetton_master_address = pool
   where tx_now >= 1732705200 and tx_now < 1734433200 and not tx_aborted
   group by pool, "owner"
 ), farmix_impact as (
   select address,
-   sum((total_mint_amount - coalesce(total_burn_amount, 0)) / total_mint_amount * total_transfer_amount * price / 1e6) as tvl_impact,
+   sum((total_mint_amount - coalesce(total_burn_amount, 0)) / total_mint_amount * total_transfer_amount * price_usd) as tvl_impact,
    count("count"), min(min_utime) as min_utime, max(max_utime) as max_utime
   from farmix_agg_mints
   left join farmix_agg_burns using (pool, address)
