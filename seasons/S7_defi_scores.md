@@ -118,13 +118,19 @@ TVL originated after tsTON/stTON/STAKED deposits, so it is a sum of all tsTON/st
 TVL originated after deposits, so it is a sum of all supported token transfers by the users to 
 [the project smart-contract](https://tonviewer.com/EQAWDyxARSl3ol2G1RMLMwepr3v6Ter5ls3jiAlheKshgg0K)
 
-### swap.coffee
+### swap.coffee staking
 
 TVL originated after CES/Ston.fi CES-TON LP/DeDust CES-TON LP deposits, so it is a sum of all transfers CES/Ston.fi CES-TON LP/DeDust CES-TON LP by the users to 
 [the project smart-contract](https://tonviewer.com/EQAp-QUzk31pYQWIO5gelCfRrkEe71sI6rg_SvicSV0n31rf)
-And
-TVL originated after XROCK/Ston.fi XROCK-USDT LP/DeDust XROCK-USDT LP deposits, so it is a sum of all transfers XROCK/Ston.fi XROCK-USDT LP/DeDust XROCK-USDT LP by the users to 
+<br>
+And TVL originated after XROCK/Ston.fi XROCK-USDT LP/DeDust XROCK-USDT LP deposits, so it is a sum of all transfers XROCK/Ston.fi XROCK-USDT LP/DeDust XROCK-USDT LP by the users to 
 [the project smart-contract](https://tonviewer.com/EQDITerx2VbV-AvnIrva7roz1w0Gis6Xxvwj4b_rVonhyiJW)
+<br>
+And TVL originated after JETTON/Ston.fi JETTON-USDT LP/DeDust JETTON-USDT LP/Ston.fi JETTON-TON LP/Ston.fi(V2) JETTON-TON LP/DeDust JETTON-TON LP deposits, so it is a sum of all transfers JETTON/Ston.fi JETTON-USDT LP/DeDust JETTON-USDT LP/Ston.fi JETTON-TON LP/Ston.fi(V2) JETTON-TON LP/DeDust JETTON-TON LP by the users to 
+[the project smart-contract](https://tonviewer.com/EQAWDTgu0aNz5-hZ0adrMZtKPlyJRfJvyBd2YqxZosZ_OFnj)
+<br>
+And TVL originated after DFC/Ston.fi DFC-TON LP/DeDust DFC-TON LP deposits, so it is a sum of all transfers DFC/Ston.fi DFC-TON LP/DeDust DFC-TON LP by the users to 
+[the project smart-contract](https://tonviewer.com/EQA6yvJtg_m_-LiLckNPtqsjGC9RU-dpCgdVfpYm-IJLq2m3)
 
 ### Coffin
 
