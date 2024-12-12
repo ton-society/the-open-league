@@ -783,37 +783,37 @@ select "owner" as address, amount,
   join catton_total_tvl using(pool)
   group by 1
 ), all_projects_impact as (
- select 'jVault' as project, *, floor(tvl_impact / 20.) * 5 as points from jvault_impact
+ select 'jVault' as project, *, trunc(tvl_impact / 20.) * 5 as points from jvault_impact
    union all
- select 'SettleTon' as project, *, floor(tvl_impact / 20.) * 10 as points from settleton_impact
+ select 'SettleTon' as project, *, trunc(tvl_impact / 20.) * 10 as points from settleton_impact
    union all
- select 'DAOLama' as project, *, floor(tvl_impact / 20.) * 10 as points from daolama_impact
+ select 'DAOLama' as project, *, trunc(tvl_impact / 20.) * 10 as points from daolama_impact
    union all
- select 'TONHedge' as project, *, floor(tvl_impact / 20.) * 10 as points from tonhedge_impact
+ select 'TONHedge' as project, *, trunc(tvl_impact / 20.) * 10 as points from tonhedge_impact
    union all
- select 'TONPools' as project, *, floor(tvl_impact / 20.) * 5 as points from tonpools_impact
+ select 'TONPools' as project, *, trunc(tvl_impact / 20.) * 5 as points from tonpools_impact
    union all
- select 'Parraton' as project, *, floor(tvl_impact / 20.) * 10 as points from parraton_impact
+ select 'Parraton' as project, *, trunc(tvl_impact / 20.) * 10 as points from parraton_impact
    union all
- select 'TONStable' as project, *, floor(tvl_impact / 20.) * 10 as points from tonstable_impact
+ select 'TONStable' as project, *, trunc(tvl_impact / 20.) * 10 as points from tonstable_impact
    union all
- select 'Aqua' as project, *, floor(tvl_impact / 20.) * 10 as points from aqua_impact
+ select 'Aqua' as project, *, trunc(tvl_impact / 20.) * 10 as points from aqua_impact
    union all
- select 'swap.coffee staking' as project, *, floor(tvl_impact / 20.) * 5 as points from swapcoffee_impact
+ select 'swap.coffee staking' as project, *, trunc(tvl_impact / 20.) * 5 as points from swapcoffee_impact
    union all
- select 'Coffin' as project, *, floor(tvl_impact / 20.) * 5 as points from coffin_impact
+ select 'Coffin' as project, *, trunc(tvl_impact / 20.) * 5 as points from coffin_impact
    union all
- select 'TONCO' as project, *, floor(tvl_impact / 20.) * 10 as points from tonco_impact
+ select 'TONCO' as project, *, trunc(tvl_impact / 20.) * 10 as points from tonco_impact
    union all
- select 'Farmix' as project, *, floor(tvl_impact / 20.) * 10 as points from farmix_impact
+ select 'Farmix' as project, *, trunc(tvl_impact / 20.) * 10 as points from farmix_impact
    union all
- select 'Crouton' as project, *, floor(tvl_impact / 20.) * 10 as points from crouton_impact
+ select 'Crouton' as project, *, trunc(tvl_impact / 20.) * 10 as points from crouton_impact
    union all
- select 'Delea' as project, *, floor(tvl_impact / 20.) * 10 as points from delea_impact
+ select 'Delea' as project, *, trunc(tvl_impact / 20.) * 10 as points from delea_impact
    -- union all
- -- select 'Beetroot' as project, *, floor(tvl_impact / 20.) * 10 as points from beetroot_impact
+ -- select 'Beetroot' as project, *, trunc(tvl_impact / 20.) * 10 as points from beetroot_impact
    union all
- select 'Catton' as project, *, floor(tvl_impact / 20.) * 10 as points from catton_impact
+ select 'Catton' as project, *, trunc(tvl_impact / 20.) * 10 as points from catton_impact
 )
 select extract(epoch from now())::integer as score_time, p.address, project, points, tvl_impact as "value", "count", min_utime, max_utime
 from all_projects_impact p
