@@ -380,7 +380,7 @@ order by now desc limit 1)
 ), swapcoffee_flow as (
   select "source" as address,
   case
-    when symbol in ('CES', 'XROCK', 'JETTON') then
+    when symbol in ('CES', 'XROCK', 'JETTON', 'DFC') then
       coalesce((select price_usd from prices.agg_prices ap
       where ap.base = jetton_master_address and price_time < 1734433200 order by price_time desc limit 1) * jt.amount / 1e6, 0)
     else
