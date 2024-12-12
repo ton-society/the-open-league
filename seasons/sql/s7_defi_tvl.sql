@@ -325,6 +325,10 @@ order by now desc limit 1)
   select 'CES' as pool_name, '0:29F90533937D696105883B981E9427D1AE411EEF5B08EAB83F4AF89C495D27DF' as pool_address
     union all
   select 'XROCK' as pool_name, '0:C84DEAF1D956D5F80BE722BBDAEEBA33D70D068ACE97C6FC23E1BFEB5689E1CA' as pool_address
+    union all
+  select 'JETTON' as pool_name, '0:160D382ED1A373E7E859D1A76B319B4A3E5C8945F26FC8177662AC59A2C67F38' as pool_address
+    union all
+  select 'DFC' as pool_name, '0:3ACAF26D83F9BFF8B88B72434FB6AB23182F5153E7690A07557E9626F8824BAB' as pool_address
 ), swapcoffee_assets as (
   select 'CES' as pool_name, 'CES' as symbol,
   '0:A5D12E31BE87867851A28D3CE271203C8FA1A28AE826256E73C506D94D49EDAD' as jetton_master_address
@@ -343,10 +347,40 @@ order by now desc limit 1)
     union all
   select 'XROCK' as pool_name, 'Ston.fi XROCK-USDT LP' as symbol,
   '0:6BA0E19F6ADACBEFDCBBC859407241EFF578F4A57EDC8E3E05E86DCFBB283F20' as jetton_master_address
+    union all
+  select 'JETTON' as pool_name, 'JETTON' as symbol,
+  '0:105E5589BC66DB15F13C177A12F2CF3B94881DA2F4B8E7922C58569176625EB5' as jetton_master_address
+    union all
+  select 'JETTON' as pool_name, 'JETTON-TON Ston.fi v2 LP' as symbol,
+  '0:FF5F1FA2411D33DC6268CD0B74744D726E0C01145C9F4F9C9E867C0E244DE490' as jetton_master_address
+    union all
+  select 'JETTON' as pool_name, 'JETTON-TON DeDust LP' as symbol,
+  '0:F417FC37E424D65314D646379FA15FB8D342910368D7E755F87B3220994518FF' as jetton_master_address
+    union all
+  select 'JETTON' as pool_name, 'JETTON-TON Ston.fi LP' as symbol,
+  '0:139EAE96DB1BF5D02D7D2CD942DBAC45B535757DBCCC917997402587AADBFA3A' as jetton_master_address
+    union all
+  select 'JETTON' as pool_name, 'JETTON-USDT DeDust LP' as symbol,
+  '0:98AC7350EECB80D1F1D690912E2ED5E541E2EFFF1A722670103F97ED2407F473' as jetton_master_address
+    union all
+  select 'JETTON' as pool_name, 'JETTON-USDT Ston.fi LP' as symbol,
+  '0:1B011C80E68E5942AAB7E5C79B7B4FAACD4999ECDA9579DF58B3EDFBCCA414F4' as jetton_master_address
+    union all
+  select 'JETTON' as pool_name, 'JETTON-USDT Ston.fi v2 LP' as symbol,
+  '0:46FE73FA794A69F3D6723D10B136DC884061DF06E602CCB5D58414306EFE5310' as jetton_master_address
+    union all
+  select 'DFC' as pool_name, 'DFC' as symbol,
+  '0:F6EB371DE82AA9CFB5B22CA547F31FDC0FA0FBB41AE89BA84A73272FF0BF2157' as jetton_master_address
+    union all
+  select 'DFC' as pool_name, 'DFC-TON DeDust LP' as symbol,
+  '0:84868F284AFCD59DE33EAB700B57D18C3A8473946370AC6B6AE29DB1DD29C89C' as jetton_master_address
+    union all
+  select 'DFC' as pool_name, 'DFC-TON Ston.fi LP' as symbol,
+  '0:A66A91222D03B4B9810E9AF0DE5CD47D8B947891854F126C8D2447304824D251' as jetton_master_address
 ), swapcoffee_flow as (
   select "source" as address,
   case
-    when symbol in ('CES', 'XROCK') then
+    when symbol in ('CES', 'XROCK', 'JETTON') then
       coalesce((select price_usd from prices.agg_prices ap
       where ap.base = jetton_master_address and price_time < 1734433200 order by price_time desc limit 1) * jt.amount / 1e6, 0)
     else
