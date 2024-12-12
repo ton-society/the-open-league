@@ -121,17 +121,17 @@ with lowfee_pools as (
 ), degens as (
   select distinct address from tol.enrollment_degen ed 
 ), volume_points as (
-  select *, floor(volume_usd / 20.) * 1 as points from rainbow_volume
+  select *, trunc(volume_usd / 20.) * 1 as points from rainbow_volume
   union all
-  select *, floor(volume_usd / 20.) * 5 as points from gaspump_volume
+  select *, trunc(volume_usd / 20.) * 5 as points from gaspump_volume
   union all
-  select *, floor(volume_usd / 20.) * 1 as points from swapcoffee_volume
+  select *, trunc(volume_usd / 20.) * 1 as points from swapcoffee_volume
   union all
-  select *, floor(volume_usd / 20.) * 5 as points from memepads_volume
+  select *, trunc(volume_usd / 20.) * 5 as points from memepads_volume
   union all
-  select *, floor(volume_usd / 20.) * 1 as points from moki_volume
+  select *, trunc(volume_usd / 20.) * 1 as points from moki_volume
   union all
-  select *, floor(volume_usd / 20.) * 1 as points from titan_volume
+  select *, trunc(volume_usd / 20.) * 1 as points from titan_volume
 )
 select extract(epoch from now())::integer as score_time, address, project, points, volume_usd as "value", "count", min_utime, max_utime
 from volume_points
