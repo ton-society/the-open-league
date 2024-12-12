@@ -156,6 +156,8 @@ List of Farmix pools:
 - [TON](https://tonviewer.com/EQC-jlX83DYZgSWRW5q_XuHLWWFQPp2xGmc8BCoeWckKpeHs)
 - [USDT](https://tonviewer.com/EQD6gQSWCayHh0FvUnTXlpfizIWiq7UeE4gYvXGYtEhIYJ8q)
 - [NOT](https://tonviewer.com/EQCE_6TevKEpj8OTz3rZt1D5bR6fENQbSN2bbW0jzxbWGGIo)
+- [TsTon](https://tonviewer.com/EQC2HxXptnU7vstREZOHyheGTafnFNSlVus5Iwd8Ik89Q7dD)
+- [StTon](https://tonviewer.com/EQDuM7dM6mw0vAMurdY0hTNREenlZR1yCurqqo99q3o42nCi)
 
 ### Crouton
 
