@@ -495,35 +495,43 @@ tonco_collections as (
   select owner_address as address, sum(amount_usd) as tvl_impact, count(amount_usd), null::bigint as min_utime, null::bigint as max_utime
   from tonco_liquidity_transfers group by 1
 ), farmix_pools as (
-  select upper('0:be8e55fcdc36198125915b9abf5ee1cb5961503e9db11a673c042a1e59c90aa5') as pool, -- pTON pool
-    upper('0:1bb30d579441ffdbc4f3ab248a460cd748e2a9f044dc0d59ba7871da31648268') as jetton,
-    (select price from prices.ton_price p where p.price_ts < 1734433200 order by price_ts desc limit 1) / 1e3 as price
+  select '0:BE8E55FCDC36198125915B9ABF5EE1CB5961503E9DB11A673C042A1E59C90AA5' as pool, -- pTON pool
+    '0:1BB30D579441FFDBC4F3AB248A460CD748E2A9F044DC0D59BA7871DA31648268' as jetton
   union all
-  select upper('0:fa81049609ac8787416f5274d79697e2cc85a2abb51e138818bd7198b4484860') as pool, -- USDT pool
-    upper('0:b113a994b5024a16719f69139328eb759596c38a25f59028b146fecdc3621dfe') as jetton,
-    1 as price
+  select '0:FA81049609AC8787416F5274D79697E2CC85A2ABB51E138818BD7198B4484860' as pool, -- USDT pool
+    '0:B113A994B5024A16719F69139328EB759596C38A25F59028B146FECDC3621DFE' as jetton
   union all
-  select upper('0:84ffa4debca1298fc393cf7ad9b750f96d1e9f10d41b48dd9b6d6d23cf16d618') as pool, -- NOT pool
-    upper('0:2f956143c461769579baef2e32cc2d7bc18283f40d20bb03e432cd603ac33ffc') as jetton,
-    (select price_usd from prices.agg_prices ap 
-    where ap.base = upper('0:2f956143c461769579baef2e32cc2d7bc18283f40d20bb03e432cd603ac33ffc') and price_time < 1734433200 
-    order by price_time desc limit 1) as price
+  select '0:84FFA4DEBCA1298FC393CF7AD9B750F96D1E9F10D41B48DD9B6D6D23CF16D618' as pool, -- NOT pool
+    '0:2F956143C461769579BAEF2E32CC2D7BC18283F40D20BB03E432CD603AC33FFC' as jetton
+  union all
+  select '0:B61F15E9B6753BBECB51119387CA17864DA7E714D4A556EB3923077C224F3D43' as pool, -- tsTON pool
+    '0:BDF3FA8098D129B54B4F73B5BAC5D1E1FD91EB054169C3916DFC8CCD536D1000' as jetton
+  union all
+  select '0:EE33B74CEA6C34BC032EADD63485335111E9E5651D720AEAEAAA8F7DAB7A38DA' as pool, -- stTON pool
+    '0:CD872FA7C5816052ACDF5332260443FAEC9AACC8C21CCA4D92E7F47034D11892' as jetton
+), farmix_pools_with_price as (
+  select fp.*, 
+    case when fp.jetton = '0:1BB30D579441FFDBC4F3AB248A460CD748E2A9F044DC0D59BA7871DA31648268' 
+      then (select price from prices.ton_price where price_ts < 1734433200 order by price_ts desc limit 1) / 1e9
+      else price_usd end as price_usd 
+  from farmix_pools fp
+  left join current_prices cp on jetton = token_address
 ), farmix_agg_mints as (
   select fp.pool, jt."source" as address, sum(jt.amount) as total_transfer_amount, sum(jm.amount) as total_mint_amount,
-    fp.price, count(jm.amount), min(jm.utime) as min_utime, max(jm.utime) as max_utime
+    fp.price_usd, count(jm.amount), min(jm.utime) as min_utime, max(jm.utime) as max_utime
   from parsed.jetton_mint jm
-  join farmix_pools fp on jetton_master_address = pool
+  join farmix_pools_with_price fp on jetton_master_address = pool
   join jetton_transfers jt on jm.trace_id = jt.trace_id and jt.destination = fp.pool and jt.jetton_master_address = fp.jetton and not jt.tx_aborted
   where jm.utime >= 1732705200 and jm.utime < 1734433200 and jm.successful
-  group by fp.pool, jt."source", fp.price
+  group by fp.pool, jt."source", fp.price_usd
 ), farmix_agg_burns as (
   select pool, "owner" as address, sum(amount) as total_burn_amount from jetton_burns jb 
-  join farmix_pools fp on jetton_master_address = pool
+  join farmix_pools_with_price fp on jetton_master_address = pool
   where tx_now >= 1732705200 and tx_now < 1734433200 and not tx_aborted
   group by pool, "owner"
 ), farmix_impact as (
   select address,
-   sum((total_mint_amount - coalesce(total_burn_amount, 0)) / total_mint_amount * total_transfer_amount * price / 1e6) as tvl_impact,
+   sum((total_mint_amount - coalesce(total_burn_amount, 0)) / total_mint_amount * total_transfer_amount * price_usd) as tvl_impact,
    count("count"), min(min_utime) as min_utime, max(max_utime) as max_utime
   from farmix_agg_mints
   left join farmix_agg_burns using (pool, address)
