@@ -550,25 +550,32 @@ tonco_collections as (
       else price_usd end as price_usd 
   from farmix_pools fp
   left join current_prices cp on jetton = token_address
-), farmix_agg_mints as (
-  select fp.pool, jt."source" as address, sum(jt.amount) as total_transfer_amount, sum(jm.amount) as total_mint_amount,
-    fp.price_usd, count(jm.amount), min(jm.utime) as min_utime, max(jm.utime) as max_utime
-  from parsed.jetton_mint jm
-  join farmix_pools_with_price fp on jetton_master_address = pool
-  join jetton_transfers jt on jm.trace_id = jt.trace_id and jt.destination = fp.pool and jt.jetton_master_address = fp.jetton and not jt.tx_aborted
-  where jm.utime >= 1732705200 and jm.utime < 1734433200 and jm.successful
-  group by fp.pool, jt."source", fp.price_usd
-), farmix_agg_burns as (
-  select pool, "owner" as address, sum(amount) as total_burn_amount from jetton_burns jb 
-  join farmix_pools_with_price fp on jetton_master_address = pool
-  where tx_now >= 1732705200 and tx_now < 1734433200 and not tx_aborted
-  group by pool, "owner"
+), farmix_pools_tvls as (
+  select pool, balance * price_usd as tvl_usd 
+  from farmix_pools_with_price 
+  join wallets_end on "owner" = pool and jetton_master = jetton
+), farmix_balances_before as (
+  select pool, ed.address, balance from wallets_start b
+  join tol.enrollment_degen ed on ed.address = b."owner"
+  join farmix_pools on b.jetton_master = pool
+), farmix_balances_after as (
+  select pool, ed.address, balance from wallets_end b
+  join tol.enrollment_degen ed on ed.address = b."owner"
+  join farmix_pools on b.jetton_master = pool
+), farmix_balances_delta as (
+  select pool, address, coalesce(fba.balance, 0) - coalesce(fbb.balance, 0) as balance_delta
+  from farmix_balances_after fba 
+  left join farmix_balances_before fbb using(pool, address) 
+), farmix_total_supply as (
+  select pool, sum(balance) as total_supply from wallets_end b
+  join farmix_pools fp on b.jetton_master = pool
+  group by pool
 ), farmix_impact as (
-  select address,
-   sum((total_mint_amount - coalesce(total_burn_amount, 0)) / total_mint_amount * total_transfer_amount * price_usd) as tvl_impact,
-   count("count"), min(min_utime) as min_utime, max(max_utime) as max_utime
-  from farmix_agg_mints
-  left join farmix_agg_burns using (pool, address)
+  select address, sum(tvl_usd * balance_delta / total_supply) as tvl_impact,
+    count(balance_delta), null::bigint as min_utime, null::bigint as max_utime 
+  from farmix_balances_delta
+  join farmix_total_supply using(pool)
+  join farmix_pools_tvls using(pool)
   group by 1
 ), crouton_vaults as (
   select '3TON' as agg_pool, 'TON' as symbol,
