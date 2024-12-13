@@ -126,7 +126,7 @@
       "icon": "https://raw.githubusercontent.com/ton-society/the-open-league/refs/heads/main/projects/icons/apps_swap.coffee.png",
       "name": "swap.coffee staking",
       "link": "https://swap.coffee/stake",
-      "target_action": "Stake CES or LP tokens",
+      "target_action": "Stake CES, JETTON, XROCK or LP tokens",
       "protocol_type": "Jetton staking",
       "points": "5"
     },
