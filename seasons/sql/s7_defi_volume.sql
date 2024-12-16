@@ -27,9 +27,17 @@ with lowfee_pools as (
    select '0:88388D351492AF507A94345F9CD411B2B68B87E4775E38F1C283293675D2B563' as referral_address
    union all
    select '0:1A086B18D52ECE2289C19289B694EC31E9C04C82018A287BA40BF9FA6AAD3443' as referral_address
+), raindow_fee_messages as (
+  select m.trace_id from messages m
+  join swaps s on s.swap_user = m."source"
+  join rainbow_referral_addresses rra on m.destination = rra.referral_address
+  where direction = 'in'
+  and m.created_at >= 1732705200 and m.created_at < 1734433200
 ), rainbow_traces as (
   select distinct trace_id from swaps
   join rainbow_referral_addresses using(referral_address)
+    union
+  select distinct trace_id from raindow_fee_messages
 ), rainbow_swaps as (
   select tx_hash, swap_user as address, volume_usd, swap_utime from swaps join rainbow_traces using(trace_id)
 ), rainbow_volume as (
