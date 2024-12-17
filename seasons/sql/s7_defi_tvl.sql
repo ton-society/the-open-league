@@ -27,6 +27,8 @@ with wallets_start as (
     (select * from core_prices union all select * from lptokens_prices union all select * from jettons_prices)
 ), jvault_excluded_pools as (
   select '0:019A00628A27EF0F33E57B602971D3C4FA50FAAED1E4273546B1D6CFC14CED4C' as pool_address
+    union all
+  select '0:FCEB337D82AAD212C60C9B4A401296E193A2477F63C6A496A510A2A71A316B80' as pool_address
 ), jvault_pools as (
  select address as pool_address from nft_items ni
  left join jvault_excluded_pools jep on address = pool_address
