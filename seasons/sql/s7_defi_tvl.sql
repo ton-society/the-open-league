@@ -1,11 +1,16 @@
 -- create table tol.s7_defi_wallets_start 
 -- as
 -- select distinct on(address) address, tx_lt, jetton_master, "owner", balance from parsed.jetton_wallet_balances 
--- where tx_lt < 51304152000000 order by address, tx_lt desc
+-- where tx_lt < 51304152000000 order by address, tx_lt desc;
+--
+-- create table tol.s7_defi_wallets_end 
+-- as
+-- select distinct on(address) address, tx_lt, jetton_master, "owner", balance from parsed.jetton_wallet_balances 
+-- where tx_lt < 51950290000000 order by address, tx_lt desc;
 with wallets_start as (
   select * from tol.s7_defi_wallets_start
 ), wallets_end as (
-  select address, last_transaction_lt as tx_lt, jetton as jetton_master, "owner", balance from jetton_wallets
+  select * from tol.s7_defi_wallets_end
 ), core_prices as (
   select distinct on (asset) asset as token_address, 
   case when asset = '0:B113A994B5024A16719F69139328EB759596C38A25F59028B146FECDC3621DFE' then 1e3
