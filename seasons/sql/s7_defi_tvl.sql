@@ -478,7 +478,11 @@ tonco_collections as (
 ), tonco_positions as (
   -- get all NFT positions which is active now (init=true)
   select address, owner_address from public.nft_items ni 
-  where collection_address in (select * from tonco_collections) and init
+  where collection_address in (select * from tonco_collections) -- and init
+  -- since we have to track which positions have been withdrawn we will exclude all positions with 
+  -- POSITIONNFTV3_POSITION_BURN#46ca335a message before the end of the season
+  and not exists  (select from messages where direction ='in' and destination = ni.address 
+  and  created_at < 1734433200 and opcode = 1187656538 order by created_at desc limit 1)
 ), tonco_positions_first_tx as (
   -- get first transaction for every NFT position. This tx will be a part of mint tx chain
   -- to get the first transaction we will filter by end_status and orig_status and also filter 
@@ -505,7 +509,8 @@ tonco_collections as (
     -- for all other jettons let's get latest agg price just before the event
     else (select price_usd from prices.agg_prices ap where 
         ap.base = jetton_master_address and
-        price_time < tx_now
+        -- estimate using the price and the end of the season
+        price_time < 1734433200
         order by price_time desc limit 1)
   end
   ) * amount / 1e6 as amount_usd from tonco_jetton_transfers
