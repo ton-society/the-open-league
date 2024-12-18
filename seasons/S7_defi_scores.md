@@ -142,7 +142,8 @@ TONCO is a CLMM DEX and every time user provides liquidity to the pool, new NFT 
 User can withdraw entire amount of liquidity at any time, when it is done, liquidity goes back to the user
 and NFT marked as init=false. So to get all active liqudity positions by the user we are getting all NFTs
 from collections owner by [router contract](https://tonviewer.com/EQC_-t0nCnOFMdp7E7qPxAOCbCWGFz-e3pwxb6tTvFmshjt5)
-and init=true. Next we are extracting initial liquidity transfers during the NFT mint transaction chain
+which have not been withdrawn by sending [POSITIONNFTV3_POSITION_BURN#46ca335a](https://docs.tonco.io/technical-reference/contracts/position_nft) 
+message. Next we are extracting initial liquidity transfers during the NFT mint transaction chain
 and estimating that liquidity in USD based on the price of the assets at the time of the transaction.
 
 ### Farmix
