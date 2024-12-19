@@ -473,8 +473,13 @@ order by now desc limit 1)
 -- TONCO
 tonco_collections as (
   -- get all NFT pools owner by the router
-  select  address from public.nft_collections nc where 
-  owner_address ='0:BFFADD270A738531DA7B13BA8FC403826C2586173F9EDE9C316FAB53BC59AC86'
+  select  address from public.nft_collections nc 
+  where owner_address ='0:BFFADD270A738531DA7B13BA8FC403826C2586173F9EDE9C316FAB53BC59AC86'
+  and address not in (
+    '0:93D7C069894BAC560DF3A282964F3593E3908E4D1D4B3E9D816F8DA71C934A1A', 
+    '0:2E609100FC431B6EA5D63EB4EB4C5B05B7EDCA44D614E401A688142C10A2AAE3', 
+    '0:BCE4F83F2D8AB4B4D9AAA385CA59B4B62B15FF8293C561E2AA8ED6C3CB1D6FC1'
+  )
 ), tonco_positions as (
   -- get all NFT positions which is active now (init=true)
   select address, owner_address from public.nft_items ni 
