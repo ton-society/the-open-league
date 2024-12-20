@@ -89,6 +89,8 @@ with wallets_start as (
   select upper('0:5b46607213a02eec4061be961e41f69a6bfdb4ccb56b2a7ae5d38d25b42eff1d') as pool_address -- JETTON Vault
   union all
   select upper('0:df2807a89cb6f0f7244847e632a8c4dee6cee7262006a7c3699d696b092040d4') as pool_address -- STORM Vault
+  union all
+  select upper('0:c378ec213eeeb22629d6111f4b2a102cf9d5e45f3b4f268ef2280ff67f3e69f2') as pool_address -- HIPO Vault
 ), settleton_pool_tvls as (
  select pool_address, 
   coalesce (sum( (select tvl_usd / total_supply from prices.dex_pool_history dph where pool = jetton_master and timestamp < 1734433200 order by timestamp desc limit 1) * balance), 0)
